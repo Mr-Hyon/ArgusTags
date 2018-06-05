@@ -1,0 +1,43 @@
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+Initiator/161250178/FundInfo
+Initiator/161250178/TaskList
+Task/13/FundInfo
+Task/13/ImageList
+Task/13/WorkerList
+Task/14/FundInfo
+Task/14/ImageList
+Task/14/WorkerList
+tempath/20180601101800.zip
+tempath/20180601102350.zip
+tempath/20180601102744.zip
+tempath/20180601103022.zip
+tempath/20180601103858.zip
+tempath/20180601103905.zip
+tempath/20180601104200.zip
+tempath/20180601104507.zip
+tempath/20180601104918.zip
+Worker/worker/TaskList

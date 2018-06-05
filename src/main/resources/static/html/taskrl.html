@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Argus Release Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+    <!-- CSS
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/supersized.css">
+    <link rel="stylesheet" href="../css/style.css"> -->
+    <link href="../css/bootstrap.css" rel="stylesheet" />
+    <link href="../css/form.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/inistyle.css">
+    <script src="../js/jquery-1.8.2.min.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div class="page-container">
+    </br>
+    </br>
+    <ul>
+        <li><a href="http://localhost:8080/initiatorHome">Home</a></li>
+        <li><a href="http://localhost:8080/initiator/message">Message</a></li>
+        <li style="float:right"><a href="http://localhost:8080">Log out</a></li>
+        <li style="float:right" id="user"><a>Welcome!</a></li>
+    </ul>
+    <div class="form_content">
+    <fieldset style="width:500px;">
+
+        <div class="form-row">
+            <div class="field-label"><label for="taskmethod">框选标注类型：</label></div>
+            <div class="field-widget">
+                <select id="taskmethod" name="field6" class="validate-selection" title="Choose your department">
+                    <option value="整体标注">整体标注</option>
+                    <option value="框选标注">方框框选标注</option>
+                    <option value="自由标注">自由框选标注</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="taskreward">总任务奖励：</label></div>
+            <div class="field-widget"><input id="taskreward" class="required" placeholder="请输入任务奖励" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');this.value=this.value.replace('.','');" / /></div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="taskcut">平台分成：</label></div>
+            <div class="field-widget"><input id="taskcut" class="required" placeholder="请输入平台分成"  /></div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="taskdscb">任务描述：</label></div>
+            <div class="field-widget"><input id="taskdscb" class="required" placeholder="请输入任务描述" /></div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="workernum">标记人数：</label></div>
+            <div class="field-widget"><input id="workernum" class="required"placeholder="请输入标记人数" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');this.value=this.value.replace('.','');" /></div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="taskobj">标注物体：</label></div>
+            <div class="field-widget"><input id="taskobj" class="required" placeholder="请输入想要标注的物体" /></div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="taskddl">截止时间：</label></div>
+            <div class="field-widget"><input type="date" id="taskddl" class="required" placeholder="请输入任务截止时间" /></div>
+        </div>
+
+        <div class="form-row">
+            <div class="field-label"><label for="image-file">选择文件：</label></div>
+            <div class="field-widget"><input type="file" accept=".zip" id="image-file"   /></div>
+        </div>
+    </fieldset>
+    </div>
+    <div style="text-align:center;">
+        <button id="release" class="btn btn-default btn-lg" >发布任务</button>
+    </div>
+</div>
+<script>
+    document.getElementById('release').onclick = function (e) {
+        var method = document.getElementById('taskmethod').value;
+        var reward = parseInt(document.getElementById('taskreward').value);
+        var cut = parseFloat(document.getElementById('taskcut').value);
+        var dscb = document.getElementById('taskdscb').value;
+        var workernum = parseInt(document.getElementById('workernum').value);
+        var obj = document.getElementById('taskobj').value;
+        var ddl=document.getElementById('taskddl').value.toString();
+        var file = document.getElementById('image-file').files[0];
+
+        //var name = "initiator";//获取发布者用户名，尚未实现
+        var name=$.cookie("username");
+
+        var result = release(name,method, reward, cut, dscb, workernum, obj,ddl, file);
+
+        if (result == "success") {
+            alert('发布成功！')
+            window.location = "http://localhost:8080/initiatorHome"
+        }
+        else {
+            alert('发布失败！请检查内容是否填写准确！')
+        }
+    }
+        //var jsonstr=JSON.stringify(JSONObject);
+        //alert("保存的json文件:"+jsonstr);
+
+        function release(name,method,reward,cut,dscb,workernum,obj,ddl,file){
+            var res = null;
+            var formData = new FormData();
+            formData.append("username",name)
+            formData.append("method", method);
+            formData.append("reward", reward);
+            formData.append("cut", cut);
+            formData.append("dscb", dscb);
+            formData.append("markedPersonNum", workernum);
+            formData.append("obj", obj);
+            formData.append("ddl",ddl);
+            formData.append("file", file);
+
+            //alert("I'm here")
+       $.ajax({
+            url: '/release',
+            type: 'post',
+            async: false,
+            data: formData,
+           processData: false,
+           contentType: false,
+           enctype:'multipart/form-data',
+            success: function (data) {
+                res = data
+                alert(data)
+            },
+            error: function() {
+                alert('request fail!')
+            }
+        })
+        return res;
+       //return jsonstr;
+    }
+</script>
+</body>
+</html>

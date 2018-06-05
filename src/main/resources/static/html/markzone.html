@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Welcome to DARK ZONE</title>
+
+    <!-- CSS -->
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/supersized.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/markpage.css">
+
+</head>
+<body>
+
+<ul>
+    <li><a href="http://localhost:8080/workerHome">Home</a></li>
+    <li><a href="http://localhost:8080/worker/yourtask">Your Task</a></li>
+    <li><a href="http://localhost:8080/worker/findtask">Find Task</a></li>
+    <li><a href="http://localhost:8080">Log out</a></li>
+</ul>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<h1>众包标注系统</h1>
+<br/>
+<p>图片预览：</p>
+<p><div id="test-image-preview" style="border: 1px solid #ccc; width: 100%; height: 200px; background-size: contain; background-repeat: no-repeat; background-position: center center;"></div></p>
+<p id="test-file-info"></p>
+<p>图片编辑区域</p>
+<p>
+    <canvas id="test-canvas" width="300" height="300"></canvas>
+</p>
+<p>
+    <button id="preImage" onclick='PreviousPic()'>Previous Picture</button>
+    <button id="nextImage" onclick='NextPic()'>Next Picture</button>
+</p>
+<table width="100%" border="1px" id="mark_info">
+    <caption>标注信息</caption>
+    <tr>
+        <td>区域编号</td><td>标注信息</td>
+    </tr>
+</table>
+<p>
+    整体标注信息：<input type="text" id="total_input" value="" readonly="true">
+</p>
+<p>
+    <button type="button "id="Free_Mark" >局部标注(自由画线)</button>
+</p>
+<p>
+    <button type="button "id="Classic_Mark" >局部标注(方框标注)</button>
+</p>
+<p>
+    <button type="button "id="Total_Mark" >整体标注</button>
+</p>
+<p>
+    <button type="button" id="save_button" >保存</button>  <button type="button" id="load_button">读取标注过的图片文件</button>
+</p>
+<script src="../js/jquery-1.8.2.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script>
+    var marked_num = 0      //记录工人本次标记张数（用于记录可增加积分情况）
+    var workername  = $.cookie("username") //当前工人用户名
+    var taskId = $.cookie("taskId") //当前任务ID
+
+    var current_pic_index = 0  //当前图片编号
+    /** 获取相关任务信息 **/
+    var TaskInfo = null
+    var TaskJsonInfo = null
+    $.ajax({
+        url: 'http://localhost:8080/getImageList',
+        type: 'post',
+        async: false,
+        data: {
+            username:workername,
+            taskId:taskId
+        },
+        success: function (data) {
+            TaskInfo = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+    TaskJsonInfo = JSON.parse(TaskInfo)
+    var taskName = TaskJsonInfo[0].taskName   //任务名称
+    var type = TaskJsonInfo[0].type   //任务类型
+    var pic_num = TaskJsonInfo[0].pic_num  //图片数量
+    var jsonData = new Array();
+    for(var i = 0;i<pic_num;i++){
+        jsonData.push(TaskJsonInfo[i+1].image)
+    }
+
+    /** 根据任务类型锁死button **/
+    if(type == 0){
+        document.getElementById('Classic_Mark').disabled = true
+        document.getElementById('Free_Mark').disabled = true
+    }
+    else if(type == 1){
+        document.getElementById('Free_Mark').disabled = true
+        document.getElementById('Total_Mark').disabled = true
+    }
+    else if(type == 2){
+        document.getElementById('Total_Mark').disabled = true
+        document.getElementById('Classic_Mark').disabled = true
+    }
+
+    /** 开始进行网页初始化布局 **/
+    var line_editable = false; //自由划线模式默认关闭
+    var square_editable = false; //边框标记模式默认关闭
+    var hasImage = false; //判断画布上是否有图片
+    var hasMarked = false; //判断是否进行了标记操作
+    var mark_messages = new Array();  //用于储存局部标记的数组
+    var total_mark='';                //用于储存整体标记信息的字符串
+
+    var totalInput = document.getElementById("total_input");
+    var table_info=document.getElementById("mark_info");
+
+    var origin_img;
+
+    var
+        info = document.getElementById('test-file-info'),
+        preview = document.getElementById('test-image-preview');
+
+    function load_page(pic_index){
+        var jsonObject = JSON.parse(jsonData[pic_index])
+
+        var after_url = jsonObject.current_image
+        var origin_url = jsonObject.origin_image
+        origin_img = origin_url
+        console.log(origin_url)
+
+        document.getElementById('test-image-preview').style.backgroundImage = 'url(' + origin_url + ')'
+        drawToCanvas(after_url)
+        hasImage = true
+        if(jsonObject.marked == 1){
+            hasMarked = true
+        }
+
+        document.getElementById('test-file-info').innerHTML = '任务名称：'+ taskName +'<br>'+
+                        '图片数量：'+ jsonData.length + '<br>'+
+                        '当前图片编号：'+ (pic_index+1)
+
+        if(type == 0){
+            document.getElementById("total_input").value = jsonObject.total_tag
+            total_mark = jsonObject.total_tag
+        }
+        else {
+            var tags = jsonObject.tags
+            for (var j = 0; j < tags.length; j++) {
+                add_Mark(tags[j]);
+            }
+        }
+    }
+
+    function PreviousPic(){
+        if(current_pic_index == 0){
+            alert('已是该任务的首张图片')
+        }
+        else{
+            clearTable()
+            current_pic_index = current_pic_index - 1
+            load_page(current_pic_index)
+        }
+    }
+
+    function NextPic(){
+        if(current_pic_index == pic_num-1){
+            alert('已是该任务的最后一张图片')
+        }
+        else{
+            clearTable()
+            current_pic_index = current_pic_index + 1
+            load_page(current_pic_index)
+        }
+    }
+
+    load_page(current_pic_index)     //加载图片以及相关信息
+
+    alert('单张图片标注完成后请先保存再进行上一张或下一张操作')
+
+    //oneROW=table_info.insertRow();
+    //cell1=oneROW.insertCell();
+    //cell2=oneROW.insertCell();
+    //var id = "No.1";
+    //cell1.innerHTML = id;
+    //cell2.innerHTML="<input id='No.1' value='You did it'/>";
+    //document.getElementById(id).value='ttt';
+    //table_info.deleteRow(table_info.rows.length-1);
+
+    function drawToCanvas(imgData){
+        var cvs = document.getElementById('test-canvas');
+        var ctx = cvs.getContext('2d');
+        var img = new Image;
+        img.src = imgData;
+        cvs.width=1920;
+        cvs.height=1080;
+        img.onload = function(){//必须onload之后再画
+            cvs.height=img.height;
+            cvs.width=img.width;
+            ctx.drawImage(img,0,0,img.width,img.height);
+        }
+    }
+
+    document.getElementById('test-canvas').onmousedown = function(e){
+
+        //未选择进行标注
+        if(!line_editable && !square_editable){
+            return;
+        }
+
+        //自由划线标注
+        if(line_editable){
+            var cvs = document.getElementById('test-canvas');
+            var ctx = cvs.getContext('2d');
+            var e = e ||event;
+            var ox = e.clientX + window.pageXOffset - cvs.offsetLeft;
+            var oy = e.clientY + window.pageYOffset- cvs.offsetTop;
+            ctx.moveTo(ox,oy);
+            var img_data=ctx.getImageData(0,0,cvs.width,cvs.height);
+            ctx.beginPath();
+
+            document.onmousemove = function(e){
+                var ox2 = e.clientX + window.pageXOffset -cvs.offsetLeft;
+                var oy2 = e.clientY + window.pageYOffset - cvs.offsetTop;
+                ctx.lineTo(ox2,oy2);
+                ctx.stroke();
+            }
+
+            document.onmouseup  = function(e){
+                document.onmousemove =null;
+                document.onmouseup = null;
+                line_editable=false;
+                ctx.closePath();
+                mark_line(img_data,ox,oy);
+            }
+        }
+
+        //边框局部标注
+        if(square_editable){
+            var cvs = document.getElementById('test-canvas');
+            var ctx = cvs.getContext('2d');
+            var e = e ||event;
+            var ox = e.clientX + window.pageXOffset - cvs.offsetLeft;
+            var oy = e.clientY + window.pageYOffset- cvs.offsetTop;
+            var ox2;
+            var oy2;
+            ctx.moveTo(ox,oy);
+            var img_data=ctx.getImageData(0,0,cvs.width,cvs.height);
+
+            document.onmousemove = function(e){
+                ctx.putImageData(img_data,0,0);
+                ox2 = e.clientX + window.pageXOffset -cvs.offsetLeft;
+                oy2 = e.clientY + window.pageYOffset - cvs.offsetTop;
+                //ctx.clearRect(0,0,cvs.width,cvs.height);
+                ctx.beginPath();
+                ctx.strokeRect(ox,oy,ox2-ox,oy2-oy);
+                ctx.closePath();
+            }
+
+            document.onmouseup  = function(e){
+                document.onmousemove = null;
+                document.onmouseup = null;
+                square_editable=false;
+                mark_square(img_data,ox,oy,ox2,oy2);
+            }
+        }
+    }
+
+    document.getElementById('Free_Mark').onclick = function(e) {
+        if(!hasImage){
+            alert("请先加载图片再进行标记");
+            return;
+        }
+        line_editable=true;
+        square_editable=false;
+        alert("正在进行自由标注，其余标注模式已撤销");
+    }
+
+    document.getElementById('Classic_Mark').onclick = function(e) {
+        if(!hasImage){
+            alert("请先加载图片再进行标记");
+            return;
+        }
+        square_editable=true;
+        line_editable=false;
+        alert("正在进行边框局部标注，其余标注模式已撤销");
+    }
+
+    document.getElementById('Total_Mark').onclick = function (e) {
+        if(!hasImage){
+            alert("请先加载图片再进行标记");
+            return;
+        }
+        var cvs=document.getElementById('test-canvas');
+        var ctx=cvs.getContext('2d');
+        var total_message = prompt("请输入整体标注信息:","");
+        if (total_message != null){
+            hasMarked = true;
+            alert("你输入的标注信息为："+total_message+".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
+            marked_num++
+            total_mark = total_message;
+            totalInput.value = total_mark;
+            totalInput.readOnly = false;
+        }else{
+            alert("取消本次标注");
+        }
+    }
+
+    //保存json文件
+    document.getElementById('save_button').onclick = function (e) {
+        if(!hasMarked){
+            alert('未检测到标注行为，保存无效');
+            return;
+        }
+        var cvs = document.getElementById('test-canvas');
+        var img = cvs.toDataURL();
+        total_mark = totalInput.value;
+        for(var i = 0 ; i < mark_messages.length ; i++){
+            var temp_id = "No."+(i+1);
+            mark_messages[i]=document.getElementById(temp_id).value;
+        }
+        var JSONObject= {
+            "origin_image":origin_img,
+            "current_image":img,
+            "total_tag":total_mark,
+            "tags":mark_messages,
+            "marked":1};
+        var jsonstr=JSON.stringify(JSONObject);
+        jsonData[current_pic_index] = jsonstr;
+        var JsontoSend = {
+            "imageData":jsonData
+        }
+
+        $.ajax({
+            url: 'http://localhost:8080/updateWorkerTask',
+            type: 'post',
+            async: false,
+            data: {
+                username:workername,
+                taskId:taskId,
+                marked_num:marked_num,
+                imgList:JSON.stringify(JsontoSend)
+            },
+            success: function (data) {
+                 alert(data)
+            },
+            error: function() {
+                alert('fail')
+            }
+        })
+    }
+
+    //读取button
+    /*
+    document.getElementById('load_button').onclick = function (e) {
+        if(jsonData.length == 0){
+            alert('无保存信息');
+            return;
+        }
+        var id = prompt("请输入保存的json数据编号（第一次保存的数据编号为0）:","");
+        var cvs=document.getElementById('test-canvas');
+        var ctx=cvs.getContext('2d');
+        if (id != null){
+            if(id === "" || id ==null){
+                alert("输入无效");
+            }
+            else if(isNaN(id)){
+                alert("输入无效");
+            }else{
+                var num = parseInt(id);
+                if(num >= jsonData.length) {
+                    alert("编号越界");
+                }
+                else{
+                    clearTable();
+                    var json_data=jsonData[num];
+                    var jsonObject = JSON.parse(json_data);
+                    var origin_image = jsonObject[0].origin_image;
+                    var after_image = jsonObject[0].current_image;
+                    var totalMark= jsonObject[0].total_mark_message;
+                    var block_messages = jsonObject[0].block_messages;
+                    preview.style.backgroundImage = 'url(' + origin_image + ')';
+                    drawToCanvas(after_image);
+                    total_mark = totalMark;
+                    for(var j = 0 ;j < block_messages.length ; j++){
+                        add_Mark(block_messages[j]);
+                    }
+                    totalInput.value = total_mark ;
+                }
+            }
+        }else{
+            alert("取消操作");
+        }
+    }*/
+
+    //方框画线后的具体标注
+    function mark_square(img_data,ox1,oy1,ox2,oy2){
+        var square_message = prompt("请输入标注信息:","");
+        var cvs=document.getElementById('test-canvas');
+        var ctx=cvs.getContext('2d');
+        if (square_message != null){
+            hasMarked = true;
+            alert("你输入的标注信息为："+square_message+".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
+            marked_num++;
+            ctx.font="20px Georgia";
+            ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
+            add_Mark(square_message);
+        }else{
+            alert("取消本次标注");
+            ctx.putImageData(img_data,0,0);
+        }
+    }
+
+    //自由划线后具体标注
+    function mark_line(img_data,ox1,oy1){
+        var line_message = prompt("请输入标注信息:","");
+        var cvs=document.getElementById('test-canvas');
+        var ctx=cvs.getContext('2d');
+        if (line_message != null){
+            hasMarked = true;
+            alert("你输入的标注信息为："+ line_message +".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
+            marked_num++;
+            ctx.font="20px Georgia";
+            ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
+            add_Mark(line_message);
+        }else{
+            alert("取消本次标注");
+            ctx.putImageData(img_data,0,0);
+        }
+    }
+
+    //将新增的区域编号与标注的文本信息添加至表格当中
+    function add_Mark(message){
+        var oneRow = table_info.insertRow();
+        var cell1 = oneRow.insertCell();
+        var cell2 = oneRow.insertCell();
+        var cell_id = "No." + (table_info.rows.length-1);
+        cell1.innerHTML= cell_id ;
+        cell2.innerHTML="<input id='tempinput' value=''>";
+        document.getElementById('tempinput').id = cell_id;
+        document.getElementById(cell_id).value = message;
+        mark_messages.push(message);
+    }
+
+    //用于清空表格内容与信息储存数组
+    function clearTable(){
+        origin_img = '';
+        hasMarked = false;
+        totalInput.readOnly = true;
+        totalInput.value='';
+        while( table_info.rows.length > 1){
+            table_info.deleteRow(table_info.rows.length-1);
+        }
+        while( mark_messages.length > 0){
+            mark_messages.pop();
+        }
+    }
+
+
+</script>
+
+<script src="../js/supersized.3.2.7.min.js"></script>
+<script src="../js/supersized-init.js"></script>
+<script src="../js/scripts.js"></script>
+
+</body>
+</html>

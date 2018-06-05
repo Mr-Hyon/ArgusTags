@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <title>Argus Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/supersized.css">
+    <link rel="stylesheet" href="../css/style.css">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div class="page-container">
+    <h1>Argus Login</h1>
+    <br/>
+        <select id="identity" style="width: 270px;height: 30px;margin-top: 25px;
+    padding: 0 15px;
+    background: #2d2d2d; /* browsers that don't support rgba */
+    background: rgba(45,45,45,.15);
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    border: 1px solid #3d3d3d; /* browsers that don't support rgba */
+    border: 1px solid rgba(255,255,255,.15);
+    -moz-box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+    -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+    box-shadow: 0 2px 3px 0 rgba(0,0,0,.1) inset;
+    font-family: 'PT Sans', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,.1);">
+            <option value="initiator">任务发布者</option>
+            <option value="worker">众包工人</option>
+            <option value="admin">管理员</option>
+        </select>
+    <br/>
+        <input type="text" id="username" class="username" placeholder="Username">
+    <br/>
+        <input type="password" id="password" class="password" placeholder="Password">
+    <br/>
+        <div class="error"><span>+</span></div>
+    <button  id="register" >Go to register</button>
+    <br/>
+    <button  id="signin">Sign me in</button>
+    <div class="connect">
+        <p>Or connect with:</p>
+        <p>
+            <a class="facebook" href=""></a>
+            <a class="twitter" href=""></a>
+        </p>
+    </div>
+</div>
+
+<script src="../js/jquery-1.8.2.min.js"></script>
+<script src="../js/supersized.3.2.7.min.js"></script>
+<script src="../js/supersized-init.js"></script>
+<script src="../js/scripts.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script>
+
+    document.getElementById('register').onclick = function (e) {
+        //alert("Hello");
+        window.location = 'http://localhost:8080/redirect';
+    }
+    document.getElementById('signin').onclick = function (e) {
+
+        var name=document.getElementById('username').value;
+        var pw=document.getElementById('password').value;
+        var type=document.getElementById('identity').value;
+
+        if(name==""||name==null)
+            alert('请输入用户名！');
+        else if(pw==""||pw==null)
+            alert('请输入密码！');
+
+        else{
+            //alert("trying to send request")
+            var result = login(name,pw,type)
+            if(result == "success"){
+                //alert("登陆成功")
+                $.cookie('username',name)
+                if(type == "worker"){
+                    window.location = "http://localhost:8080/workerHome"
+                }
+                if(type == "initiator"){
+                    window.location = "http://localhost:8080/initiatorHome"
+                }
+                if(type == "admin"){
+                    window.location = "http://localhost:8080/adminHome"
+                }
+            }
+            else{
+                alert("用户不存在或密码错误")
+            }
+        }
+    }
+
+    function login(username,password,type) {
+
+        var res = null;
+        $.ajax({
+            url: 'http://localhost:8080/login',
+            type: 'post',
+            async: false,
+            data: {
+                username:username,
+                password:password,
+                type:type
+            },
+            success: function (data) {
+                res = data
+            },
+            error: function() {
+                alert('fail')
+            }
+        })
+        return res
+    }
+
+</script>
+</body>
+</html>

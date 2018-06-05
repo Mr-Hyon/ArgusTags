@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Argus  Administrator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <!--<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/supersized.css">
+    <link rel="stylesheet" href="../css/style.css">-->
+    <link rel="stylesheet" href="../css/inistyle.css">
+    <script src="../js/jquery-1.8.2.min.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div class="page-container">
+    <ul>
+        <li style="float:right"><a href="http://localhost:8080">Log out</a></li>
+        <li style="float:right" id="user"><a>Welcome!</a></li>
+    </ul>
+    <br><br>
+        <p id="usernum" style="text-align:center;"></p>
+        <p id="ininum" style="text-align:center;"></p>
+        <p id="workernum" style="text-align:center;"></p>
+        <p id="tasknum" style="text-align:center;"></p>
+        <p id="taskon" style="text-align:center;"></p>
+        <p id="taskfn" style="text-align:center;"></p>
+</div>
+<script>
+    var Data = null
+
+    $.ajax({
+        url: 'http://localhost:8080/getInfo',
+        type: 'post',
+        async: false,
+        data: {
+        },
+        success: function (data) {
+            Data = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+
+    var Obj = JSON.parse(Data)
+var num0=Obj.usernum;
+var num1=Obj.ininum;
+var num2=Obj.workernum;
+var num3=Obj.tasknum;
+var num4=Obj.taskog;
+var num5=Obj.taskfn;
+
+document.getElementById('usernum').innerHTML="系统用户数："+num0;
+document.getElementById('ininum').innerHTML="众包发起者数："+num1;
+document.getElementById('workernum').innerHTML="众包工人数："+num2;
+document.getElementById('tasknum').innerHTML="系统任务数："+num3;
+document.getElementById('taskon').innerHTML="进行中任务数："+num4;
+document.getElementById('taskfn').innerHTML="已完成任务数："+num5;
+</script>
+</body>
+</html>

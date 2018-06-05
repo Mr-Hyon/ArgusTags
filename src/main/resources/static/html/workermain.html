@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Worker Main Menu</title>
+
+    <link rel="stylesheet" href="../css/markpage.css">
+    <script src="../js/jquery-1.8.2.min.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+</head>
+<body>
+
+<ul>
+    <li><a href="http://localhost:8080/workerHome">Home</a></li>
+    <li><a href="http://localhost:8080/worker/yourtask">Your Task</a></li>
+    <li><a href="http://localhost:8080/worker/findtask">Find Task</a></li>
+    <li><a href="http://localhost:8080">Log out</a></li>
+</ul>
+
+<br/>
+<br/>
+
+<p id="UserName"></p>
+<p id="Credit"></p>
+<p id="OngoingNum"></p>
+<p id="CompletedNum"></p>
+
+<script>
+
+    var name=$.cookie("username");
+
+    var userData = null
+
+    $.ajax({
+        url: 'http://localhost:8080/getWorkerInfo',
+        type: 'post',
+        async: false,
+        data: {
+            username:name
+        },
+        success: function (data) {
+            userData = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+
+    var userObj = JSON.parse(userData)
+
+    var credit = userObj.credit
+    var ongoing = userObj.numOfTasks
+
+    document.getElementById("UserName").innerHTML="用户:"+name;
+    document.getElementById("Credit").innerHTML="积分："+credit;
+    document.getElementById("OngoingNum").innerHTML="进行中任务数："+ongoing;
+
+
+</script>
+
+</body>
+</html>

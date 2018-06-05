@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:style="http://www.w3.org/1999/xhtml" xmlns:float="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Argus Initiator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <!--<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/supersized.css">
+    <link rel="stylesheet" href="../css/style.css">-->
+    <link href="../css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/inistyle.css">
+    <script src="../js/jquery-1.8.2.min.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div class="page-container">
+    <ul>
+        <li><a href="http://localhost:8080/initiatorHome">Home</a></li>
+        <li><a href="http://localhost:8080/initiator/message">Message</a></li>
+        <li style="float:right"><a href="http://localhost:8080">Log out</a></li>
+        <li style="float:right" id="user"><a>Welcome!</a></li>
+    </ul>
+    </br></br></br>
+        <p id="task"  style="text-align:center;"></p>
+    <HR   width="80%" color=#000000 SIZE=3>
+    <table class="table table-striped table-bordered table-hover" width="100%" border="1px" id="alltask">
+        <tr>
+            <td>任务编号</td><td>任务类型</td><td>标注物体</td><td>图片数量</td><td>是否完成</td><td>最后期限</td>
+        </tr>
+
+    </table>
+    </br>
+    <div style="text-align:center;">
+        <button id="rltask" class="btn btn-default btn-lg" >发布新任务</button>
+    </div>
+</div>
+<script>
+    var name=$.cookie("username");
+    var tasknum=12;
+    var TaskJsonList = null
+    var TaskJsonObjArray = null
+
+    $.ajax({
+        url: 'http://localhost:8080/getInitiatorTask',
+        type: 'post',
+        async: false,
+        data: {
+            username:name
+        },
+        success: function (data) {
+            TaskJsonList = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+    TaskJsonObjArray = JSON.parse(TaskJsonList)
+
+    tasknum=TaskJsonObjArray[0].num
+
+    document.getElementById('task').innerHTML="您发布的任务("+tasknum+"):";
+
+    var table_info = document.getElementById("alltask")
+
+    function load_task(id,type,obj,numb,status,deadline){
+
+        var OneRow = table_info.insertRow()
+        var cell1 = OneRow.insertCell()
+        var cell2 = OneRow.insertCell()
+        var cell3 = OneRow.insertCell()
+        var cell4 = OneRow.insertCell()
+        var cell5 = OneRow.insertCell()
+        var cell6 = OneRow.insertCell()
+
+        cell1.innerHTML = id
+        cell2.innerHTML = type
+        cell3.innerHTML = obj
+        cell4.innerHTML = numb
+        cell5.innerHTML = status
+        cell6.innerHTML=deadline
+
+    }
+
+    for(var i=1 ; i<=TaskJsonObjArray[0].num ; i++){
+        var TaskId = TaskJsonObjArray[i].id
+        var TaskType = TaskJsonObjArray[i].type
+        var TaskObj=TaskJsonObjArray[i].obj
+        var TaskNumPics = TaskJsonObjArray[i].num
+        var x=TaskJsonObjArray[i].status
+        if(x==1)
+            var TaskStatus="已完成"
+        else
+            var TaskStatus="进行中"
+        var EndTime = TaskJsonObjArray[i].end_date
+
+        load_task(TaskId,TaskType,TaskObj,TaskNumPics,TaskStatus,EndTime)
+    }
+
+    //load_task("5","自由标注","篮球",10,"进行中","2018-6-1")
+
+
+    document.getElementById('rltask').onclick=function (e) {
+        window.location="http://localhost:8080/releaseTask"
+    }
+</script>
+</body>
+</html>
