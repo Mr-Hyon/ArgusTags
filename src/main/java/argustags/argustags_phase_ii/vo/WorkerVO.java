@@ -1,12 +1,20 @@
 package argustags.argustags_phase_ii.vo;
 
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class WorkerVO {
-
+@Entity
+@Table(name = "worker")
+public class WorkerVO implements Serializable {
+    private static final long serialVersionUID = 2120869894112984147L;
+    @Id
     private String username;
+
     private String password;
+
     private ArrayList<String> taskList;
+
     private int credit;
 
     public WorkerVO(){

@@ -2,7 +2,7 @@ package argustags.argustags_phase_ii.vo;
 
 import java.util.ArrayList;
 
-public class TaskVO {
+public class  TaskVO {
 
     private String ID;
     private String name;

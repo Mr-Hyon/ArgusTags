@@ -1,5 +1,6 @@
 package argustags.argustags_phase_ii.controller;
 
+import argustags.argustags_phase_ii.repository.WorkerRepository;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
@@ -12,6 +13,7 @@ import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +27,9 @@ import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 @Controller
 public class WorkerController{
+
+    @Autowired
+    private WorkerRepository workerRepository;
 
     WorkerService workerservice=new WorkerImpl();
     TaskService taskservice = new TaskImpl();
