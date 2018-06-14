@@ -27,4 +27,6 @@ public interface WorkerService {
     public ResultMessage submitTask(String taskID);
 
     public WorkerVO getByName(String name);
+
+    public ArrayList<TaskVO> getFilteredTask(String workerName);
 }

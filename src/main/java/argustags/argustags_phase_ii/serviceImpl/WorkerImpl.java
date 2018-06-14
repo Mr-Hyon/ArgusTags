@@ -1,6 +1,10 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
+<<<<<<< HEAD
 import argustags.argustags_phase_ii.repository.WorkerRepository;
+=======
+import argustags.argustags_phase_ii.service.AdminService;
+>>>>>>> 674116cbd2a890f8df0ee9a6efd3c81cc0785337
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
 import argustags.argustags_phase_ii.util.FileOpe;
@@ -156,5 +160,24 @@ public class WorkerImpl implements WorkerService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    //根据名称筛选对应task（剔除该worker已接受的task）
+    public ArrayList<TaskVO> getFilteredTask(String workerName){
+        AdminService as = new AdminImpl();
+        WorkerService ws = new WorkerImpl();
+
+        ArrayList<TaskVO> list1 = as.getTask();
+        ArrayList<TaskVO> list2 = ws.getTask(workerName);
+
+        for(TaskVO workerTask : list2){
+            for(TaskVO task : list1){
+                if(workerTask.getID().equals(task.getID())){
+                    list1.remove(task);
+                    break;
+                }
+            }
+        }
+        return list1;
     }
 }

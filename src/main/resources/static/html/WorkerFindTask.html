@@ -75,7 +75,7 @@
 
     TaskJsonObjArray = JSON.parse(TaskJsonList)
 
-    for(var i=1 ; i<TaskJsonObjArray[0].num ; i++){
+    for(var i=1 ; i<=TaskJsonObjArray[0].num ; i++){
         var TaskId = TaskJsonObjArray[i].id
         var TaskName = TaskJsonObjArray[i].name
         var TaskNumPics = TaskJsonObjArray[i].num
