@@ -7,6 +7,17 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class FileOpe {
+    //新建文件
+    public void createFile(String path){
+        File f = new File(path);
+        if(!f.exists()){
+            try {
+                f.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     //返回文件的行数
     public int getLineNum(String fileName){
@@ -18,6 +29,7 @@ public class FileOpe {
                 num++;
             }
             br.close();
+            fr.close();
             return num;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -41,6 +53,8 @@ public class FileOpe {
                     result++;
                 }
             }
+            br.close();
+            fr.close();
             return result;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -109,6 +123,8 @@ public class FileOpe {
             while((valueString = br.readLine())!=null){
                 content.add(valueString);
             }
+            br.close();
+            fr.close();
             return content;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -128,6 +144,7 @@ public class FileOpe {
             br.readLine();
             String result = br.readLine();
             br.close();
+            fr.close();
             return result;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

@@ -32,10 +32,16 @@ public class TaskImpl implements TaskService {
         String infoPath = "Task\\" + vo.getID() + "\\" + "FundInfo";
         String workerPath = "Task\\" + vo.getID() + "\\" + "WorkerList";
         String imagePath = "Task\\" + vo.getID() + "\\" + "ImageList";
+
         FileOpe fo = new FileOpe();
+
+        fo.createFile(infoPath);
+        fo.createFile(workerPath);
+        fo.createFile(imagePath);
 
         fo.write("taskList",vo.getID()+"\n");
         fo.write(infoPath,vo.getID()+"\n"+vo.getName()+"\n"+vo.getInitName()+"\n"+vo.getType()+"\n"+vo.getStatus()+"\n"+vo.getStartTime()+"\n"+vo.getEndTime()+"\n"+vo.getDescribe()+"\n"+vo.getObeject()+"\n"+vo.getCut()+"\n"+vo.getReward()+"\n"+vo.getWorkernum()+"\n");
+
         for(String worker:vo.getWorkers()){
             fo.write(workerPath,worker+"\n");
 
@@ -49,21 +55,27 @@ public class TaskImpl implements TaskService {
     }
 
     public ResultMessage delTask(String id) {
-        String path = "Task\\" + id;
+        String path = "Task" + File.separator + id;
         File f = new File(path);
-        File f1 = new File(path + "\\FundInfo");
-        File f2 = new File(path + "\\WorkerList");
-        File f3 = new File(path + "\\ImageList");
+        File f1 = new File(path + File.separator + "FundInfo");
+        File f2 = new File(path + File.separator + "WorkerList");
+        File f3 = new File(path + File.separator + "ImageList");
         f1.delete();
         f2.delete();
         f3.delete();
         f.delete();
+        if(f.exists()){
+            return ResultMessage.FAILED;
+        }
         return ResultMessage.SUCCESS;
     }
 
     public ResultMessage updateTask(TaskVO vo) {
         TaskService ts = new TaskImpl();
-        ts.delTask(vo.getID());
+        ResultMessage rm = ts.delTask(vo.getID());
+        if(rm==ResultMessage.FAILED){
+            return rm;
+        }
         return ts.addTask(vo);
     }
 
@@ -94,6 +106,8 @@ public class TaskImpl implements TaskService {
 
             vo.setWorkers(workers);
             vo.setEndTime(endTime);
+            br.close();
+            fr.close();
             return vo;
         } catch (FileNotFoundException e) {
             e.printStackTrace();

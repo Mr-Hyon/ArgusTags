@@ -1,6 +1,5 @@
 package argustags.argustags_phase_ii.controller;
 
-import argustags.argustags_phase_ii.repository.WorkerRepository;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
@@ -12,8 +11,10 @@ import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.google.gson.JsonParser;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,9 +28,6 @@ import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 @Controller
 public class WorkerController{
-
-    @Autowired
-    private WorkerRepository workerRepository;
 
     WorkerService workerservice=new WorkerImpl();
     TaskService taskservice = new TaskImpl();
@@ -97,20 +95,26 @@ public class WorkerController{
     @ResponseBody
     public String FindWorkerTask(@RequestParam("username") String username){
         ArrayList<TaskVO> WorkerTask = new ArrayList<>();
-        WorkerTask = adminservice.getTask();
+        WorkerTask = workerservice.getFilteredTask(username);
         JsonObject obj = new JsonObject();
         JsonArray array = new JsonArray();
-        obj.addProperty("num",WorkerTask.size());
-        array.add(obj);
+        if(WorkerTask == null){
+            obj.addProperty("num",0);
+            array.add(obj);
+        }
+        else {
+            obj.addProperty("num", WorkerTask.size());
+            array.add(obj);
 
-        for(int i = 1; i < WorkerTask.size() ; i++){
-            TaskVO sample = WorkerTask.get(i);
-            JsonObject temp = new JsonObject();
-            temp.addProperty("id",sample.getID());
-            temp.addProperty("name",sample.getName());
-            temp.addProperty("num",1);
-            temp.addProperty("end_date",sample.getEndTime());
-            array.add(temp);
+            for (int i = 0; i < WorkerTask.size(); i++) {
+                TaskVO sample = WorkerTask.get(i);
+                JsonObject temp = new JsonObject();
+                temp.addProperty("id", sample.getID());
+                temp.addProperty("name", sample.getName());
+                temp.addProperty("num", sample.getImgList().size());
+                temp.addProperty("end_date", sample.getEndTime());
+                array.add(temp);
+            }
         }
         return array.toString();
     }
@@ -147,7 +151,7 @@ public class WorkerController{
         for(int i=0;i<imgList.size();i++){
             JsonObject obj = new JsonObject();
             obj.addProperty("image",imgList.get(i));
-            System.out.println(imgList.get(i));
+            //System.out.println(imgList.get(i));
             arr.add(obj);
         }
         return arr.toString();
@@ -155,18 +159,21 @@ public class WorkerController{
 
     @PostMapping(value = "/updateWorkerTask", produces="application/text; charset=utf-8")
     @ResponseBody
-    String updateWorkerTask(@RequestParam("username") String username,
+    public String UpdateWorkerTask(@RequestParam("username") String username,
                             @RequestParam("taskId") String taskId,
-                            @RequestParam("marked_num") int marked_num,
-                            @RequestParam("imgList") String imgList){
-        Jsonhelper helper = new Jsonhelper();
+                            @RequestParam("marked_num") String marked_num,
+                            @RequestParam("imgList") String image,
+                            @RequestParam("pic_index") int pic_index){
+        System.out.println("114514");
+        System.out.println(image);
         TaskVO vo = taskservice.getByID(taskId);
-        JsonObject obj = helper.fromJson(imgList,JsonObject.class);
+        JsonParser parser = new JsonParser();
+        JsonElement jsonElement = parser.parse(image);
+        JsonObject obj = jsonElement.getAsJsonObject();
         ArrayList<String> list = new ArrayList<>();
-        JsonArray arr = obj.getAsJsonArray("imageData");
-        for(int i=0;i<arr.size();i++){
-            list.add(arr.get(i).toString());
-        }
+        list = vo.getImgList();
+
+        list.set(pic_index,image);
         vo.setImgList(list);
         ResultMessage rm1 = taskservice.updateTask(vo);
 
@@ -176,6 +183,7 @@ public class WorkerController{
         else{
             return "fail";
         }
+
     }
 
 
