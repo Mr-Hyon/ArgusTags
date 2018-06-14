@@ -22,7 +22,7 @@ public interface WorkerService {
 
     public int getCredit(String username);
 
-    public ResultMessage updateCredit(int credit,String username);
+   public ResultMessage updateCredit(int credit,String username);
 
     public ResultMessage submitTask(String taskID);
 

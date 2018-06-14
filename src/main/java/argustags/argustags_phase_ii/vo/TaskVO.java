@@ -1,10 +1,15 @@
 package argustags.argustags_phase_ii.vo;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+@Entity
+@Table(name = "task")
 public class  TaskVO implements Serializable {
-
+    @Id
     private String ID;
     private String name;
     private String initName;

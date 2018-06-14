@@ -1,10 +1,10 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
-<<<<<<< HEAD
+import argustags.argustags_phase_ii.service.WorkerService;
 import argustags.argustags_phase_ii.repository.WorkerRepository;
-=======
+
 import argustags.argustags_phase_ii.service.AdminService;
->>>>>>> 674116cbd2a890f8df0ee9a6efd3c81cc0785337
+
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
 import argustags.argustags_phase_ii.util.FileOpe;

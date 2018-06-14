@@ -45,9 +45,7 @@ public class WorkerVO implements Serializable {
         this.password = password;
     }
 
-    public List<String> getTaskList(){
-        return taskList;
-    }
+    public List<String> getTaskList(){return taskList;}
 
     public void setTaskList(List<String> taskList){
         this.taskList = taskList;
