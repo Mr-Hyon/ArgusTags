@@ -1,8 +1,9 @@
 package argustags.argustags_phase_ii.vo;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class  TaskVO {
+public class  TaskVO implements Serializable {
 
     private String ID;
     private String name;

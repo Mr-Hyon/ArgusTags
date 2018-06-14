@@ -1,9 +1,16 @@
 package argustags.argustags_phase_ii.vo;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class InitiatorVO {
 
+@Entity
+@Table(name = "initiator")
+public class InitiatorVO implements Serializable {
+    @Id
     private String username;
     private String password;
     private ArrayList<String> taskList;

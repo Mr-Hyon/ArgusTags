@@ -3,17 +3,18 @@ package argustags.argustags_phase_ii.vo;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "worker")
 public class WorkerVO implements Serializable {
-    private static final long serialVersionUID = 2120869894112984147L;
+    private static final long serialVersionUID = 1L;
     @Id
     private String username;
 
     private String password;
 
-    private ArrayList<String> taskList;
+    private List<String> taskList;
 
     private int credit;
 
@@ -21,7 +22,7 @@ public class WorkerVO implements Serializable {
 
     }
 
-    public WorkerVO(String username, String password, ArrayList<String> taskList, int credit){
+    public WorkerVO(String username, String password, List<String> taskList, int credit){
         this.username = username;
         this.password = password;
         this.taskList = taskList;
@@ -44,11 +45,11 @@ public class WorkerVO implements Serializable {
         this.password = password;
     }
 
-    public ArrayList<String> getTaskList(){
+    public List<String> getTaskList(){
         return taskList;
     }
 
-    public void setTaskList(ArrayList<String> taskList){
+    public void setTaskList(List<String> taskList){
         this.taskList = taskList;
     }
 
