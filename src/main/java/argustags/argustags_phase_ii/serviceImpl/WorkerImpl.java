@@ -1,5 +1,6 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
+import argustags.argustags_phase_ii.repository.WorkerRepository;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
 import argustags.argustags_phase_ii.util.FileOpe;
@@ -7,25 +8,22 @@ import argustags.argustags_phase_ii.util.RegisterLogin;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.util.ArrayList;
 
 public class WorkerImpl implements WorkerService {
 
+    @Autowired
+    private WorkerRepository workerRepository;
     //	实现注册功能，在workerList文件中写入用户名和密码，并创建worker目录
-    public ResultMessage register(String username, String password){
-        ArrayList<String> taskList = new ArrayList<>();
-        File wf = new File("Worker");
-        if(!wf.exists()){
-            wf.mkdir();
-        }
-        WorkerService ws = new WorkerImpl();
-        WorkerVO vo = new WorkerVO(username,password,taskList,0);
-        ws.add(vo);
-        String workerList = "workerList";
-        RegisterLogin rl = new RegisterLogin();
-        return rl.register(workerList,username,password);
+    public WorkerVO register(String username, String password){
+      WorkerVO worker = new WorkerVO();
+      worker.setUsername(username);
+      worker.setPassword(password);
+      worker.setCredit(100);
+      return workerRepository.save(worker);
     }
 
     //  实现登录功能，读取workerList文件，将用户名和密码分别存在两个ArrayList中，并判断输入用户名和密码是否存在且对应

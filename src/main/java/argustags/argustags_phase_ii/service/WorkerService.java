@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public interface WorkerService {
 
-    public ResultMessage register(String username,String password);
+    public WorkerVO register(String username, String password);
 
     public ResultMessage login(String username, String password);
 
