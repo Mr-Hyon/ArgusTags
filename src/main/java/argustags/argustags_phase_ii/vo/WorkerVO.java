@@ -1,5 +1,7 @@
 package argustags.argustags_phase_ii.vo;
 
+import org.apache.tools.ant.taskdefs.Parallel;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.io.Serializable;
@@ -9,12 +11,16 @@ import java.util.List;
 @Table(name = "worker")
 public class WorkerVO implements Serializable {
     private static final long serialVersionUID = 1L;
+
     @Id
+    @GeneratedValue
+    private int workerid;
+
     private String username;
 
-    private String password;
+    private String passwd;
 
-    private List<String> taskList;
+    private ArrayList<Integer> taskList;
 
     private int credit;
 
@@ -22,11 +28,19 @@ public class WorkerVO implements Serializable {
 
     }
 
-    public WorkerVO(String username, String password, List<String> taskList, int credit){
+        public WorkerVO(String username, String password, ArrayList<Integer> taskList, int credit){
         this.username = username;
-        this.password = password;
+        this.passwd = password;
         this.taskList = taskList;
         this.credit = credit;
+    }
+
+    public int getWorkerid() {
+        return workerid;
+    }
+
+    public void setWorkerid(int userid) {
+        this.workerid = userid;
     }
 
     public String getUsername(){
@@ -38,17 +52,21 @@ public class WorkerVO implements Serializable {
     }
 
     public String getPassword(){
-        return password;
+        return passwd;
     }
 
     public void setPassword(String password){
-        this.password = password;
+        this.passwd = password;
     }
 
-    public List<String> getTaskList(){return taskList;}
+    public ArrayList<Integer> getTaskList(){return taskList;}
 
-    public void setTaskList(List<String> taskList){
+    public void setTaskList(ArrayList<Integer> taskList){
         this.taskList = taskList;
+    }
+
+    public void addTask(int TaskID){
+       taskList.add(TaskID);
     }
 
     public int getCredit(){

@@ -11,6 +11,6 @@ public interface TaskService {
 
     public ResultMessage updateTask(TaskVO vo);
 
-    public TaskVO getByID(String taskID);
+    public TaskVO getByID(int taskID);
     
 }

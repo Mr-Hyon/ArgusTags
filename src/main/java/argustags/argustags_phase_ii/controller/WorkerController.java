@@ -15,6 +15,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import jdk.nashorn.internal.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +29,12 @@ import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 @Controller
 public class WorkerController{
-
-    WorkerService workerservice=new WorkerImpl();
-    TaskService taskservice = new TaskImpl();
-    AdminService adminservice = new AdminImpl();
+    @Autowired
+    private WorkerService workerService;
+    @Autowired
+    private TaskService taskservice ;
+    @Autowired
+    AdminService adminservice;
 
     @RequestMapping("/workerHome")
     String workerMainPage(){
@@ -54,13 +57,13 @@ public class WorkerController{
     @PostMapping(value = "/getWorkerInfo", produces="application/text; charset=utf-8")
     @ResponseBody
     public String getWorkerInfo(@RequestParam("username") String username){
-        int credit = workerservice.getCredit(username);
+        int credit = workerService.getCredit(username);
         int numOfTasks = 0;
-        if(workerservice.getTask(username) == null){
+        if(workerService.getTask(username) == null){
             numOfTasks = 0;
         }
         else{
-            numOfTasks = workerservice.getTask(username).size();
+            numOfTasks = workerService.getTask(username).size();
         }
         JsonObject obj = new JsonObject();
         obj.addProperty("username",username);
@@ -73,7 +76,7 @@ public class WorkerController{
     @ResponseBody
     public String getWorkerTask(@RequestParam("username") String username){
         ArrayList<TaskVO> WorkerTask = new ArrayList<>();
-        WorkerTask = workerservice.getTask(username);
+        WorkerTask = workerService.getTask(username);
         JsonObject obj = new JsonObject();
         JsonArray array = new JsonArray();
         obj.addProperty("num",WorkerTask.size());
@@ -95,7 +98,7 @@ public class WorkerController{
     @ResponseBody
     public String FindWorkerTask(@RequestParam("username") String username){
         ArrayList<TaskVO> WorkerTask = new ArrayList<>();
-        WorkerTask = workerservice.getFilteredTask(username);
+        WorkerTask = workerService.getFilteredTask(username);
         JsonObject obj = new JsonObject();
         JsonArray array = new JsonArray();
         if(WorkerTask == null){
@@ -121,9 +124,9 @@ public class WorkerController{
 
     @PostMapping(value = "/workerAcceptTask", produces="application/text; charset=utf-8")
     @ResponseBody
-    public String FindWorkerTask(@RequestParam("taskId") String taskId,
+    public String FindWorkerTask(@RequestParam("taskId") int taskId,
     @RequestParam("workerName") String workerName){
-        ResultMessage rm = workerservice.acceptTask(taskId,workerName);
+        ResultMessage rm = workerService.acceptTask(taskId,workerName);
         if(rm == ResultMessage.SUCCESS){
             return "success";
         }
@@ -135,7 +138,7 @@ public class WorkerController{
     @PostMapping(value = "/getImageList", produces="application/text; charset=utf-8")
     @ResponseBody
     public String GetImageList(@RequestParam("username") String username,
-                               @RequestParam("taskId") String taskId){
+                               @RequestParam("taskId") int taskId){
         TaskVO vo = taskservice.getByID(taskId);
         ArrayList<String> imgList = vo.getImgList();
         String taskName = vo.getName();
@@ -160,7 +163,7 @@ public class WorkerController{
     @PostMapping(value = "/updateWorkerTask", produces="application/text; charset=utf-8")
     @ResponseBody
     public String UpdateWorkerTask(@RequestParam("username") String username,
-                            @RequestParam("taskId") String taskId,
+                            @RequestParam("taskId") int taskId,
                             @RequestParam("marked_num") String marked_num,
                             @RequestParam("imgList") String image,
                             @RequestParam("pic_index") int pic_index){

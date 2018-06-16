@@ -5,18 +5,19 @@ import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface WorkerService {
 
-    public WorkerVO register(String username, String password);
+    public List<WorkerVO> getAllUserlist();
+
+    public  void register(String username, String password);
 
     public ResultMessage login(String username, String password);
 
-    public ResultMessage add(WorkerVO vo);
-
     public ResultMessage update(WorkerVO vo);
 
-    public ResultMessage acceptTask(String id,String workerName);
+    public ResultMessage acceptTask(int id,String workerName);
 
     public ArrayList<TaskVO> getTask(String workerName);
 

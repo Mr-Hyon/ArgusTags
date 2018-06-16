@@ -1,14 +1,17 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
+import argustags.argustags_phase_ii.repository.TaskRepository;
 import argustags.argustags_phase_ii.service.InitiatorService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.util.FileOpe;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -17,9 +20,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static argustags.argustags_phase_ii.util.UnZip.unZipFiles;
-
+@RestController
 public class TaskImpl implements TaskService {
 
+    @Autowired
+    private TaskRepository taskRepository;
     public ResultMessage addTask(TaskVO vo) {
         InitiatorService is = new InitiatorImpl();
         if (is.getByName(vo.getInitName()).getCredit() < 0) {
@@ -79,43 +84,8 @@ public class TaskImpl implements TaskService {
         return ts.addTask(vo);
     }
 
-    public TaskVO getByID(String taskID) {
-        String infoPath = "Task\\" + taskID + "\\" + "FundInfo";
-        String workerPath = "Task\\" + taskID + "\\" + "WorkerList";
-        String imagePath = "Task\\" + taskID + "\\" + "ImageList";
-        try {
-            FileReader fr = new FileReader(infoPath);
-            BufferedReader br = new BufferedReader(fr);
-            String ID = br.readLine();
-            String name = br.readLine();
-            String initName = br.readLine();
-            String type = br.readLine();
-            String status = br.readLine();
-            String startTime = br.readLine();
-            String endTime = br.readLine();
-            String describe = br.readLine();
-            String object = br.readLine();
-            double cut = Double.parseDouble(br.readLine());
-            int reward = Integer.parseInt(br.readLine());
-            int workernum = Integer.parseInt(br.readLine());
-            FileOpe fo = new FileOpe();
-            ArrayList<String> workers = fo.getLine(workerPath);
-            ArrayList<String> imgList = fo.getLine(imagePath);
-
-            TaskVO vo = new TaskVO(ID,name,initName,imgList,type,status,startTime,endTime,describe,object,cut,reward,workernum);
-
-            vo.setWorkers(workers);
-            vo.setEndTime(endTime);
-            br.close();
-            fr.close();
-            return vo;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public TaskVO getByID(int taskID) {
+        return taskRepository.findById(taskID).get();
     }
 
 

@@ -5,13 +5,14 @@ import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.util.FileOpe;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+@RestController
 public class AdminImpl implements AdminService {
 
     //  实现登录功能，判断admin用户名密码输入是否正确

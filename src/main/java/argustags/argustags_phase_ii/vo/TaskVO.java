@@ -1,32 +1,35 @@
 package argustags.argustags_phase_ii.vo;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "task")
 public class  TaskVO implements Serializable {
     @Id
-    private String ID;
+    private int id;
     private String name;
     private String initName;
+
     private ArrayList<String> workers;
+
     private ArrayList<String> imgList;
     private String type;
     private String status;
     private String startTime;
     private String endTime;
-    private String describe;
+    private String description;
     private String object;
-    private double cut;
-    private int reward;
-    private int workernum;
 
-    public TaskVO(String ID,String name,String initName,ArrayList<String> imgList,String type,String status,String startTime,String endTime,String describe,String object,double cut,int reward,int workernum){
-        this.ID = ID;
+
+    public TaskVO(){
+
+    }
+
+    public TaskVO(int ID,String name,String initName,ArrayList<String> imgList,String type,String status,String startTime,String endTime,String describe,String object){
+        this.id = ID;
         this.name = name;
         this.initName = initName;
         this.imgList = imgList;
@@ -34,22 +37,20 @@ public class  TaskVO implements Serializable {
         this.status = status;
         this.startTime = startTime;
         this.endTime=endTime;
-        this.describe = describe;
+        this.description = describe;
         this.object = object;
-        this.cut = cut;
-        this.reward = reward;
-        this.workernum = workernum;
+
         endTime = "no data";
         ArrayList<String> list = new ArrayList<>();
         workers = list;
     }
 
-    public String getID(){
-        return ID;
+    public int getID(){
+        return id;
     }
 
-    public void setID(String ID){
-        this.ID = ID;
+    public void setID(int ID){
+        this.id = ID;
     }
 
     public String getName(){
@@ -121,11 +122,11 @@ public class  TaskVO implements Serializable {
     }
 
     public String getDescribe(){
-        return describe;
+        return description;
     }
 
     public void setDescribe(String describe){
-        this.describe = describe;
+        this.description = describe;
     }
 
     public String getObeject(){
@@ -136,27 +137,5 @@ public class  TaskVO implements Serializable {
         this.object = object;
     }
 
-    public double getCut(){
-        return cut;
-    }
 
-    public void setCut(int cut){
-        this.cut = cut;
-    }
-
-    public int getReward(){
-        return reward;
-    }
-
-    public void setReward(int reward){
-        this.reward = reward;
-    }
-
-    public int getWorkernum(){
-        return workernum;
-    }
-
-    public void setWorkernum(int workernum){
-        this.workernum = workernum;
-    }
 }

@@ -8,6 +8,7 @@ import argustags.argustags_phase_ii.serviceImpl.InitiatorImpl;
 import argustags.argustags_phase_ii.serviceImpl.WorkerImpl;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.WorkerVO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,10 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class pageController {
-
+    @Autowired
     private WorkerService workerService;
+
+    @Autowired
     private InitiatorService initiatorService;
 
     @RequestMapping("/")
@@ -58,8 +61,8 @@ public class pageController {
         }
 
         if(type.equals("worker")){
-            WorkerService worker=new WorkerImpl();
-                return worker.login(username,password).toString();
+            workerService.login(username,password);
+            return ResultMessage.SUCCESS.toString();
 
         }
 
@@ -81,9 +84,9 @@ public class pageController {
 
 
         if(type.equals("worker")){
-            WorkerService worker=new WorkerImpl();
-            return worker.register(username,password).toString();
 
+            workerService.register(username,password);
+            return ResultMessage.SUCCESS.toString();
         }
 
         if(type.equals("initiator")){

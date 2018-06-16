@@ -2,6 +2,7 @@ package argustags.argustags_phase_ii.vo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -11,7 +12,7 @@ public class Image implements Serializable {
     @GeneratedValue
     private  Long imgid;
     private String base64 ;
-    private List<Tag> Tags;
+    private ArrayList<Tag> Tags;
 
     public Image(){
 
@@ -33,7 +34,7 @@ public class Image implements Serializable {
         this.base64 = base64;
     }
 
-    public List<Tag> getTags() { return Tags; }
+    public ArrayList<Tag> getTags() { return Tags; }
 
-    public void setTags(List<Tag> Tags) { this.Tags = Tags; }
+    public void setTags(ArrayList<Tag> Tags) { this.Tags = Tags; }
 }

@@ -1,6 +1,7 @@
 package argustags.argustags_phase_ii.vo;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -11,8 +12,10 @@ import java.util.ArrayList;
 @Table(name = "initiator")
 public class InitiatorVO implements Serializable {
     @Id
+    @GeneratedValue
+    private int id;
     private String username;
-    private String password;
+    private String passwd;
     private ArrayList<String> taskList;
     private int credit;
 
@@ -22,10 +25,16 @@ public class InitiatorVO implements Serializable {
 
     public InitiatorVO(String username,String password,ArrayList<String> taskList,int credit){
         this.username = username;
-        this.password = password;
+        this.passwd = password;
         this.taskList = taskList;
         this.credit = credit;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id){ this.id = id; }
 
     public String getUsername(){
         return username;
@@ -36,11 +45,11 @@ public class InitiatorVO implements Serializable {
     }
 
     public String getPassword(){
-        return password;
+        return passwd;
     }
 
     public void setPassword(String password){
-        this.password = password;
+        this.passwd = password;
     }
 
     public ArrayList<String> getTaskList(){

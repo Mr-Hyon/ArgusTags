@@ -1,5 +1,6 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
+import argustags.argustags_phase_ii.repository.TaskRepository;
 import argustags.argustags_phase_ii.service.WorkerService;
 import argustags.argustags_phase_ii.repository.WorkerRepository;
 
@@ -13,87 +14,94 @@ import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
+@RestController
 public class WorkerImpl implements WorkerService {
 
     @Autowired
     private WorkerRepository workerRepository;
+    @Autowired
+    private TaskRepository taskRepository;
+    @Autowired
+    private TaskService taskService;
     //	实现注册功能，在workerList文件中写入用户名和密码，并创建worker目录
-    public WorkerVO register(String username, String password){
+
+    @Override
+    public List<WorkerVO> getAllUserlist(){
+        return workerRepository.findAll();
+    }
+
+    @Override
+    public void register(String username, String password){
       WorkerVO worker = new WorkerVO();
+      ArrayList<String> temp = new ArrayList();
+      temp.add("");
       worker.setUsername(username);
       worker.setPassword(password);
       worker.setCredit(100);
-      return workerRepository.save(worker);
+      worker.setTaskList(temp);
+      System.out.println(worker.getUsername());
+      System.out.println(worker.getPassword());
+      System.out.println(worker.getCredit());
+      System.out.println("imhere");
+      workerRepository.saveAndFlush(worker);
+
+    }
+
+
+
+    @Override
+    public ResultMessage login(String username, String password) {
+        WorkerVO worker1 = getByName(username);
+        if(username == worker1.getUsername()&&password == worker1.getPassword()){
+            return ResultMessage.SUCCESS;
+        }
+        else{
+            return ResultMessage.FAILED;
+        }
+
     }
 
     //  实现登录功能，读取workerList文件，将用户名和密码分别存在两个ArrayList中，并判断输入用户名和密码是否存在且对应
-    public ResultMessage login(String username, String password){
-        String workerList = "workerList";
-        RegisterLogin rl = new RegisterLogin();
-        return rl.login(workerList,username,password);
-    }
 
-    //新增一条worker信息
-    public ResultMessage add(WorkerVO vo){
-        File wf = new File("Worker\\"+vo.getUsername());
-        if(!wf.exists()){
-            wf.mkdir();
-        }
-        String infoPath = "Worker\\"+vo.getUsername()+"\\"+"FundInfo";
-        String taskPath = "Worker\\"+vo.getUsername()+"\\"+"TaskList";
-        FileOpe fo = new FileOpe();
-        fo.write(infoPath,vo.getUsername()+"\n"+vo.getPassword()+"\n"+vo.getCredit()+"\n");
-        fo.write(taskPath,"");
-        for(String task:vo.getTaskList()){
-            fo.write(taskPath,task+"\n");
-        }
-        return ResultMessage.SUCCESS;
-    }
+
+
 
     //删除原有worker信息，新增目前worker信息
     public ResultMessage update(WorkerVO vo){
-        String infoPath = "Worker\\"+vo.getUsername()+"\\"+"FundInfo";
-        String taskPath = "Worker\\"+vo.getUsername()+"\\"+"TaskList";
-        File f1 = new File(infoPath);
-        File f2 = new File(taskPath);
-        f1.delete();
-        f2.delete();
-        FileOpe fo = new FileOpe();
-        fo.write(infoPath,vo.getUsername()+"\n"+vo.getPassword()+"\n"+vo.getCredit()+"\n");
-        for(String task:vo.getTaskList()){
-            fo.write(taskPath,task+"\n");
-        }
+        workerRepository.saveAndFlush(vo);
         return ResultMessage.SUCCESS;
     }
 
     //在对应worker的taskList中加入此任务，并向接受此任务的工人列表中添加该worker
-    public ResultMessage acceptTask(String id,String workerName){
-        TaskService ts = new TaskImpl();
-        //if((ts.getByID(id).getWorkers().size())>=(ts.getByID(id).getWorkernum())){
-        ////    return ResultMessage.LIMITEDWORKERS;
-       // }
-        String taskPath = "Worker\\"+workerName+"\\"+"TaskList";
-        String workerPath = "Task\\"+id+"\\WorkerList";
-        FileOpe fo = new FileOpe();
-        fo.write(taskPath,id+"\n");
-        fo.write(workerPath,workerName+"\n");
+    public ResultMessage acceptTask(int id,String workerName){
+        TaskVO task =new TaskVO();
+        task = taskService.getByID(id);
+        task.addWorker(workerName);
+        WorkerVO worker = getByName(workerName);
+        worker.addTask(id);
+        workerRepository.saveAndFlush(worker);
+        taskRepository.saveAndFlush(task);
         return ResultMessage.SUCCESS;
     }
 
     //读取worker对应的taskList，并根据这些taskID找到对应TaskVO
     public ArrayList<TaskVO> getTask(String workerName){
-        String taskPath = "Worker\\"+workerName+"\\"+"TaskList";
-        FileOpe fo = new FileOpe();
-        ArrayList<String> List1 = fo.getLine(taskPath);
+        WorkerVO worker = getByName(workerName);
+        ArrayList<Integer> List1 = worker.getTaskList();
         ArrayList<TaskVO> List2 = new ArrayList<>();
         TaskVO vo;
-        TaskService ts = new TaskImpl();
-        for(String taskID : List1){
-            vo = ts.getByID(taskID);
+        for(int taskID : List1){
+            vo = taskService.getByID(taskID);
             List2.add(vo);
         }
         return List2;
@@ -101,34 +109,15 @@ public class WorkerImpl implements WorkerService {
 
     //得到对应worker的credit信息
     public int getCredit(String username){
-        String path = "Worker\\"+username+"\\"+"FundInfo";
-        FileOpe fo = new FileOpe();
-        return Integer.parseInt(fo.getThirdLine(path));
+        WorkerVO worker1=getByName(username);
+        return worker1.getCredit();
     }
 
     //更新对应worker的credit信息
     public ResultMessage updateCredit(int credit,String username){
-        String path = "Worker\\"+username+"\\"+"FundInfo";
-        try {
-            FileReader fr = new FileReader(path);
-            BufferedReader br = new BufferedReader(fr);
-            WorkerVO vo = new WorkerVO();
-            vo.setUsername(br.readLine());
-            vo.setPassword(br.readLine());
-            vo.setCredit(credit);
-            br.close();
-            File f = new File(path);
-            f.delete();
-            FileOpe fo = new FileOpe();
-            fo.write(path,vo.getUsername()+"\n"+vo.getPassword()+"\n"+vo.getCredit()+"\n");
-            return ResultMessage.SUCCESS;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return ResultMessage.FAILED;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return ResultMessage.FAILED;
-        }
+        WorkerVO worker1=getByName(username);
+        worker1.setCredit(credit);
+        return ResultMessage.SUCCESS;
     }
 
     //更新该task的状态信息为finished（只要有一个工人提交，任务状态就会更改）
@@ -140,27 +129,18 @@ public class WorkerImpl implements WorkerService {
     }
 
     //根据名称查找对应worker
-    public WorkerVO getByName(String name){
-        String infoPath = "Worker\\"+name+"\\"+"FundInfo";
-        String taskPath = "Worker\\"+name+"\\"+"TaskList";
-        try {
-            FileReader fr = new FileReader(infoPath);
-            BufferedReader br = new BufferedReader(fr);
-            String username = br.readLine();
-            String password = br.readLine();
-            int credit = Integer.parseInt(br.readLine());
-            FileOpe fo = new FileOpe();
-            ArrayList<String> taskList = fo.getLine(taskPath);
-            WorkerVO vo = new WorkerVO(username,password,taskList,credit);
-            return vo;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
+    public WorkerVO getByName(String username){
+        List<WorkerVO>li = workerRepository.findAll();
+        WorkerVO res=new WorkerVO();
+        for(WorkerVO worker:li){
+            if(worker.getUsername().equals(username)){
+                res=worker;
+                break;
+            }
         }
+        return res;
     }
+
 
     //根据名称筛选对应task（剔除该worker已接受的task）
     public ArrayList<TaskVO> getFilteredTask(String workerName){
