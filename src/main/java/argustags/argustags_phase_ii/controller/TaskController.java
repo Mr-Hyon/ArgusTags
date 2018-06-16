@@ -34,10 +34,7 @@ public class TaskController{
     public @ResponseBody
     String releasetask(@RequestParam("username") String username,
                        @RequestParam("method") String method,
-                       @RequestParam("reward") int reward,
-                       @RequestParam("cut") double cut,
                        @RequestParam("dscb") String dscb,
-                       @RequestParam("markedPersonNum") int markedPersonNum,
                        @RequestParam("obj") String obj,
                        @RequestParam("ddl") String ddl,
                        @RequestParam("file") MultipartFile file
@@ -108,7 +105,7 @@ public class TaskController{
         }
 
         int id=(Adminservice.getTaskNum()+1);
-        TaskVO vo=new TaskVO(id,"标注",username,imgList,method,0+"",df.toString(),ddl,dscb,obj,cut,reward,markedPersonNum);
+        TaskVO vo=new TaskVO(id,"标注",username,imgList,method,0+"",df.toString(),ddl,dscb,obj);
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
         ResultMessage rm=Taskservice.addTask(vo);
