@@ -120,12 +120,17 @@ public class WorkerImpl implements WorkerService {
         return ResultMessage.SUCCESS;
     }
 
-    //更新该task的状态信息为finished（只要有一个工人提交，任务状态就会更改）
-    public ResultMessage submitTask(String taskID){
-        TaskService ts = new TaskImpl();
-        TaskVO vo = ts.getByID(taskID);
-        vo.setStatus("finished");
-        return ts.updateTask(vo);
+    //更新该task的状态信息（有一个工人提交，任务进度+1）
+    public ResultMessage submitTask(int taskID){
+        TaskVO task = taskService.getByID(taskID);
+        int p = task.getProcess();
+        task.setProcess(p+1);
+        taskRepository.saveAndFlush(task);
+//        TaskService ts = new TaskImpl();
+//        TaskVO vo = ts.getByID(taskID);
+//        vo.setStatus("finished");
+//        return ts.updateTask(vo);
+        return ResultMessage.SUCCESS;
     }
 
     //根据名称查找对应worker

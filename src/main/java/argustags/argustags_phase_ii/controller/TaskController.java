@@ -7,6 +7,7 @@ import argustags.argustags_phase_ii.serviceImpl.AdminImpl;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,8 @@ import static argustags.argustags_phase_ii.util.UnZip.unZipFiles;
 
 @Controller
 public class TaskController{
-    TaskService Taskservice=new TaskImpl();
+    @Autowired
+    TaskService Taskservice;
     AdminService Adminservice=new AdminImpl();
     @PostMapping(value = "/release", produces = "application/text; charset=utf-8")
     public @ResponseBody

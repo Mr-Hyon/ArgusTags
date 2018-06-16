@@ -25,7 +25,7 @@ public interface WorkerService {
 
    public ResultMessage updateCredit(int credit,String username);
 
-    public ResultMessage submitTask(String taskID);
+    public ResultMessage submitTask(int taskID);
 
     public WorkerVO getByName(String name);
 

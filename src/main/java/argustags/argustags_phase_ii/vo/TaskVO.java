@@ -17,7 +17,7 @@ public class  TaskVO implements Serializable {
 
     private ArrayList<String> imgList;
     private String type;
-    private String status;
+    private int process;
     private String startTime;
     private String endTime;
     private String description;
@@ -28,13 +28,13 @@ public class  TaskVO implements Serializable {
 
     }
 
-    public TaskVO(int ID,String name,String initName,ArrayList<String> imgList,String type,String status,String startTime,String endTime,String describe,String object){
+    public TaskVO(int ID,String name,String initName,ArrayList<String> imgList,String type,int process,String startTime,String endTime,String describe,String object){
         this.id = ID;
         this.name = name;
         this.initName = initName;
         this.imgList = imgList;
         this.type = type;
-        this.status = status;
+        this.process = process;
         this.startTime = startTime;
         this.endTime=endTime;
         this.description = describe;
@@ -97,12 +97,12 @@ public class  TaskVO implements Serializable {
         this.type = type;
     }
 
-    public String getStatus(){
-        return status;
+    public int getProcess(){
+        return process;
     }
 
-    public void setStatus(String status){
-        this.status = status;
+    public void setProcess(int process){
+        this.process = process;
     }
 
     public String getStartTime(){
