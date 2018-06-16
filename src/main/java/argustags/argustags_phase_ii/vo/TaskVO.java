@@ -15,20 +15,20 @@ public class  TaskVO implements Serializable {
 
     private ArrayList<String> workers;
 
-    private ArrayList<String> imgList;
+    private ArrayList<Integer> imgList;
     private String type;
     private int process;
     private String startTime;
     private String endTime;
     private String description;
-    private String object;
+    private String option;
 
 
     public TaskVO(){
 
     }
 
-    public TaskVO(int ID,String name,String initName,ArrayList<String> imgList,String type,int process,String startTime,String endTime,String describe,String object){
+    public TaskVO(int ID,String name,String initName,ArrayList<Integer> imgList,String type,int process,String startTime,String endTime,String describe,String option){
         this.id = ID;
         this.name = name;
         this.initName = initName;
@@ -38,7 +38,7 @@ public class  TaskVO implements Serializable {
         this.startTime = startTime;
         this.endTime=endTime;
         this.description = describe;
-        this.object = object;
+        this.option = option;
 
         endTime = "no data";
         ArrayList<String> list = new ArrayList<>();
@@ -81,11 +81,11 @@ public class  TaskVO implements Serializable {
         workers.add(workerName);
     }
 
-    public ArrayList<String> getImgList(){
+    public ArrayList<Integer> getImgList(){
         return imgList;
     }
 
-    public void setImgList(ArrayList<String> imgList){
+    public void setImgList(ArrayList<Integer> imgList){
         this.imgList = imgList;
     }
 
@@ -129,12 +129,12 @@ public class  TaskVO implements Serializable {
         this.description = describe;
     }
 
-    public String getObeject(){
-        return object;
+    public String getOption(){
+        return option;
     }
 
-    public void setObject(String object){
-        this.object = object;
+    public void setOption(String option){
+        this.option = option;
     }
 
 

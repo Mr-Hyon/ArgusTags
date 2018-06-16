@@ -16,14 +16,14 @@ public class InitiatorVO implements Serializable {
     private int id;
     private String username;
     private String passwd;
-    private ArrayList<String> taskList;
+    private ArrayList<Integer> taskList;
     private int credit;
 
     public InitiatorVO(){
 
     }
 
-    public InitiatorVO(String username,String password,ArrayList<String> taskList,int credit){
+    public InitiatorVO(String username,String password,ArrayList<Integer> taskList,int credit){
         this.username = username;
         this.passwd = password;
         this.taskList = taskList;
@@ -52,11 +52,11 @@ public class InitiatorVO implements Serializable {
         this.passwd = password;
     }
 
-    public ArrayList<String> getTaskList(){
+    public ArrayList<Integer> getTaskList(){
         return taskList;
     }
 
-    public void setTaskList(ArrayList<String> taskList){
+    public void setTaskList(ArrayList<Integer> taskList){
         this.taskList = taskList;
     }
 

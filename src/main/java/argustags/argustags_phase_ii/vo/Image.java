@@ -12,10 +12,19 @@ public class Image implements Serializable {
     @GeneratedValue
     private  Long imgid;
     private String base64 ;
+
+    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @JoinColumn(name = "ImgID", nullable = false)
     private ArrayList<Tag> Tags;
 
     public Image(){
 
+    }
+
+    public Image(Long imgid,String base64,ArrayList<Tag> Tags){
+        this.imgid = imgid;
+        this.base64 = base64;
+        this.Tags = Tags;
     }
 
     public Long getId() {

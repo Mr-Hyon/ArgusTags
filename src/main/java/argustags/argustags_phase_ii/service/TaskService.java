@@ -1,16 +1,26 @@
 package argustags.argustags_phase_ii.service;
 
 import argustags.argustags_phase_ii.util.ResultMessage;
+import argustags.argustags_phase_ii.vo.Tag;
 import argustags.argustags_phase_ii.vo.TaskVO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskService {
 
     public ResultMessage addTask(TaskVO vo);
 
-    public ResultMessage delTask(String id);
+    public ResultMessage delTask(int id);
 
     public ResultMessage updateTask(TaskVO vo);
 
     public TaskVO getByID(int taskID);
+
+    public ArrayList<Integer> getImageList(int taskId);
+
+    public String getBase64(int imgid);
+
+    public List<Tag> getTagbyWnT(String workerName, int imgid);
     
 }

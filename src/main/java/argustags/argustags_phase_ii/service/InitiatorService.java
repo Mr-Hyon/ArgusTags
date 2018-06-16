@@ -5,18 +5,19 @@ import argustags.argustags_phase_ii.vo.InitiatorVO;
 import argustags.argustags_phase_ii.vo.TaskVO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface InitiatorService {
+
+    public List<InitiatorVO> getAllUserlist();
 
     public ResultMessage register(String username, String password);
 
     public ResultMessage login(String username, String password);
 
-    public ResultMessage add(InitiatorVO vo);
-
     public ResultMessage update(InitiatorVO vo);
 
-    public String getTaskProgress(String taskID);
+    public String getTaskProgress(int taskID);
 
     public int getTaskNum(String initName);
 
@@ -26,9 +27,7 @@ public interface InitiatorService {
 
     public ArrayList<TaskVO> getTask(String initName);
 
-    public int getRestCredit(String initName);
-
-    public int getSpentCredit(String initName);
+    public int getCredit(String initName);
 
     public ResultMessage updateCredit(int credit,String initName);
 

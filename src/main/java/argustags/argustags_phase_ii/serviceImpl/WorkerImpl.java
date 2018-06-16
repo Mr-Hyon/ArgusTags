@@ -33,32 +33,34 @@ public class WorkerImpl implements WorkerService {
     private TaskRepository taskRepository;
     @Autowired
     private TaskService taskService;
-    //	实现注册功能，在workerList文件中写入用户名和密码，并创建worker目录
+    @Autowired
+    private AdminService adminService;
+    @Autowired
+    private WorkerService workerService;
+
 
     @Override
     public List<WorkerVO> getAllUserlist(){
         return workerRepository.findAll();
     }
 
+    //	实现注册
     @Override
     public void register(String username, String password){
       WorkerVO worker = new WorkerVO();
-      ArrayList<String> temp = new ArrayList();
-      temp.add("");
       worker.setUsername(username);
       worker.setPassword(password);
       worker.setCredit(100);
-      worker.setTaskList(temp);
-      System.out.println(worker.getUsername());
-      System.out.println(worker.getPassword());
-      System.out.println(worker.getCredit());
-      System.out.println("imhere");
+//      System.out.println(worker.getUsername());
+//      System.out.println(worker.getPassword());
+//      System.out.println(worker.getCredit());
+//      System.out.println("imhere");
       workerRepository.saveAndFlush(worker);
 
     }
 
 
-
+    //  实现登录功能
     @Override
     public ResultMessage login(String username, String password) {
         WorkerVO worker1 = getByName(username);
@@ -71,12 +73,12 @@ public class WorkerImpl implements WorkerService {
 
     }
 
-    //  实现登录功能，读取workerList文件，将用户名和密码分别存在两个ArrayList中，并判断输入用户名和密码是否存在且对应
 
 
 
 
-    //删除原有worker信息，新增目前worker信息
+
+    //更新worker信息
     public ResultMessage update(WorkerVO vo){
         workerRepository.saveAndFlush(vo);
         return ResultMessage.SUCCESS;
@@ -126,10 +128,6 @@ public class WorkerImpl implements WorkerService {
         int p = task.getProcess();
         task.setProcess(p+1);
         taskRepository.saveAndFlush(task);
-//        TaskService ts = new TaskImpl();
-//        TaskVO vo = ts.getByID(taskID);
-//        vo.setStatus("finished");
-//        return ts.updateTask(vo);
         return ResultMessage.SUCCESS;
     }
 
@@ -149,15 +147,13 @@ public class WorkerImpl implements WorkerService {
 
     //根据名称筛选对应task（剔除该worker已接受的task）
     public ArrayList<TaskVO> getFilteredTask(String workerName){
-        AdminService as = new AdminImpl();
-        WorkerService ws = new WorkerImpl();
 
-        ArrayList<TaskVO> list1 = as.getTask();
-        ArrayList<TaskVO> list2 = ws.getTask(workerName);
+        ArrayList<TaskVO> list1 = adminService.getTask();
+        ArrayList<TaskVO> list2 = workerService.getTask(workerName);
 
         for(TaskVO workerTask : list2){
             for(TaskVO task : list1){
-                if(workerTask.getID().equals(task.getID())){
+                if(workerTask.getID()==task.getID()){
                     list1.remove(task);
                     break;
                 }

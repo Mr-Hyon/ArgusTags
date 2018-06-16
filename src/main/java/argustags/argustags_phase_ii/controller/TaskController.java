@@ -105,7 +105,7 @@ public class TaskController{
         }
 
         int id=(Adminservice.getTaskNum()+1);
-        TaskVO vo=new TaskVO(id,"标注",username,imgList,method,0+"",df.toString(),ddl,dscb,obj);
+        TaskVO vo=new TaskVO(id,"标注",username,imgList,method,0,df.toString(),ddl,dscb,obj);
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
         ResultMessage rm=Taskservice.addTask(vo);
