@@ -43,21 +43,11 @@
             <div class="field-label"><label for="taskmethod">框选标注类型：</label></div>
             <div class="field-widget">
                 <select id="taskmethod" name="field6" class="validate-selection" title="Choose your department">
-                    <option value="整体标注">整体标注</option>
-                    <option value="框选标注">方框框选标注</option>
-                    <option value="自由标注">自由框选标注</option>
+                    <option value="0">整体标注</option>
+                    <option value="1">方框框选</option>
+                    <option value="2">方框标注</option>
                 </select>
             </div>
-        </div>
-
-        <div class="form-row">
-            <div class="field-label"><label for="taskreward">总任务奖励：</label></div>
-            <div class="field-widget"><input id="taskreward" class="required" placeholder="请输入任务奖励" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');this.value=this.value.replace('.','');" / /></div>
-        </div>
-
-        <div class="form-row">
-            <div class="field-label"><label for="taskcut">平台分成：</label></div>
-            <div class="field-widget"><input id="taskcut" class="required" placeholder="请输入平台分成"  /></div>
         </div>
 
         <div class="form-row">
@@ -65,14 +55,10 @@
             <div class="field-widget"><input id="taskdscb" class="required" placeholder="请输入任务描述" /></div>
         </div>
 
-        <div class="form-row">
-            <div class="field-label"><label for="workernum">标记人数：</label></div>
-            <div class="field-widget"><input id="workernum" class="required"placeholder="请输入标记人数" onKeyUp="this.value=this.value.replace(/[^\.\d]/g,'');this.value=this.value.replace('.','');" /></div>
-        </div>
 
         <div class="form-row">
-            <div class="field-label"><label for="taskobj">标注物体：</label></div>
-            <div class="field-widget"><input id="taskobj" class="required" placeholder="请输入想要标注的物体" /></div>
+            <div class="field-label"><label for="taskobj">标注备选：</label></div>
+            <div class="field-widget"><input id="taskobj" class="required" placeholder="请输入标注物体的备选描述（以空格进行分隔）" /></div>
         </div>
 
         <div class="form-row">
@@ -93,10 +79,7 @@
 <script>
     document.getElementById('release').onclick = function (e) {
         var method = document.getElementById('taskmethod').value;
-        var reward = parseInt(document.getElementById('taskreward').value);
-        var cut = parseFloat(document.getElementById('taskcut').value);
         var dscb = document.getElementById('taskdscb').value;
-        var workernum = parseInt(document.getElementById('workernum').value);
         var obj = document.getElementById('taskobj').value;
         var ddl=document.getElementById('taskddl').value.toString();
         var file = document.getElementById('image-file').files[0];
@@ -104,7 +87,7 @@
         //var name = "initiator";//获取发布者用户名，尚未实现
         var name=$.cookie("username");
 
-        var result = release(name,method, reward, cut, dscb, workernum, obj,ddl, file);
+        var result = release(name,method,dscb,obj,ddl, file);
 
         if (result == "success") {
             alert('发布成功！')
@@ -117,15 +100,12 @@
         //var jsonstr=JSON.stringify(JSONObject);
         //alert("保存的json文件:"+jsonstr);
 
-        function release(name,method,reward,cut,dscb,workernum,obj,ddl,file){
+        function release(name,method,dscb,obj,ddl,file){
             var res = null;
             var formData = new FormData();
             formData.append("username",name)
             formData.append("method", method);
-            formData.append("reward", reward);
-            formData.append("cut", cut);
             formData.append("dscb", dscb);
-            formData.append("markedPersonNum", workernum);
             formData.append("obj", obj);
             formData.append("ddl",ddl);
             formData.append("file", file);

@@ -7,6 +7,7 @@ import argustags.argustags_phase_ii.serviceImpl.AdminImpl;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,16 +27,14 @@ import static argustags.argustags_phase_ii.util.UnZip.unZipFiles;
 
 @Controller
 public class TaskController{
-    TaskService Taskservice=new TaskImpl();
+    @Autowired
+    TaskService Taskservice;
     AdminService Adminservice=new AdminImpl();
     @PostMapping(value = "/release", produces = "application/text; charset=utf-8")
     public @ResponseBody
     String releasetask(@RequestParam("username") String username,
                        @RequestParam("method") String method,
-                       @RequestParam("reward") int reward,
-                       @RequestParam("cut") double cut,
                        @RequestParam("dscb") String dscb,
-                       @RequestParam("markedPersonNum") int markedPersonNum,
                        @RequestParam("obj") String obj,
                        @RequestParam("ddl") String ddl,
                        @RequestParam("file") MultipartFile file
@@ -106,7 +105,7 @@ public class TaskController{
         }
 
         int id=(Adminservice.getTaskNum()+1);
-        TaskVO vo=new TaskVO(id,"标注",username,imgList,method,0+"",df.toString(),ddl,dscb,obj,cut,reward,markedPersonNum);
+        TaskVO vo=new TaskVO(id,"标注",username,imgList,method,0+"",df.toString(),ddl,dscb,obj);
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
         ResultMessage rm=Taskservice.addTask(vo);
