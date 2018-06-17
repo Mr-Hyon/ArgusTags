@@ -27,7 +27,7 @@ public class InitiatorImpl implements InitiatorService {
         return initiatorRepository.findAll();
     }
 
-    //	实现注册功能，在initiatorList文件中写入用户名和密码，并创建initiator和task目录
+    //	实现注册功能
     public ResultMessage register(String username, String password){
         initiatorRepository.findAll();
 
@@ -39,7 +39,7 @@ public class InitiatorImpl implements InitiatorService {
         return ResultMessage.SUCCESS;
     }
 
-    //  实现登录功能，读取initiatorList文件，将用户名和密码分别存在两个ArrayList中，并判断输入用户名和密码是否存在且对应
+    //  实现登录功能
     public ResultMessage login(String username, String password){
         InitiatorVO initiator1 = getByName(username);
         if(username == initiator1.getUsername()&&password == initiator1.getPassword()){
@@ -52,7 +52,7 @@ public class InitiatorImpl implements InitiatorService {
     }
 
 
-    //删除原有initiator信息，新增目前initiator信息
+    //更新initiator信息
     public ResultMessage update(InitiatorVO vo){
         initiatorRepository.saveAndFlush(vo);
         return ResultMessage.SUCCESS;
@@ -94,12 +94,12 @@ public class InitiatorImpl implements InitiatorService {
         int count = 0;
         for(TaskVO task : allTask){
             if(task.getProcess()>= (task.getImgList().size())*10){
-                count++;
-            }
+        count++;
+    }
             else{
-                ;
-            }
-        }
+        ;
+    }
+}
         return count;
     }
 

@@ -1,6 +1,7 @@
 package argustags.argustags_phase_ii.service;
 
 import argustags.argustags_phase_ii.util.ResultMessage;
+import argustags.argustags_phase_ii.vo.Image;
 import argustags.argustags_phase_ii.vo.TaskVO;
 
 import java.util.ArrayList;
@@ -21,4 +22,8 @@ public interface AdminService {
     public int getTaskOngoingNum();
 
     public int getTaskFinishedNum();
+
+    public String getAnswer(Image img);
+
+    public ResultMessage rewardAndPunish(Image img);
 }

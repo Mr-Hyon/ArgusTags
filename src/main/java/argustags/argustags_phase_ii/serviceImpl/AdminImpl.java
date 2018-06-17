@@ -7,9 +7,7 @@ import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.util.FileOpe;
 import argustags.argustags_phase_ii.util.ResultMessage;
-import argustags.argustags_phase_ii.vo.InitiatorVO;
-import argustags.argustags_phase_ii.vo.TaskVO;
-import argustags.argustags_phase_ii.vo.WorkerVO;
+import argustags.argustags_phase_ii.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -29,6 +27,8 @@ public class AdminImpl implements AdminService {
     private InitiatorRepository initiatorRepository;
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private AdminService adminService;
 
 
     //  实现登录功能，判断admin用户名密码输入是否正确
@@ -66,8 +66,11 @@ public class AdminImpl implements AdminService {
     public int getTaskOngoingNum(){
         int count = 0;
         List<TaskVO> list = taskRepository.findAll();
-        for(TaskVO task:list){
-            if(task.getProcess()==0){
+        for(TaskVO task : list){
+            if(task.getProcess()>= (task.getImgList().size())*10){
+                ;
+            }
+            else{
                 count++;
             }
         }
@@ -78,11 +81,37 @@ public class AdminImpl implements AdminService {
     public int getTaskFinishedNum(){
         int count = 0;
         List<TaskVO> list = taskRepository.findAll();
-        for(TaskVO task:list){
-            if(task.getProcess()==1){
+        for(TaskVO task : list){
+            if(task.getProcess()>= (task.getImgList().size())*10){
                 count++;
             }
         }
         return count;
+    }
+
+    public String getAnswer(Image img) {
+        ArrayList<Tag> list = img.getTags();
+        String str = "";
+        int count = 0;
+        int maximum = 0;
+        String result = "";
+        for (int i = 0; i < list.size(); i++) {
+            str += list.get(i).getTag();
+        }
+        for (int i = 0; i < list.size(); i++) {
+            String temp = str.replaceAll(list.get(i).getTag(), "");
+            count = (str.length() - temp.length()) / list.get(i).getTag().length();
+            if (count > maximum) {
+                maximum = count;
+                result = list.get(i).getTag();
+            }
+        }
+        return result;
+    }
+
+    public ResultMessage rewardAndPunish(Image img){
+        String answer = adminService.getAnswer(img);
+        ArrayList<Tag> list = img.getTags();
+        return ResultMessage.SUCCESS;
     }
 }
