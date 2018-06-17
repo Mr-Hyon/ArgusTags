@@ -45,7 +45,9 @@
     </tr>
 </table>
 <p>
-    整体标注信息：<input type="text" id="total_input" value="" readonly="true">
+    整体标注信息：<select  id="total_input">
+    <option value="">None</option>
+</select>
 </p>
 <p>
     <button type="button "id="Free_Mark" >局部标注(自由画线)</button>
@@ -62,9 +64,12 @@
 <script src="../js/jquery-1.8.2.min.js"></script>
 <script src="../js/jquery.cookie.js"></script>
 <script>
+    document.getElementById('total_input').disabled = true
     var marked_num = 0      //记录工人本次标记张数（用于记录可增加积分情况）
     var workername  = $.cookie("username") //当前工人用户名
     var taskId = $.cookie("taskId") //当前任务ID
+    var option=''   //用于存储备选项
+    var type=0
 
     var current_pic_index = 0  //当前图片编号
     /** 获取相关任务信息 **/
@@ -87,8 +92,9 @@
     })
     TaskJsonInfo = JSON.parse(TaskInfo)
     var taskName = TaskJsonInfo[0].taskName   //任务名称
-    var type = TaskJsonInfo[0].type   //任务类型
+    type = TaskJsonInfo[0].type   //任务类型
     var pic_num = TaskJsonInfo[0].pic_num  //图片数量
+    option = TaskJsonInfo[0].option
     var jsonData = new Array();
     for(var i = 0;i<pic_num;i++){
         jsonData.push(TaskJsonInfo[i+1].image)
@@ -111,10 +117,11 @@
     /** 开始进行网页初始化布局 **/
     var line_editable = false; //自由划线模式默认关闭
     var square_editable = false; //边框标记模式默认关闭
-    var hasImage = false; //判断画布上是否有图片
     var hasMarked = false; //判断是否进行了标记操作
-    var mark_messages = new Array();  //用于储存局部标记的数组
-    var total_mark='';                //用于储存整体标记信息的字符串
+    var hasImage = false; //判断画布上是否有图片
+    var coordinate_one = new Array();
+    var coordinate_two = new Array();
+    var mark_messages = new Array();  //用于储存标记内容的数组
 
     var totalInput = document.getElementById("total_input");
     var table_info=document.getElementById("mark_info");
@@ -128,30 +135,49 @@
     function load_page(pic_index){
         var jsonObject = JSON.parse(jsonData[pic_index])
 
-        var after_url = jsonObject.current_image
+        //var after_url = jsonObject.current_image
         var origin_url = jsonObject.origin_image
         origin_img = origin_url
-        console.log(origin_url)
+        //console.log(origin_url)
 
         document.getElementById('test-image-preview').style.backgroundImage = 'url(' + origin_url + ')'
-        drawToCanvas(after_url)
+        drawToCanvas(origin_url)
         hasImage = true
-        if(jsonObject.marked == 1){
-            hasMarked = true
-        }
+        //if(jsonObject.marked == 1){
+        //    hasMarked = true
+        //}
 
         document.getElementById('test-file-info').innerHTML = '任务名称：'+ taskName +'<br>'+
                         '图片数量：'+ jsonData.length + '<br>'+
                         '当前图片编号：'+ (pic_index+1)
 
         if(type == 0){
-            document.getElementById("total_input").value = jsonObject.total_tag
-            total_mark = jsonObject.total_tag
+            var total_select = document.getElementById("total_input");
+            total_select.disabled = true;
+            total_select.options.length = 0;
+            total_select.options.add(new Option("未选择",""));
+            var options = option.split(" ");
+            for(var j=0;j<options.length;j++){
+                total_select.options.add(new Option(options[j],options[j]))
+            }
+            var tagToSelect = jsonObject.tag;
+            total_select.value = tagToSelect;
         }
-        else {
-            var tags = jsonObject.tags
-            for (var j = 0; j < tags.length; j++) {
-                add_Mark(tags[j]);
+        else if(type == 1){
+            var tagstart = jsonObject.tagstart.split(" ")
+            var tagend = jsonObject.tagend.split(" ")
+            var tagcontent = jsonObject.tag.split(" ")
+            for (var j = 0; j < tagstart.length; j++) {
+                drawTags(tagstart[j],tagend[j])
+            }
+        }
+        else if(type == 2){
+            var tagstart = jsonObject.tagstart.split(" ")
+            var tagend = jsonObject.tagend.split(" ")
+            var tagcontent = jsonObject.tag.split(" ")
+            for (var j = 0; j < tagstart.length; j++) {
+                drawTags(tagstart[j],tagend[j])
+                add_Mark(tagcontent[j]);
             }
         }
     }
@@ -191,6 +217,26 @@
     //document.getElementById(id).value='ttt';
     //table_info.deleteRow(table_info.rows.length-1);
 
+    function drawTags(tagStart,tagEnd){
+        var cvs = document.getElementById('test-canvas');
+        var ctx = cvs.getContext('2d');
+        var coordinate1 = tagStart.split(",");
+        var coordinate2 = tagEnd.split(",");
+        var x1=parseInt(coordinate1[0]);
+        var y1=parseInt(coordinate1[1]);
+        var x2=parseInt(coordinate2[0]);
+        var y2=parseInt(coordinate2[1]);
+        coordinate_one.push(tagStart);
+        coordinate_two.push(tagEnd);
+        ctx.moveTo(x1,y1);
+        ctx.beginPath();
+        ctx.strokeRect(x1,y1,x2-x1,y2-y1);
+        ctx.closePath();
+
+        ctx.font="20px Georgia";
+        ctx.fillText("No."+table_info.rows.length ,x1+5,y1+20);
+    }
+
     function drawToCanvas(imgData){
         var cvs = document.getElementById('test-canvas');
         var ctx = cvs.getContext('2d');
@@ -212,32 +258,32 @@
             return;
         }
 
-        //自由划线标注
-        if(line_editable){
-            var cvs = document.getElementById('test-canvas');
-            var ctx = cvs.getContext('2d');
-            var e = e ||event;
-            var ox = e.clientX + window.pageXOffset - cvs.offsetLeft;
-            var oy = e.clientY + window.pageYOffset- cvs.offsetTop;
-            ctx.moveTo(ox,oy);
-            var img_data=ctx.getImageData(0,0,cvs.width,cvs.height);
-            ctx.beginPath();
-
-            document.onmousemove = function(e){
-                var ox2 = e.clientX + window.pageXOffset -cvs.offsetLeft;
-                var oy2 = e.clientY + window.pageYOffset - cvs.offsetTop;
-                ctx.lineTo(ox2,oy2);
-                ctx.stroke();
-            }
-
-            document.onmouseup  = function(e){
-                document.onmousemove =null;
-                document.onmouseup = null;
-                line_editable=false;
-                ctx.closePath();
-                mark_line(img_data,ox,oy);
-            }
-        }
+//        //自由划线标注
+//        if(line_editable){
+//            var cvs = document.getElementById('test-canvas');
+//            var ctx = cvs.getContext('2d');
+//            var e = e ||event;
+//            var ox = e.clientX + window.pageXOffset - cvs.offsetLeft;
+//            var oy = e.clientY + window.pageYOffset- cvs.offsetTop;
+//            ctx.moveTo(ox,oy);
+//            var img_data=ctx.getImageData(0,0,cvs.width,cvs.height);
+//            ctx.beginPath();
+//
+//            document.onmousemove = function(e){
+//                var ox2 = e.clientX + window.pageXOffset -cvs.offsetLeft;
+//                var oy2 = e.clientY + window.pageYOffset - cvs.offsetTop;
+//                ctx.lineTo(ox2,oy2);
+//                ctx.stroke();
+//            }
+//
+//            document.onmouseup  = function(e){
+//                document.onmousemove =null;
+//                document.onmouseup = null;
+//                line_editable=false;
+//                ctx.closePath();
+//                mark_line(img_data,ox,oy);
+//            }
+//        }
 
         //边框局部标注
         if(square_editable){
@@ -270,15 +316,15 @@
         }
     }
 
-    document.getElementById('Free_Mark').onclick = function(e) {
-        if(!hasImage){
-            alert("请先加载图片再进行标记");
-            return;
-        }
-        line_editable=true;
-        square_editable=false;
-        alert("正在进行自由标注，其余标注模式已撤销");
-    }
+//    document.getElementById('Free_Mark').onclick = function(e) {
+//        if(!hasImage){
+//            alert("请先加载图片再进行标记");
+//            return;
+//        }
+//        line_editable=true;
+//        square_editable=false;
+//        alert("正在进行自由标注，其余标注模式已撤销");
+//    }
 
     document.getElementById('Classic_Mark').onclick = function(e) {
         if(!hasImage){
@@ -297,16 +343,15 @@
         }
         var cvs=document.getElementById('test-canvas');
         var ctx=cvs.getContext('2d');
-        var total_message = prompt("请输入整体标注信息:","");
-        if (total_message != null){
+        var total_message = confirm("是否进行该图的整体标注？");
+        if (total_message == true){
             hasMarked = true;
-            alert("你输入的标注信息为："+total_message+".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
-            marked_num++
-            total_mark = total_message;
-            totalInput.value = total_mark;
-            totalInput.readOnly = false;
+            alert("整体标注选框已解锁");
+            marked_num++;
+            totalInput.disabled = false;
         }else{
-            alert("取消本次标注");
+            alert("整体标注选框已锁定");
+            totalInput.disabled = true;
         }
     }
 
@@ -317,47 +362,130 @@
             return;
         }
         var cvs = document.getElementById('test-canvas');
-        var img = cvs.toDataURL();
-        total_mark = totalInput.value;
-        for(var i = 0 ; i < mark_messages.length ; i++){
-            var temp_id = "No."+(i+1);
-            mark_messages[i]=document.getElementById(temp_id).value;
-        }
-        var JSONObject= {
-            "origin_image":origin_img,
-            "current_image":img,
-            "total_tag":total_mark,
-            "tags":mark_messages,
-            "marked":1};
-        var jsonstr=JSON.stringify(JSONObject);
-        jsonData[current_pic_index] = jsonstr;
-        var JsontoSend = {
-            "imageData":jsonData
+        //var img = cvs.toDataURL();
+        if(type == 0){
+            var total_mark = totalInput.value;
+            var JSONObject= {
+                "imgid":jsonData[current_pic_index].imgid,
+                "origin_image":jsonData[current_pic_index].origin_image,
+                "tagstart":jsonData[current_pic_index].tagstart,
+                "tagend":jsonData[current_pic_index].tagend,
+                "tagcontent":total_mark};
+
+            jsonData[current_pic_index] = JSON.stringify(JSONObject);
+
+            $.ajax({
+                url: 'http://localhost:8080/updateWorkerTask',
+                type: 'post',
+                async: false,
+                data: {
+                    username:workername,
+                    imageid:jsonData[current_pic_index].imgid,
+                    tagcontent:total_mark
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function() {
+                    alert('fail')
+                }
+            })
         }
 
-        $.ajax({
-            url: 'http://localhost:8080/updateWorkerTask',
-            type: 'post',
-            async: false,
-            data: {
-                username:workername,
-                taskId:taskId,
-                marked_num:marked_num,
-                imgList:JSON.stringify(JsontoSend)
-            },
-            success: function (data) {
-                 alert(data)
-            },
-            error: function() {
-                alert('fail')
+        else if( type == 1 ){
+            var coord1toSend = '';
+            var coord2toSend = '';
+            for(var i=0;i<coordinate_one.length;i++){
+                coord1toSend = coord1toSend + coordinate_one[i];
+                coord2toSend = coord2toSend + coordinate_two[i];
+                if(i<coordinate_one.length-1){
+                    coord1toSend = coord1toSend + ' ';
+                    coord2toSend = coord2toSend + ' ';
+                }
             }
-        })
-    }
 
+            var JSONObject= {
+                "imgid":jsonData[current_pic_index].imgid,
+                "origin_image":jsonData[current_pic_index].origin_image,
+                "tagstart":coord1toSend,
+                "tagend":coord2toSend,
+                "tagcontent":jsonData[current_pic_index].tagcontent};
+
+            jsonData[current_pic_index] = JSON.stringify(JSONObject);
+
+            $.ajax({
+                url: 'http://localhost:8080/updateWorkerTask',
+                type: 'post',
+                async: false,
+                data: {
+                    username:workername,
+                    imageid:jsonData[current_pic_index].imgid,
+                    tagstart:coord1toSend,
+                    tagend:coord2toSend
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function() {
+                    alert('fail')
+                }
+            })
+        }
+        else if(type == 2){
+
+            for(var i = 0 ; i < mark_messages.length ; i++){
+                var temp_id = "No."+(i+1);
+                mark_messages[i]=document.getElementById(temp_id).value;
+            }
+            var coord1toSend = '';
+            var coord2toSend = '';
+            var tagtoSend = '';
+
+            for(var i=0;i<coordinate_one.length;i++){
+                coord1toSend = coord1toSend + coordinate_one[i];
+                coord2toSend = coord2toSend + coordinate_two[i];
+                tagtoSend = tagtoSend + mark_messages[i];
+                if(i<coordinate_one.length-1){
+                    coord1toSend = coord1toSend + ' ';
+                    coord2toSend = coord2toSend + ' ';
+                    tagtoSend = tagtoSend + ' ';
+                }
+            }
+
+            var JSONObject= {
+                "imgid":jsonData[current_pic_index].imgid,
+                "origin_image":jsonData[current_pic_index].origin_image,
+                "tagstart":coord1toSend,
+                "tagend":coord2toSend,
+                "tagcontent":tagtoSend};
+
+            jsonData[current_pic_index] = JSON.stringify(JSONObject);
+
+            $.ajax({
+                url: 'http://localhost:8080/updateWorkerTask',
+                type: 'post',
+                async: false,
+                data: {
+                    username:workername,
+                    imageid:jsonData[current_pic_index].imgid,
+                    tagstart:coord1toSend,
+                    tagend:coord2toSend,
+                    tagcontent:tagtoSend
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function() {
+                    alert('fail')
+                }
+            })
+
+        }
+    }
+/*
     //读取button
-    /*
     document.getElementById('load_button').onclick = function (e) {
-        if(jsonData.length == 0){
+        /*if(jsonData.length == 0){
             alert('无保存信息');
             return;
         }
@@ -394,69 +522,85 @@
             }
         }else{
             alert("取消操作");
-        }
-    }*/
+        }}*/
 
     //方框画线后的具体标注
     function mark_square(img_data,ox1,oy1,ox2,oy2){
-        var square_message = prompt("请输入标注信息:","");
+        var square_message = confirm("是否确认标注？");
         var cvs=document.getElementById('test-canvas');
         var ctx=cvs.getContext('2d');
-        if (square_message != null){
+        if (square_message == true){
             hasMarked = true;
-            alert("你输入的标注信息为："+square_message+".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
+            alert("标记成功");
             marked_num++;
             ctx.font="20px Georgia";
             ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
-            add_Mark(square_message);
+            coordinate_one.push(ox1.toString()+","+oy1.toString());
+            coordinate_two.push(ox2.toString()+","+oy2.toString());
+            if(type == 2){
+                add_Mark("");
+            }
         }else{
             alert("取消本次标注");
             ctx.putImageData(img_data,0,0);
         }
     }
 
-    //自由划线后具体标注
-    function mark_line(img_data,ox1,oy1){
-        var line_message = prompt("请输入标注信息:","");
-        var cvs=document.getElementById('test-canvas');
-        var ctx=cvs.getContext('2d');
-        if (line_message != null){
-            hasMarked = true;
-            alert("你输入的标注信息为："+ line_message +".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
-            marked_num++;
-            ctx.font="20px Georgia";
-            ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
-            add_Mark(line_message);
-        }else{
-            alert("取消本次标注");
-            ctx.putImageData(img_data,0,0);
-        }
-    }
+//    //自由划线后具体标注
+//    function mark_line(img_data,ox1,oy1){
+//        var line_message = prompt("请输入标注信息:","");
+//        var cvs=document.getElementById('test-canvas');
+//        var ctx=cvs.getContext('2d');
+//        if (line_message != null){
+//            hasMarked = true;
+//            alert("你输入的标注信息为："+ line_message +".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
+//            marked_num++;
+//            ctx.font="20px Georgia";
+//            ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
+//            add_Mark(line_message);
+//        }else{
+//            alert("取消本次标注");
+//            ctx.putImageData(img_data,0,0);
+//        }
+//    }
 
     //将新增的区域编号与标注的文本信息添加至表格当中
-    function add_Mark(message){
+    function add_Mark(tagContent){
         var oneRow = table_info.insertRow();
         var cell1 = oneRow.insertCell();
         var cell2 = oneRow.insertCell();
         var cell_id = "No." + (table_info.rows.length-1);
         cell1.innerHTML= cell_id ;
-        cell2.innerHTML="<input id='tempinput' value=''>";
+        cell2.innerHTML="<select id='tempinput'>";
+        var temp_options = option.split(" ");
+        for(var k=0;k<options.length;k++){
+            document.getElementById('tempinput').options.add(new Option(temp_options[k],temp_options[k]));
+        }
         document.getElementById('tempinput').id = cell_id;
-        document.getElementById(cell_id).value = message;
-        mark_messages.push(message);
+        if(tagContent == ''){
+            document.getElementById(cell_id).value = 'None'
+        }
+        else{
+            document.getElementById(cell_id).value = tagContent;
+        }
+        mark_messages.push(tagContent)
     }
 
     //用于清空表格内容与信息储存数组
     function clearTable(){
         origin_img = '';
         hasMarked = false;
-        totalInput.readOnly = true;
-        totalInput.value='';
+        totalInput.disabled = true;
+        totalInput.value="";
         while( table_info.rows.length > 1){
             table_info.deleteRow(table_info.rows.length-1);
         }
         while( mark_messages.length > 0){
             mark_messages.pop();
+        }
+        while( coordinate_one.length > 0){
+            coordinate_one.pop();
+            coordinate_two.pop();
         }
     }
 

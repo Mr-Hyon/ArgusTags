@@ -8,6 +8,8 @@ import argustags.argustags_phase_ii.serviceImpl.TaskImpl;
 import argustags.argustags_phase_ii.serviceImpl.WorkerImpl;
 import argustags.argustags_phase_ii.util.Jsonhelper;
 import argustags.argustags_phase_ii.util.ResultMessage;
+import argustags.argustags_phase_ii.vo.Image;
+import argustags.argustags_phase_ii.vo.Tag;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
 import com.google.gson.JsonArray;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static argustags.argustags_phase_ii.util.Jsonhelper.fromJson;
 import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
@@ -140,9 +143,37 @@ public class WorkerController{
     public String GetImageList(@RequestParam("username") String username,
                                @RequestParam("taskId") int taskId){
         TaskVO vo = taskservice.getByID(taskId);
-        ArrayList<String> imgList = vo.getImgList();
+        ArrayList<Integer> imgidList = vo.getImgList();
+        ArrayList<String> imgList = new ArrayList<>();
+
+        for(int i=0;i<imgidList.size();i++){
+            String base64 = taskservice.getBase64(imgidList.get(i));
+            List<Tag> tags = taskservice.getTagbyWnT(username,imgidList.get(i));
+            String start="";
+            String end="";
+            String mark_messages="";
+            for(int j=0;i<tags.size();j++){
+                start = start + tags.get(j).getTagStart();
+                end = end + tags.get(j).getTagEnd();
+                mark_messages = mark_messages + tags.get(j).getTag();
+                if(j!=tags.size()-1){
+                    start=start+" ";
+                    end=end+" ";
+                    mark_messages=mark_messages+" ";
+                }
+            }
+            JsonObject temp = new JsonObject();
+            temp.addProperty("imgid",imgidList.get(i));
+            temp.addProperty("origin_image",base64);
+            temp.addProperty("tagstart",start);
+            temp.addProperty("tagend",end);
+            temp.addProperty("tagcontent",mark_messages);
+            imgList.add(temp.toString());
+        }
+
         String taskName = vo.getName();
         String type = vo.getType();
+        String option = vo.getOption();
 
         JsonArray arr = new JsonArray();
 
@@ -150,6 +181,8 @@ public class WorkerController{
         basic_info.addProperty("taskName",taskName);
         basic_info.addProperty("type",type);
         basic_info.addProperty("pic_num",imgList.size());
+        basic_info.addProperty("option",option);
+
         arr.add(basic_info);
         for(int i=0;i<imgList.size();i++){
             JsonObject obj = new JsonObject();
