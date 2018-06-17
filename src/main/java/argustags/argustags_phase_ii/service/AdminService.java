@@ -4,6 +4,7 @@ import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface AdminService {
 
@@ -15,7 +16,7 @@ public interface AdminService {
 
     public int getTaskNum();
 
-    public ArrayList<TaskVO> getTask();
+    public List<TaskVO> getTask();
 
     public int getTaskOngoingNum();
 
