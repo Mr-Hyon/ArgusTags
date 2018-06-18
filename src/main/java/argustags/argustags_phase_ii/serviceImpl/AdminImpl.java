@@ -91,7 +91,7 @@ public class AdminImpl implements AdminService {
 
     public String getAnswer(long imgid) {
         Image img = taskService.findImageById(imgid);
-        ArrayList<Tag> list = img.getTags();
+        List<Tag> list = img.getTags();
         String str = "";
         int count = 0;
         int maximum = 0;
@@ -123,7 +123,7 @@ public class AdminImpl implements AdminService {
         int credit = 0;
         String answer = "";
         Image img = null;
-        ArrayList<Tag> tags = new ArrayList();
+        List<Tag> tags = new ArrayList();
         for(int imgid : imgs){
             img = taskService.findImageById(imgid);
             answer = adminService.getAnswer(imgid);
