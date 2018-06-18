@@ -61,8 +61,7 @@ public class pageController {
         }
 
         if(type.equals("worker")){
-            workerService.login(username,password);
-            return ResultMessage.SUCCESS.toString();
+            return workerService.login(username,password).toString();
 
         }
 
@@ -84,9 +83,7 @@ public class pageController {
 
 
         if(type.equals("worker")){
-
-            workerService.register(username,password);
-            return ResultMessage.SUCCESS.toString();
+            return workerService.register(username,password).toString();
         }
 
         if(type.equals("initiator")){

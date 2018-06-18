@@ -11,7 +11,7 @@ public interface WorkerService {
 
     public List<WorkerVO> getAllUserlist();
 
-    public  void register(String username, String password);
+    public  ResultMessage register(String username, String password);
 
     public ResultMessage login(String username, String password);
 

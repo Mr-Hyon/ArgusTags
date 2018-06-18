@@ -9,6 +9,7 @@ import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
 import argustags.argustags_phase_ii.util.ResultMessage;
+import argustags.argustags_phase_ii.vo.InitiatorVO;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,16 +44,29 @@ public class WorkerImpl implements WorkerService {
 
     //	实现注册
     @Override
-    public void register(String username, String password){
-      WorkerVO worker = new WorkerVO();
-      worker.setUsername(username);
-      worker.setPassword(password);
-      worker.setCredit(100);
-//      System.out.println(worker.getUsername());
-//      System.out.println(worker.getPassword());
-//      System.out.println(worker.getCredit());
-//      System.out.println("imhere");
-      workerRepository.saveAndFlush(worker);
+    public ResultMessage register(String username, String password){
+        List<WorkerVO> list1 = workerRepository.findAll();
+        int flag = 0;
+        for(WorkerVO ini:list1){
+            if(ini.getUsername() == username ){
+                flag = flag+1;
+                break;
+            }
+            else{
+                ;
+            }
+        }
+        if(flag == 1) {
+            return ResultMessage.REPEATEDNAME;
+        }
+        else{
+            WorkerVO worker = new WorkerVO();
+            worker.setUsername(username);
+            worker.setPassword(password);
+            worker.setCredit(100);
+            workerRepository.saveAndFlush(worker);
+            return ResultMessage.SUCCESS;
+        }
 
     }
 
@@ -145,7 +159,7 @@ public class WorkerImpl implements WorkerService {
     //根据名称筛选对应task（剔除该worker已接受的task）
     public ArrayList<TaskVO> getFilteredTask(String workerName){
 
-        ArrayList<TaskVO> list1 = adminService.getTask();
+        ArrayList<TaskVO> list1 = (ArrayList) adminService.getTask();
         ArrayList<TaskVO> list2 = workerService.getTask(workerName);
 
         for(TaskVO workerTask : list2){
