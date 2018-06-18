@@ -3,15 +3,16 @@ package argustags.argustags_phase_ii.service;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@RestController
 public interface WorkerService {
 
-    public List<WorkerVO> getAllUserlist();
+//    public List<WorkerVO> getAllUserlist();
 
-    public  ResultMessage register(String username, String password);
+    public ResultMessage register(String username, String password);
 
     public ResultMessage login(String username, String password);
 

@@ -1,21 +1,23 @@
 package argustags.argustags_phase_ii.vo;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "tag")
 public class Tag implements Serializable {
-
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private  Long tagid;
+    @Column(nullable = false)
     private String tagcontent ;
+    @Column(nullable = false)
     private String tagStart;
+    @Column(nullable = false)
     private String tagEnd;
+    @Column(nullable = false)
     private String workerName;
 
     public Tag(){

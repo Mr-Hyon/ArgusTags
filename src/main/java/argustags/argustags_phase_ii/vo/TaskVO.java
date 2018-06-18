@@ -1,6 +1,7 @@
 package argustags.argustags_phase_ii.vo;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,20 +9,31 @@ import java.util.List;
 @Entity
 @Table(name = "task")
 public class  TaskVO implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private int id;
-    private String name;
+    @Column(nullable = false)
+    private String taskname;
+    @Column(nullable = false)
     private String initName;
-
+    @Column(nullable = false)
     private ArrayList<String> workers;
-
+    @Column(nullable = false)
     private ArrayList<Integer> imgList;
-    private String type;
+    @Column(nullable = false)
+    private String typ;
+    @Column(nullable = false)
     private int process;
+    @Column(nullable = false)
     private String startTime;
+    @Column(nullable = false)
     private String endTime;
+    @Column(nullable = false)
     private String description;
-    private String option;
+    @Column(nullable = false)
+    private String opt;
 
 
     public TaskVO(){
@@ -30,15 +42,15 @@ public class  TaskVO implements Serializable {
 
     public TaskVO(int ID,String name,String initName,ArrayList<Integer> imgList,String type,int process,String startTime,String endTime,String describe,String option){
         this.id = ID;
-        this.name = name;
+        this.taskname = name;
         this.initName = initName;
         this.imgList = imgList;
-        this.type = type;
+        this.typ = type;
         this.process = process;
         this.startTime = startTime;
         this.endTime=endTime;
         this.description = describe;
-        this.option = option;
+        this.opt = option;
 
         endTime = "no data";
         ArrayList<String> list = new ArrayList<>();
@@ -54,11 +66,11 @@ public class  TaskVO implements Serializable {
     }
 
     public String getName(){
-        return name;
+        return taskname;
     }
 
     public void setName(String name){
-        this.name = name;
+        this.taskname = name;
     }
 
     public String getInitName(){
@@ -90,11 +102,11 @@ public class  TaskVO implements Serializable {
     }
 
     public String getType(){
-        return type;
+        return typ;
     }
 
     public void setType(String type){
-        this.type = type;
+        this.typ = type;
     }
 
     public int getProcess(){
@@ -130,11 +142,11 @@ public class  TaskVO implements Serializable {
     }
 
     public String getOption(){
-        return option;
+        return opt;
     }
 
     public void setOption(String option){
-        this.option = option;
+        this.opt = option;
     }
 
 

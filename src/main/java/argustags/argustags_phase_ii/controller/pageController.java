@@ -20,11 +20,17 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class pageController {
-    @Autowired
+
     private WorkerService workerService;
 
     @Autowired
+    public pageController(WorkerService workerService,InitiatorService initiatorService) {
+        this.workerService = workerService;
+        this.initiatorService = initiatorService;
+    }
+
     private InitiatorService initiatorService;
+
 
     @RequestMapping("/")
     String mainpage(){
@@ -66,8 +72,7 @@ public class pageController {
         }
 
         if(type.equals("initiator")){
-            InitiatorService initiator=new InitiatorImpl();
-            return initiator.login(username,password).toString();
+            return initiatorService.login(username,password).toString();
         }
 
         return result;
@@ -87,8 +92,7 @@ public class pageController {
         }
 
         if(type.equals("initiator")){
-            InitiatorService initiator=new InitiatorImpl();
-            return initiator.register(username,password).toString();
+            return initiatorService.register(username,password).toString();
         }
 
         return result;

@@ -8,9 +8,12 @@ import java.util.List;
 @Entity
 @Table(name = "image")
 public class Image implements Serializable {
+    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private  Long imgid;
+    @Column(nullable = false)
     private String base64 ;
     @OneToMany
     @JoinColumn(name = "imageid")
