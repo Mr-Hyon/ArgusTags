@@ -41,7 +41,8 @@ public class TaskController{
     ) {System.out.println("0");
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String projectId = df.format(new Date());
-        ArrayList<String> imgList = new ArrayList<>();
+//        ArrayList<String> imgList = new ArrayList<>();
+        ArrayList<Integer> imgList = new ArrayList<>();
         System.out.println("1");
         try {
             //创建临时文件夹放置zip文件
@@ -78,6 +79,7 @@ public class TaskController{
             //置filelist
             File picDest = new File("d:"+File.separator+projectId+File.separator+"pics"+projectId);
             String[] names = picDest.list();
+            int id=0;
             for(String name:names) {
                 InputStream inputStream = null;
                 byte[] data = null;
@@ -91,13 +93,15 @@ public class TaskController{
                 }
                 BASE64Encoder encoder = new BASE64Encoder();
                 String base64_image =  "data:image/png;base64,"+encoder.encode(data);
-                JsonObject object=new JsonObject();
-                object.addProperty("origin_image", base64_image);
-                object.addProperty("current_image",base64_image);
-                object.addProperty("total_tag","default");
-                object.addProperty("tags","default");
-                object.addProperty("marked",0);
-                imgList.add(object.toString());
+//                JsonObject object=new JsonObject();
+//                object.addProperty("origin_image", base64_image);
+//                object.addProperty("current_image",base64_image);
+//                object.addProperty("total_tag","default");
+//                object.addProperty("tags","default");
+//                object.addProperty("marked",0);
+//                imgList.add(object.toString());
+                imgList.add(id);
+                id++;
             }
             System.out.println("5");
         } catch (IOException e) {
