@@ -32,14 +32,28 @@ public class InitiatorImpl implements InitiatorService {
 
     //	实现注册功能，在initiatorList文件中写入用户名和密码，并创建initiator和task目录
     public ResultMessage register(String username, String password){
-        initiatorRepository.findAll();
-
-        InitiatorVO initiator = new InitiatorVO();
-        initiator.setUsername(username);
-        initiator.setPassword(password);
-        initiator.setCredit(10240);
-        initiatorRepository.saveAndFlush(initiator);
-        return ResultMessage.SUCCESS;
+        List<InitiatorVO> list1 = initiatorRepository.findAll();
+        int flag = 0;
+        for(InitiatorVO ini:list1){
+            if(ini.getUsername() == username ){
+                flag = flag+1;
+                break;
+            }
+            else{
+                ;
+            }
+        }
+        if(flag == 1){
+            return ResultMessage.REPEATEDNAME;
+        }
+        else {
+            InitiatorVO initiator = new InitiatorVO();
+            initiator.setUsername(username);
+            initiator.setPassword(password);
+            initiator.setCredit(10240);
+            initiatorRepository.saveAndFlush(initiator);
+            return ResultMessage.SUCCESS;
+        }
     }
 
     //  实现登录功能，读取initiatorList文件，将用户名和密码分别存在两个ArrayList中，并判断输入用户名和密码是否存在且对应

@@ -1,6 +1,7 @@
 package argustags.argustags_phase_ii.service;
 
 import argustags.argustags_phase_ii.util.ResultMessage;
+import argustags.argustags_phase_ii.vo.Image;
 import argustags.argustags_phase_ii.vo.Tag;
 import argustags.argustags_phase_ii.vo.TaskVO;
 
@@ -22,5 +23,13 @@ public interface TaskService {
     public String getBase64(int imgid);
 
     public List<Tag> getTagbyWnT(String workerName, int imgid);
+
+    public ResultMessage modifyTag(Tag tag);
+
+    public ResultMessage addTag(Tag tag);
+
+    public ResultMessage deleteTag(Tag tag);
+
+    public ResultMessage addimage(Image image);
     
 }
