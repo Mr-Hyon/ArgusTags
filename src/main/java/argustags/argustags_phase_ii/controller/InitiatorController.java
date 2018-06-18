@@ -8,6 +8,7 @@ import argustags.argustags_phase_ii.vo.TaskVO;
 import argustags.argustags_phase_ii.vo.WorkerVO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,8 +19,8 @@ import java.util.ArrayList;
 @Controller
 public class InitiatorController{
 
-    InitiatorService Initiatorservice=new InitiatorImpl();
-
+    @Autowired
+    private InitiatorService initiatorService;
     @RequestMapping("/initiatorHome")
     String initiatorMainPage(){
         return "inimain";
@@ -34,11 +35,11 @@ public class InitiatorController{
     @PostMapping(value = "/getInitiatorInfo", produces="application/text; charset=utf-8")
     @ResponseBody
     public String getInitiatorInfo(@RequestParam("username") String username){
-        int credit = Initiatorservice.getRestCredit(username);
-        int tasknum=Initiatorservice.getTaskNum(username);
-        int taskfn=Initiatorservice.getTaskFinishedNum(username);
-        int taskog=Initiatorservice.getTaskOngoingNum(username);
-        int creditcost=Initiatorservice.getSpentCredit(username);
+        int credit =initiatorService.getCredit(username);
+        int tasknum=initiatorService.getTaskNum(username);
+        int taskfn=initiatorService.getTaskFinishedNum(username);
+        int taskog=initiatorService.getTaskOngoingNum(username);
+        int creditcost=10240-initiatorService.getCredit(username);
 
         JsonObject obj = new JsonObject();
         obj.addProperty("credit",credit);
@@ -53,7 +54,7 @@ public class InitiatorController{
     @ResponseBody
     public String getInitiatorTask(@RequestParam("username") String username) {
         ArrayList<TaskVO> InitiatorTask = new ArrayList<>();
-        InitiatorTask = Initiatorservice.getTask(username);
+        InitiatorTask = initiatorService.getTask(username);
         JsonObject obj = new JsonObject();
         JsonArray array = new JsonArray();
         obj.addProperty("num", InitiatorTask.size());
@@ -64,9 +65,9 @@ public class InitiatorController{
             JsonObject temp = new JsonObject();
             temp.addProperty("id", sample.getID());
             temp.addProperty("type", sample.getType());
-            temp.addProperty("obj",sample.getObeject());
+            temp.addProperty("obj",sample.getDescribe());
             temp.addProperty("num", sample.getImgList().size());
-            temp.addProperty("status",sample.getStatus());
+            temp.addProperty("status",initiatorService.getTaskProgress(sample.getID()));
             temp.addProperty("end_date", sample.getEndTime());
             array.add(temp);
         }

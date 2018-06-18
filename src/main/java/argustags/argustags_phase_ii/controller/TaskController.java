@@ -5,6 +5,7 @@ import argustags.argustags_phase_ii.serviceImpl.TaskImpl;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.serviceImpl.AdminImpl;
 import argustags.argustags_phase_ii.util.ResultMessage;
+import argustags.argustags_phase_ii.vo.Image;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,8 @@ public class TaskController{
     ) {System.out.println("0");
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
         String projectId = df.format(new Date());
-        ArrayList<String> imgList = new ArrayList<>();
+//        ArrayList<String> imgList = new ArrayList<>();
+        ArrayList<Integer> imgList = new ArrayList<>();
         System.out.println("1");
         try {
             //创建临时文件夹放置zip文件
@@ -79,6 +81,7 @@ public class TaskController{
             File picDest = new File("d:"+File.separator+projectId+File.separator+"pics"+projectId);
             String[] names = picDest.list();
             for(String name:names) {
+                Image img =new Image();
                 InputStream inputStream = null;
                 byte[] data = null;
                 try {
@@ -91,13 +94,17 @@ public class TaskController{
                 }
                 BASE64Encoder encoder = new BASE64Encoder();
                 String base64_image =  "data:image/png;base64,"+encoder.encode(data);
-                JsonObject object=new JsonObject();
-                object.addProperty("origin_image", base64_image);
-                object.addProperty("current_image",base64_image);
-                object.addProperty("total_tag","default");
-                object.addProperty("tags","default");
-                object.addProperty("marked",0);
-                imgList.add(object.toString());
+//                JsonObject object=new JsonObject();
+//                object.addProperty("origin_image", base64_image);
+//                object.addProperty("current_image",base64_image);
+//                object.addProperty("total_tag","default");
+//                object.addProperty("tags","default");
+//                object.addProperty("marked",0);
+//                imgList.add(object.toString());
+                img.setBase64(base64_image);
+                int id=new Long(img.getId()).intValue();
+                imgList.add(id);
+
             }
             System.out.println("5");
         } catch (IOException e) {

@@ -5,7 +5,6 @@ import argustags.argustags_phase_ii.repository.TagRepository;
 import argustags.argustags_phase_ii.repository.TaskRepository;
 import argustags.argustags_phase_ii.service.InitiatorService;
 import argustags.argustags_phase_ii.service.TaskService;
-import argustags.argustags_phase_ii.util.FileOpe;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.Image;
 import argustags.argustags_phase_ii.vo.Tag;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

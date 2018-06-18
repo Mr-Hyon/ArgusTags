@@ -1,11 +1,13 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
+import argustags.argustags_phase_ii.repository.InitiatorRepository;
 import argustags.argustags_phase_ii.repository.TaskRepository;
+import argustags.argustags_phase_ii.repository.WorkerRepository;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.util.FileOpe;
 import argustags.argustags_phase_ii.util.ResultMessage;
-import argustags.argustags_phase_ii.vo.TaskVO;
+import argustags.argustags_phase_ii.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +20,17 @@ import java.util.List;
 
 @RestController
 public class AdminImpl implements AdminService {
+
+    @Autowired
+    private WorkerRepository workerRepository;
+    @Autowired
+    private InitiatorRepository initiatorRepository;
     @Autowired
     private TaskRepository taskRepository;
+    @Autowired
+    private AdminService adminService;
+
+
     //  实现登录功能，判断admin用户名密码输入是否正确
     public ResultMessage login(String adminname, String password){
         if(adminname.equals("admin")&&password.equals("123456")){
@@ -28,45 +39,79 @@ public class AdminImpl implements AdminService {
         return ResultMessage.FAILED;
     }
 
-    //  找到initiatorList中的账号密码记录，除以2即为initiator总数
+    //  返回initiator总数
     public int getInitiatorNum(){
-        String initiatorList = "initiatorList";
-        FileOpe fo = new FileOpe();
-        return fo.getLineNum(initiatorList)/2;
+        List<InitiatorVO> list = initiatorRepository.findAll();
+        return list.size();
     }
 
-    //  找到workerList中的账号密码记录，除以2即为worker总数
+    //  返回worker总数
     public int getWorkerNum(){
-        String workerList = "workerList";
-        FileOpe fo = new FileOpe();
-        return fo.getLineNum(workerList)/2;
+        List<WorkerVO> list = workerRepository.findAll();
+        return list.size();
     }
 
-    //  找到taskList中的task记录，即为task总数
+    //  返回task总数
     public int getTaskNum(){
-        String taskList = "taskList";
-        FileOpe fo = new FileOpe();
-        return fo.getLineNum(taskList);
+        List<TaskVO> list = taskRepository.findAll();
+        return list.size();
     }
 
     //返回系统中所有task
-    public ArrayList<TaskVO> getTask(){
-        ArrayList<TaskVO> alltask = new ArrayList();
-        alltask= (ArrayList)(taskRepository.findAll());
-        return alltask;
+    public List<TaskVO> getTask(){
+        return taskRepository.findAll();
     }
 
     //返回状态为ongoing的task记录总数
     public int getTaskOngoingNum(){
-        String path = "taskList";
-        FileOpe fo = new FileOpe();
-        return fo.getStatusNum(path,"ongoing");
+        int count = 0;
+        List<TaskVO> list = taskRepository.findAll();
+        for(TaskVO task : list){
+            if(task.getProcess()>= (task.getImgList().size())*10){
+                ;
+            }
+            else{
+                count++;
+            }
+        }
+        return count;
     }
 
     //返回状态为finished的task记录总数
     public int getTaskFinishedNum(){
-        String path = "taskList";
-        FileOpe fo = new FileOpe();
-        return fo.getStatusNum(path,"finished");
+        int count = 0;
+        List<TaskVO> list = taskRepository.findAll();
+        for(TaskVO task : list){
+            if(task.getProcess()>= (task.getImgList().size())*10){
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public String getAnswer(Image img) {
+        ArrayList<Tag> list = img.getTags();
+        String str = "";
+        int count = 0;
+        int maximum = 0;
+        String result = "";
+        for (int i = 0; i < list.size(); i++) {
+            str += list.get(i).getTag();
+        }
+        for (int i = 0; i < list.size(); i++) {
+            String temp = str.replaceAll(list.get(i).getTag(), "");
+            count = (str.length() - temp.length()) / list.get(i).getTag().length();
+            if (count > maximum) {
+                maximum = count;
+                result = list.get(i).getTag();
+            }
+        }
+        return result;
+    }
+
+    public ResultMessage rewardAndPunish(Image img){
+        String answer = adminService.getAnswer(img);
+        ArrayList<Tag> list = img.getTags();
+        return ResultMessage.SUCCESS;
     }
 }
