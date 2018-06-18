@@ -12,8 +12,9 @@ public class Image implements Serializable {
     @GeneratedValue
     private  Long imgid;
     private String base64 ;
-
-    private ArrayList<Tag> Tags;
+    @OneToMany
+    @JoinColumn(name = "imageid")
+    private List<Tag> Tags = new ArrayList<Tag>();
 
     public Image(){
 
@@ -41,7 +42,7 @@ public class Image implements Serializable {
         this.base64 = base64;
     }
 
-    public ArrayList<Tag> getTags() { return Tags; }
+    public List<Tag> getTags() { return Tags; }
 
     public void setTags(ArrayList<Tag> Tags) { this.Tags = Tags; }
 }
