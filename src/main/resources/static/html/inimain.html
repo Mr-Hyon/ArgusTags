@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:style="http://www.w3.org/1999/xhtml" xmlns:float="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:style="http://www.w3.org/1999/xhtml" xmlns:float="http://www.w3.org/1999/xhtml" style="height:100%;width:100%">
 <head>
     <meta charset="utf-8">
     <title>Argus Initiator</title>
@@ -8,12 +8,9 @@
     <meta name="author" content="">
 
     <!-- CSS -->
-    <!--<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/supersized.css">
-    <link rel="stylesheet" href="../css/style.css">-->
-    <link href="../css/bootstrap.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/inistyle.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="../css/Style.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
     <script src="../js/jquery-1.8.2.min.js"></script>
     <script src="../js/jquery.cookie.js"></script>
 
@@ -24,92 +21,150 @@
 
 </head>
 
-<body>
+<body style="height: 100%;width:100%">
 
-<div class="page-container">
-    <ul>
-        <li><a href="http://localhost:8080/initiatorHome">Home</a></li>
-        <li><a href="http://localhost:8080/initiator/message">Message</a></li>
-        <li style="float:right"><a href="http://localhost:8080">Log out</a></li>
-        <li style="float:right" id="user"><a>Welcome!</a></li>
-    </ul>
-    </br></br></br>
+<div class="page-container" style="height:100%;width:100%">
+
+    <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
+        <h1> <strong>Argus System</strong></h1>
+        <p id="username" style="text-align:center;"></p>
+        <p id="pts" style="text-align:center;"></p>
+        <p id="tasknum" style="text-align:center;"></p>
+        <p id="taskfn" style="text-align:center;"></p>
+        <p id="taskon" style="text-align:center;"></p>
+        <p id="ptscost" style="text-align:center;"></p>
+        <div>
+            <button id="logout" class="btn btn-default " >Log out</button>
+        </div>
+    </div>
+
+    <div class="col-sm-9 text" style="height:100%;width:75%">
+        <br>
         <p id="task"  style="text-align:center;"></p>
-    <HR   width="80%" color=#000000 SIZE=3>
-    <table class="table table-striped table-bordered table-hover" width="100%" border="1px" id="alltask">
-        <tr>
-            <td>任务编号</td><td>任务类型</td><td>标注物体</td><td>图片数量</td><td>是否完成</td><td>最后期限</td>
-        </tr>
+        <HR   width="80%" color=#000000 SIZE=3>
+        <div class="table-responsive" style="height:75%;width:100%">
+            <table class="table table-striped table-bordered table-hover" width="100%" border="1px" id="alltask">
+                <tr>
+                    <td>任务编号</td><td>任务类型</td><td>标注物体</td><td>图片数量</td><td>是否完成</td><td>最后期限</td><td>操作</td>
+                </tr>
 
-    </table>
-    </br>
-    <div style="text-align:center;">
-        <button id="rltask" class="btn btn-default btn-lg" >发布新任务</button>
+            </table>
+        </div>
+        </br>
+        <div style="text-align:center;">
+            <button id="rltask" class="btn btn-default btn-lg" style="width:50%" >发布新任务</button>
+        </div>
     </div>
 </div>
 <script>
     var name=$.cookie("username");
-    var tasknum=12;
+//    var tasknum=12;
     var TaskJsonList = null
-    var TaskJsonObjArray = null
-
     $.ajax({
-        url: 'http://localhost:8080/getInitiatorTask',
-        type: 'post',
-        async: false,
-        data: {
-            username:name
-        },
-        success: function (data) {
-            TaskJsonList = data
-        },
-        error: function() {
-            alert('fail')
-        }
+    url: 'http://localhost:8080/getInitiatorTask',
+    type: 'post',
+    async: false,
+    data: {
+        username:name
+    },
+    success: function (data) {
+         TaskJsonList = data
+     },
+    error: function() {
+       alert('fail')
+    }
     })
-    TaskJsonObjArray = JSON.parse(TaskJsonList)
+    var TaskJsonObjArray = JSON.parse(TaskJsonList)
 
     tasknum=TaskJsonObjArray[0].num
 
     document.getElementById('task').innerHTML="您发布的任务("+tasknum+"):";
 
     var table_info = document.getElementById("alltask")
-
-    function load_task(id,type,obj,numb,status,deadline){
-
+    function load_task(id,type,obj,numb,status,deadline,x){
         var OneRow = table_info.insertRow()
-        var cell1 = OneRow.insertCell()
-        var cell2 = OneRow.insertCell()
-        var cell3 = OneRow.insertCell()
-        var cell4 = OneRow.insertCell()
-        var cell5 = OneRow.insertCell()
-        var cell6 = OneRow.insertCell()
+        var cell1 =OneRow.insertCell();
+        var cell2 =OneRow.insertCell();
+        var cell3 =OneRow.insertCell();
+        var cell4 =OneRow.insertCell();
+        var cell5 =OneRow.insertCell();
+        var cell6 =OneRow.insertCell();
+        var cell7 =OneRow.insertCell();
 
+        var y="<div class=\"progress progress-striped active\"></div>"
+        var z="<div class=\"progress-bar progress-bar-primary\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
         cell1.innerHTML = id
         cell2.innerHTML = type
         cell3.innerHTML = obj
         cell4.innerHTML = numb
-        cell5.innerHTML = status
+        cell5.innerHTML = status+x;
         cell6.innerHTML=deadline
-
+        cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn btn-default\" disabled>不可查看</button>"
+        document.getElementById('SelectTask').id = id
+        $(cell5).append($(y).append($(z).css("width",x)))
+        if(x=="100%")
+            cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn btn-default\" >进入任务</button>"
     }
+    var userData = null
+
+    $.ajax({
+        url: 'http://localhost:8080/getInitiatorInfo',
+        type: 'post',
+        async: false,
+        data: {
+            username:name
+        },
+        success: function (data) {
+            userData = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+
+    var userObj = JSON.parse(userData)
+
+    var pts0=userObj.credit;
+    var num0=userObj.tasknum;
+    var num1=userObj.taskfn;
+    var num2=userObj.taskog;
+    var pts1=userObj.creditcost;
+    document.getElementById('username').innerHTML=name;
+    document.getElementById('pts').innerHTML="剩余积分："+pts0;
+    document.getElementById('tasknum').innerHTML="发布任务总数："+num0;
+    document.getElementById('taskfn').innerHTML="已完成任务数："+num1;
+    document.getElementById('taskon').innerHTML="进行中任务数："+num2;
+    document.getElementById('ptscost').innerHTML="花费积分数："+pts1;
 
     for(var i=1 ; i<=TaskJsonObjArray[0].num ; i++){
-        var TaskId = TaskJsonObjArray[i].id
-        var TaskType = TaskJsonObjArray[i].type
+       var TaskId = TaskJsonObjArray[i].id
+       var TaskType = TaskJsonObjArray[i].type
+       if(TaskType=="0")
+          TaskType="整体标注"
+      else if(TaskType=="1")
+           TaskType="方框框选"
+       else if(TaskType=="2")
+            TaskType="方框标注"
         var TaskObj=TaskJsonObjArray[i].obj
         var TaskNumPics = TaskJsonObjArray[i].num
         var x=TaskJsonObjArray[i].status
         if(x==1)
-            var TaskStatus="已完成"
-        else
-            var TaskStatus="进行中"
-        var EndTime = TaskJsonObjArray[i].end_date
+           var TaskStatus="已完成"
+      else
+       var TaskStatus="完成度："
+      var EndTime = TaskJsonObjArray[i].end_date
 
-        load_task(TaskId,TaskType,TaskObj,TaskNumPics,TaskStatus,EndTime)
-    }
+      load_task(TaskId,TaskType,TaskObj,TaskNumPics,TaskStatus,EndTime,x)
+     }
 
-    //load_task("5","自由标注","篮球",10,"进行中","2018-6-1")
+//    load_task("5","自由标注","篮球",10,"进行中","2018-6-1","50%")
+//    load_task("5","自由标注","篮球",10,"进行中","2018-6-1","100%")
+//    load_task("5","自由标注","篮球",10,"进行中","2018-6-1","40%")
+//    load_task("5","自由标注","篮球",10,"进行中","2018-6-1","40%")
+//    load_task("5","自由标注","篮球",10,"进行中","2018-6-1","40%")
+
+
+
 
 
     document.getElementById('rltask').onclick=function (e) {

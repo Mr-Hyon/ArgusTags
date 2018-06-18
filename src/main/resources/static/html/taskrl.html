@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%;width:100%">
 <head>
     <meta charset="utf-8">
     <title>Argus Release Task</title>
@@ -7,14 +7,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
-    <!-- CSS
-    <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/supersized.css">
-    <link rel="stylesheet" href="../css/style.css"> -->
+    <!-- CSS -->
     <link href="../css/bootstrap.css" rel="stylesheet" />
     <link href="../css/form.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/inistyle.css">
+    <link rel="stylesheet" href="../css/Style.css">
     <script src="../js/jquery-1.8.2.min.js"></script>
     <script src="../js/jquery.cookie.js"></script>
 
@@ -25,17 +21,25 @@
 
 </head>
 
-<body>
+<body style="height:100%;width:100%">
 
-<div class="page-container">
-    </br>
-    </br>
-    <ul>
-        <li><a href="http://localhost:8080/initiatorHome">Home</a></li>
-        <li><a href="http://localhost:8080/initiator/message">Message</a></li>
-        <li style="float:right"><a href="http://localhost:8080">Log out</a></li>
-        <li style="float:right" id="user"><a>Welcome!</a></li>
-    </ul>
+<div class="page-container" style="height:100%;width:100%">
+    <div class="page-container" style="height:100%;width:100%">
+
+        <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
+            <h1> <strong>Argus System</strong></h1>
+            <p id="username" style="text-align:center;"></p>
+            <p id="pts" style="text-align:center;"></p>
+            <p id="tasknum" style="text-align:center;"></p>
+            <p id="taskfn" style="text-align:center;"></p>
+            <p id="taskon" style="text-align:center;"></p>
+            <p id="ptscost" style="text-align:center;"></p>
+            <div>
+                <button id="logout" class="btn btn-default " >Log out</button>
+            </div>
+        </div>
+
+        <div class="col-sm-9 text" style="height:100%;width:75%">
     <div class="form_content">
     <fieldset style="width:500px;">
 
@@ -73,7 +77,9 @@
     </fieldset>
     </div>
     <div style="text-align:center;">
-        <button id="release" class="btn btn-default btn-lg" >发布任务</button>
+        <button id="release" class="btn btn-default btn-lg" style="width:10%" >发布任务</button>
+    </div>
+</div>
     </div>
 </div>
 <script>
