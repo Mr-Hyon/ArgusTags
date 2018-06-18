@@ -8,11 +8,12 @@
     <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=PT+Sans:400,700'>
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/supersized.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/style1.css">
+    <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="../css/markpage.css">
 
 </head>
-<body>
+<body background="../img/backgrounds/1@2x.jpg">
 
 <ul>
     <li><a href="http://localhost:8080/workerHome">Home</a></li>
@@ -160,13 +161,13 @@
             for(var j=0;j<options.length;j++){
                 total_select.options.add(new Option(options[j],options[j]))
             }
-            var tagToSelect = jsonObject.tag;
+            var tagToSelect = jsonObject.tagcontent;
             total_select.value = tagToSelect;
         }
         else if(type == 1){
             var tagstart = jsonObject.tagstart.split(" ")
             var tagend = jsonObject.tagend.split(" ")
-            var tagcontent = jsonObject.tag.split(" ")
+            var tagcontent = jsonObject.tagcontent.split(" ")
             for (var j = 0; j < tagstart.length; j++) {
                 drawTags(tagstart[j],tagend[j])
             }
@@ -174,7 +175,7 @@
         else if(type == 2){
             var tagstart = jsonObject.tagstart.split(" ")
             var tagend = jsonObject.tagend.split(" ")
-            var tagcontent = jsonObject.tag.split(" ")
+            var tagcontent = jsonObject.tagcontent.split(" ")
             for (var j = 0; j < tagstart.length; j++) {
                 drawTags(tagstart[j],tagend[j])
                 add_Mark(tagcontent[j]);
@@ -187,9 +188,9 @@
             alert('已是该任务的首张图片')
         }
         else{
-            clearTable()
-            current_pic_index = current_pic_index - 1
-            load_page(current_pic_index)
+            clearTable();
+            current_pic_index = current_pic_index - 1;
+            load_page(current_pic_index);
         }
     }
 
@@ -198,9 +199,9 @@
             alert('已是该任务的最后一张图片')
         }
         else{
-            clearTable()
-            current_pic_index = current_pic_index + 1
-            load_page(current_pic_index)
+            clearTable();
+            current_pic_index = current_pic_index + 1;
+            load_page(current_pic_index);
         }
     }
 
@@ -366,10 +367,10 @@
         if(type == 0){
             var total_mark = totalInput.value;
             var JSONObject= {
-                "imgid":jsonData[current_pic_index].imgid,
-                "origin_image":jsonData[current_pic_index].origin_image,
-                "tagstart":jsonData[current_pic_index].tagstart,
-                "tagend":jsonData[current_pic_index].tagend,
+                "imgid":JSON.parse(jsonData[current_pic_index]).imgid,
+                "origin_image":JSON.parse(jsonData[current_pic_index]).origin_image,
+                "tagstart":JSON.parse(jsonData[current_pic_index]).tagstart,
+                "tagend":JSON.parse(jsonData[current_pic_index]).tagend,
                 "tagcontent":total_mark};
 
             jsonData[current_pic_index] = JSON.stringify(JSONObject);
@@ -381,7 +382,7 @@
                 data: {
                     taskId:taskId,
                     username:workername,
-                    imageid:jsonData[current_pic_index].imgid,
+                    imageid:JSON.parse(jsonData[current_pic_index]).imgid,
                     tagcontent:total_mark
                 },
                 success: function (data) {
@@ -406,11 +407,11 @@
             }
 
             var JSONObject= {
-                "imgid":jsonData[current_pic_index].imgid,
-                "origin_image":jsonData[current_pic_index].origin_image,
+                "imgid":JSON.parse(jsonData[current_pic_index]).imgid,
+                "origin_image":JSON.parse(jsonData[current_pic_index]).origin_image,
                 "tagstart":coord1toSend,
                 "tagend":coord2toSend,
-                "tagcontent":jsonData[current_pic_index].tagcontent};
+                "tagcontent":JSON.parse(jsonData[current_pic_index]).tagcontent};
 
             jsonData[current_pic_index] = JSON.stringify(JSONObject);
 
@@ -421,7 +422,7 @@
                 data: {
                     taskId:taskId,
                     username:workername,
-                    imageid:jsonData[current_pic_index].imgid,
+                    imageid:JSON.parse(jsonData[current_pic_index]).imgid,
                     tagstart:coord1toSend,
                     tagend:coord2toSend
                 },
@@ -455,8 +456,8 @@
             }
 
             var JSONObject= {
-                "imgid":jsonData[current_pic_index].imgid,
-                "origin_image":jsonData[current_pic_index].origin_image,
+                "imgid":JSON.parse(jsonData[current_pic_index]).imgid,
+                "origin_image":JSON.parse(jsonData[current_pic_index]).origin_image,
                 "tagstart":coord1toSend,
                 "tagend":coord2toSend,
                 "tagcontent":tagtoSend};
@@ -470,7 +471,7 @@
                 data: {
                     taskId:taskId,
                     username:workername,
-                    imageid:jsonData[current_pic_index].imgid,
+                    imageid:JSON.parse(jsonData[current_pic_index]).imgid,
                     tagstart:coord1toSend,
                     tagend:coord2toSend,
                     tagcontent:tagtoSend
