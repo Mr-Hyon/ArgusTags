@@ -5,6 +5,7 @@ import argustags.argustags_phase_ii.serviceImpl.TaskImpl;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.serviceImpl.AdminImpl;
 import argustags.argustags_phase_ii.util.ResultMessage;
+import argustags.argustags_phase_ii.vo.Image;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +80,8 @@ public class TaskController{
             //置filelist
             File picDest = new File("d:"+File.separator+projectId+File.separator+"pics"+projectId);
             String[] names = picDest.list();
-            int id=0;
             for(String name:names) {
+                Image img =new Image();
                 InputStream inputStream = null;
                 byte[] data = null;
                 try {
@@ -100,8 +101,10 @@ public class TaskController{
 //                object.addProperty("tags","default");
 //                object.addProperty("marked",0);
 //                imgList.add(object.toString());
+                img.setBase64(base64_image);
+                int id=new Long(img.getId()).intValue();
                 imgList.add(id);
-                id++;
+
             }
             System.out.println("5");
         } catch (IOException e) {
