@@ -7,8 +7,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "image")
-public class Image implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Image  {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

@@ -10,8 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "worker")
-public class WorkerVO implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class WorkerVO  {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

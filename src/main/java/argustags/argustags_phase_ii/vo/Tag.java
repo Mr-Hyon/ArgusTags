@@ -5,8 +5,8 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "tag")
-public class Tag implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class Tag  {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)

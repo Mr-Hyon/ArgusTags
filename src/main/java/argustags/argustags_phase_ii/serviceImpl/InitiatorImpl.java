@@ -24,6 +24,7 @@ public class InitiatorImpl implements InitiatorService {
     private AdminService adminService;
 
 
+
 //    @Override
 //    public List<InitiatorVO> getAllUserlist(){
 //        return initiatorRepository.findAll();
@@ -68,10 +69,10 @@ public class InitiatorImpl implements InitiatorService {
     }
 
     //  实现登录功能
-    @Override
     public ResultMessage login(String username, String password){
+
         InitiatorVO initiator1 = getByName(username);
-        if(username == initiator1.getUsername()&&password == initiator1.getPassword()){
+        if((username == initiator1.getUsername())&&(password == initiator1.getPassword())){
             return ResultMessage.SUCCESS;
         }
         else{
@@ -168,12 +169,12 @@ public class InitiatorImpl implements InitiatorService {
     }
 
     //根据名称查找对应initiator
-    @Override
+
     public InitiatorVO getByName(String name){
-        List<InitiatorVO>li = initiatorRepository.findAll();
+        List<InitiatorVO> li = initiatorRepository.findAll();
         InitiatorVO res=null;
         for(InitiatorVO initiator:li){
-            if(initiator.getUsername().equals(initiator)){
+            if(initiator.getUsername().equals(name)){
                 res=initiator;
                 break;
             }

@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 @Entity
 @Table(name = "initiator")
-public class InitiatorVO implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class InitiatorVO  {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
