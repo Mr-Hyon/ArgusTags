@@ -193,34 +193,123 @@ public class WorkerController{
         return arr.toString();
     }
 
-    @PostMapping(value = "/updateWorkerTask", produces="application/text; charset=utf-8")
+    @PostMapping(value = "/updateWorkerTaskType0", produces="application/text; charset=utf-8")
     @ResponseBody
-    public String UpdateWorkerTask(@RequestParam("username") String username,
-                            @RequestParam("taskId") int taskId,
-                            @RequestParam("marked_num") String marked_num,
-                            @RequestParam("imgList") String image,
-                            @RequestParam("pic_index") int pic_index){
-        System.out.println("114514");
-        System.out.println(image);
-        TaskVO vo = taskservice.getByID(taskId);
-        JsonParser parser = new JsonParser();
-        JsonElement jsonElement = parser.parse(image);
-        JsonObject obj = jsonElement.getAsJsonObject();
-        ArrayList<String> list = new ArrayList<>();
-        list = vo.getImgList();
+    public String UpdateWorkerTask0(@RequestParam("taskId") int taskId,
+                            @RequestParam("username") String workername,
+                            @RequestParam("imgid") int imageid,
+                            @RequestParam("tagcontent") String tagcontent){
 
-        list.set(pic_index,image);
-        vo.setImgList(list);
-        ResultMessage rm1 = taskservice.updateTask(vo);
-
-        if( rm1 == ResultMessage.SUCCESS){
-            return "success";
+        List<Tag> tags = taskservice.getTagbyWnT(workername,imageid);
+        if(tags.size()>0){
+            Tag sample=tags.get(0);
+            sample.setTag(tagcontent);
+            ResultMessage rm1 = taskservice.modifyTag(sample);
+            if(rm1 == ResultMessage.SUCCESS) return "success";
+            else return "fail";
         }
         else{
-            return "fail";
+            Tag tag = new Tag();
+            tag.setTag(tagcontent);
+            tag.setWorkerName(workername);
+            tag.setTagEnd("");
+            tag.setTagStart("");
+            ResultMessage rm2 = taskservice.addTag(tag);
+            if(rm2 == ResultMessage.SUCCESS) return "success";
+            else return "fail";
         }
 
     }
 
+    @PostMapping(value = "/updateWorkerTaskType1", produces="application/text; charset=utf-8")
+    @ResponseBody
+    public String UpdateWorkerTask1(@RequestParam("taskId") int taskId,
+                                   @RequestParam("username") String workername,
+                                   @RequestParam("imgid") int imageid,
+                                   @RequestParam("tagstart") String tagstart,
+                                    @RequestParam("tagend") String tagend){
+
+        List<Tag> tags = taskservice.getTagbyWnT(workername,imageid);
+        String[] coordinate_one = tagstart.split(" ");
+        String[] coordinate_two = tagend.split(" ");
+        int flag = 0;
+        int error_sensor = 0;
+        for(int i=0;i<coordinate_one.length;i++){
+            flag=0;
+            String coord1 = coordinate_one[i];
+            String coord2 = coordinate_two[i];
+            for(int j=0;j<tags.size();j++){
+                if(tags.get(i).getTagStart().equals(coord1) && tags.get(i).getTagEnd().equals(coord2)){
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag == 0){
+                Tag tag = new Tag();
+                tag.setWorkerName(workername);
+                tag.setTagStart(coord1);
+                tag.setTagEnd(coord2);
+                tag.setTag("");
+                ResultMessage rm = taskservice.addTag(tag);
+                if(rm != ResultMessage.SUCCESS) error_sensor = 1;
+            }
+        }
+
+        if(error_sensor == 1)
+            return "fail";
+        else
+            return "success";
+
+    }
+
+    @PostMapping(value = "/updateWorkerTaskType2", produces="application/text; charset=utf-8")
+    @ResponseBody
+    public String UpdateWorkerTask2(@RequestParam("taskId") int taskId,
+                                    @RequestParam("username") String workername,
+                                    @RequestParam("imgid") int imageid,
+                                    @RequestParam("tagstart") String tagstart,
+                                    @RequestParam("tagend") String tagend,
+                                    @RequestParam("tagcontent") String tagcontent){
+
+        List<Tag> tags = taskservice.getTagbyWnT(workername,imageid);
+        String[] coordinate_one = tagstart.split(" ");
+        String[] coordinate_two = tagend.split(" ");
+        String[] contents = tagcontent.split(" ");
+        int flag = 0;
+        int error_sensor = 0;
+        for(int i=0;i<coordinate_one.length;i++){
+            flag=0;
+            String coord1 = coordinate_one[i];
+            String coord2 = coordinate_two[i];
+            String content = contents[i];
+            for(int j=0;j<tags.size();j++){
+                if(tags.get(i).getTagStart().equals(coord1) && tags.get(i).getTagEnd().equals(coord2)){
+                    flag = 1;
+                    if(!tags.get(i).getTag().equals(content)){
+                        Tag temp = tags.get(i);
+                        temp.setTag(content);
+                        ResultMessage rm1 = taskservice.modifyTag(temp);
+                        if(rm1 != ResultMessage.SUCCESS) error_sensor = 1;
+                    }
+                    break;
+                }
+            }
+            if(flag == 0){
+                Tag tag = new Tag();
+                tag.setTag(content);
+                tag.setWorkerName(workername);
+                tag.setTagStart(coord1);
+                tag.setTagEnd(coord2);
+                ResultMessage rm2 = taskservice.addTag(tag);
+                if(rm2 != ResultMessage.SUCCESS) error_sensor = 1;
+            }
+        }
+
+        if(error_sensor == 1)
+            return "fail";
+        else
+            return "success";
+
+    }
 
 }

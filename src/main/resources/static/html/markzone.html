@@ -375,10 +375,11 @@
             jsonData[current_pic_index] = JSON.stringify(JSONObject);
 
             $.ajax({
-                url: 'http://localhost:8080/updateWorkerTask',
+                url: 'http://localhost:8080/updateWorkerTaskType0',
                 type: 'post',
                 async: false,
                 data: {
+                    taskId:taskId,
                     username:workername,
                     imageid:jsonData[current_pic_index].imgid,
                     tagcontent:total_mark
@@ -414,10 +415,11 @@
             jsonData[current_pic_index] = JSON.stringify(JSONObject);
 
             $.ajax({
-                url: 'http://localhost:8080/updateWorkerTask',
+                url: 'http://localhost:8080/updateWorkerTaskType1',
                 type: 'post',
                 async: false,
                 data: {
+                    taskId:taskId,
                     username:workername,
                     imageid:jsonData[current_pic_index].imgid,
                     tagstart:coord1toSend,
@@ -462,10 +464,11 @@
             jsonData[current_pic_index] = JSON.stringify(JSONObject);
 
             $.ajax({
-                url: 'http://localhost:8080/updateWorkerTask',
+                url: 'http://localhost:8080/updateWorkerTaskType2',
                 type: 'post',
                 async: false,
                 data: {
+                    taskId:taskId,
                     username:workername,
                     imageid:jsonData[current_pic_index].imgid,
                     tagstart:coord1toSend,
