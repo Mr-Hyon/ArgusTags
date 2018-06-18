@@ -23,7 +23,7 @@ public interface AdminService {
 
     public int getTaskFinishedNum();
 
-    public String getAnswer(Image img);
+    public String getAnswer(long imgid);
 
-    public ResultMessage rewardAndPunish(Image img);
+    public ResultMessage rewardAndPunish0(int taskid);
 }

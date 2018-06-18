@@ -1,10 +1,12 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
+import argustags.argustags_phase_ii.repository.ImageRepository;
 import argustags.argustags_phase_ii.repository.InitiatorRepository;
 import argustags.argustags_phase_ii.repository.TaskRepository;
 import argustags.argustags_phase_ii.repository.WorkerRepository;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
+import argustags.argustags_phase_ii.service.WorkerService;
 import argustags.argustags_phase_ii.util.FileOpe;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.*;
@@ -29,6 +31,10 @@ public class AdminImpl implements AdminService {
     private TaskRepository taskRepository;
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private WorkerService workerService;
 
 
     //  实现登录功能，判断admin用户名密码输入是否正确
@@ -89,7 +95,8 @@ public class AdminImpl implements AdminService {
         return count;
     }
 
-    public String getAnswer(Image img) {
+    public String getAnswer(long imgid) {
+        Image img = taskService.findImageById(imgid);
         ArrayList<Tag> list = img.getTags();
         String str = "";
         int count = 0;
@@ -109,9 +116,47 @@ public class AdminImpl implements AdminService {
         return result;
     }
 
-    public ResultMessage rewardAndPunish(Image img){
-        String answer = adminService.getAnswer(img);
-        ArrayList<Tag> list = img.getTags();
+    public ResultMessage rewardAndPunish0(int taskid){
+        TaskVO vo = taskRepository.findById(taskid).get();
+        ArrayList<Integer> imgs = vo.getImgList();
+        ArrayList<String> workers = vo.getWorkers();
+        ArrayList<Integer> numOfTrueTags = new ArrayList();
+        for(String name : workers){
+            numOfTrueTags.add(0);
+        }
+        int total = imgs.size();
+        double percent = 0;
+        int credit = 0;
+        String answer = "";
+        Image img = null;
+        ArrayList<Tag> tags = new ArrayList();
+        for(int imgid : imgs){
+            img = taskService.findImageById(imgid);
+            answer = adminService.getAnswer(imgid);
+            tags = img.getTags();
+            for(Tag t : tags){
+                if(t.getTag().equals(answer)){
+                    for(int i = 0; i<workers.size(); i++){
+                        if(workers.get(i).equals(t.getWorkerName())){
+                            numOfTrueTags.set(i,numOfTrueTags.get(i)+1);
+                        }
+                    }
+                }
+            }
+        }
+        for(int i = 0; i<workers.size(); i++){
+            credit = workerService.getCredit(workers.get(i));
+            percent = (double)numOfTrueTags.get(i)/total;
+            if(percent >= 0.95){
+                workerService.updateCredit(credit+total,workers.get(i));
+            }
+            else if(percent >= 0.75){
+                workerService.updateCredit(credit+numOfTrueTags.get(i),workers.get(i));
+            }
+            else if(percent < 0.5){
+                workerService.updateCredit(credit+2*numOfTrueTags.get(i)-total,workers.get(i));
+            }
+        }
         return ResultMessage.SUCCESS;
     }
 }

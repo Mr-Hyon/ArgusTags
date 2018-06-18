@@ -98,7 +98,17 @@ public class TaskImpl implements TaskService {
         return ResultMessage.SUCCESS;
     }
 
-
+    public Image findImageById(long id){
+        List<Image> image = imageRepository.findAll();
+        Image img = null;
+        for(Image i:image){
+            if(i.getId()==id){
+                img = i;
+                break;
+            }
+        }
+        return img;
+    }
 
 
 

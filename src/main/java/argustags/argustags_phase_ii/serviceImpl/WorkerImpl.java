@@ -130,6 +130,7 @@ public class WorkerImpl implements WorkerService {
     public ResultMessage updateCredit(int credit,String username){
         WorkerVO worker1=getByName(username);
         worker1.setCredit(credit);
+        workerRepository.saveAndFlush(worker1);
         return ResultMessage.SUCCESS;
     }
 
