@@ -29,21 +29,30 @@ public class InitiatorImpl implements InitiatorService {
 
     //	实现注册功能
     public ResultMessage register(String username, String password){
-        List<InitiatorVO> list1 = initiatorRepository.findAll();
-        int flag = 0;
-        for(InitiatorVO ini:list1){
-            if(ini.getUsername() == username ){
-                flag = flag+1;
-                break;
+        if(initiatorRepository.findAll()!=null) {
+            List<InitiatorVO> list1 = initiatorRepository.findAll();
+
+            int flag = 0;
+            for (InitiatorVO ini : list1) {
+                if (ini.getUsername() == username) {
+                    flag = flag + 1;
+                    break;
+                } else {
+                    ;
+                }
             }
-            else{
-                ;
+            if (flag == 1) {
+                return ResultMessage.REPEATEDNAME;
+            } else {
+                InitiatorVO initiator = new InitiatorVO();
+                initiator.setUsername(username);
+                initiator.setPassword(password);
+                initiator.setCredit(10240);
+                initiatorRepository.saveAndFlush(initiator);
+                return ResultMessage.SUCCESS;
             }
         }
-        if(flag == 1){
-            return ResultMessage.REPEATEDNAME;
-        }
-        else {
+        else{
             InitiatorVO initiator = new InitiatorVO();
             initiator.setUsername(username);
             initiator.setPassword(password);

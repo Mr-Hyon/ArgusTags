@@ -45,19 +45,27 @@ public class WorkerImpl implements WorkerService {
     //	实现注册
     @Override
     public ResultMessage register(String username, String password){
-        List<WorkerVO> list1 = workerRepository.findAll();
-        int flag = 0;
-        for(WorkerVO ini:list1){
-            if(ini.getUsername() == username ){
-                flag = flag+1;
-                break;
+        if(workerRepository.findAll()!=null) {
+            List<WorkerVO> list1 = workerRepository.findAll();
+            int flag = 0;
+            for (WorkerVO ini : list1) {
+                if (ini.getUsername() == username) {
+                    flag = flag + 1;
+                    break;
+                } else {
+                    ;
+                }
             }
-            else{
-                ;
+            if (flag == 1) {
+                return ResultMessage.REPEATEDNAME;
+            } else {
+                WorkerVO worker = new WorkerVO();
+                worker.setUsername(username);
+                worker.setPassword(password);
+                worker.setCredit(100);
+                workerRepository.saveAndFlush(worker);
+                return ResultMessage.SUCCESS;
             }
-        }
-        if(flag == 1) {
-            return ResultMessage.REPEATEDNAME;
         }
         else{
             WorkerVO worker = new WorkerVO();
@@ -67,7 +75,6 @@ public class WorkerImpl implements WorkerService {
             workerRepository.saveAndFlush(worker);
             return ResultMessage.SUCCESS;
         }
-
     }
 
 
