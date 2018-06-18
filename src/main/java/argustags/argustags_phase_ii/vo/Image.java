@@ -13,8 +13,6 @@ public class Image implements Serializable {
     private  Long imgid;
     private String base64 ;
 
-    @OneToMany(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
-    @JoinColumn(name = "ImgID", nullable = false)
     private ArrayList<Tag> Tags;
 
     public Image(){

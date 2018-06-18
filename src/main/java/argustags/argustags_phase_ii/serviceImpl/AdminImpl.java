@@ -1,22 +1,16 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
-import argustags.argustags_phase_ii.repository.ImageRepository;
 import argustags.argustags_phase_ii.repository.InitiatorRepository;
 import argustags.argustags_phase_ii.repository.TaskRepository;
 import argustags.argustags_phase_ii.repository.WorkerRepository;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
-import argustags.argustags_phase_ii.util.FileOpe;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
