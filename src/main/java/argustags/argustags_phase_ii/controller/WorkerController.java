@@ -246,7 +246,7 @@ public class WorkerController{
             String coord1 = coordinate_one[i];
             String coord2 = coordinate_two[i];
             for(int j=0;j<tags.size();j++){
-                if(tags.get(i).getTagStart().equals(coord1) && tags.get(i).getTagEnd().equals(coord2)){
+                if(tags.get(j).getTagStart().equals(coord1) && tags.get(j).getTagEnd().equals(coord2)){
                     flag = 1;
                     break;
                 }
@@ -298,9 +298,9 @@ public class WorkerController{
             String coord2 = coordinate_two[i];
             String content = contents[i];
             for(int j=0;j<tags.size();j++){
-                if(tags.get(i).getTagStart().equals(coord1) && tags.get(i).getTagEnd().equals(coord2)){
+                if(tags.get(j).getTagStart().equals(coord1) && tags.get(j).getTagEnd().equals(coord2)){
                     flag = 1;
-                    if(!tags.get(i).getTag().equals(content)){
+                    if(!tags.get(j).getTag().equals(content)){
                         Tag temp = tags.get(i);
                         temp.setTag(content);
                         ResultMessage rm1 = taskService.modifyTag(temp);
