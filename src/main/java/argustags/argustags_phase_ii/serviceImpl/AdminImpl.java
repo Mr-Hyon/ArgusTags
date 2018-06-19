@@ -101,7 +101,7 @@ public class AdminImpl implements AdminService {
     public String getAnswer(int imgid) {
         Image img = taskService.findImageById(imgid);
         List<Integer> tags = img.getTags();
-        List<Tag> list = new ArrayList<Tag>();
+        List<Tag> list = new ArrayList<>();
         for(Integer t :tags){
             list.add(taskService.getTagById(t));
         }
@@ -124,20 +124,37 @@ public class AdminImpl implements AdminService {
         return result;
     }
 
+    public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total){
+        double percent = 0;
+        int credit = 0;
+        for(int i = 0; i<workers.size(); i++){
+            credit = workerService.getCredit(workers.get(i));
+            percent = (double)numOfTrueTags.get(i)/total;
+            if(percent >= 0.95){
+                workerService.updateCredit(credit+total,workers.get(i));
+            }
+            else if(percent >= 0.75){
+                workerService.updateCredit(credit+numOfTrueTags.get(i),workers.get(i));
+            }
+            else if(percent < 0.5){
+                workerService.updateCredit(credit+2*numOfTrueTags.get(i)-total,workers.get(i));
+            }
+        }
+        return ResultMessage.SUCCESS;
+    }
+
     public ResultMessage rewardAndPunish0(int taskid){
         TaskVO vo = taskRepository.findById(taskid).get();
         ArrayList<Integer> imgs = vo.getImgList();
         ArrayList<String> workers = vo.getWorkers();
-        ArrayList<Integer> numOfTrueTags = new ArrayList();
+        ArrayList<Integer> numOfTrueTags = new ArrayList<>();
         for(String name : workers){
             numOfTrueTags.add(0);
         }
         int total = imgs.size();
-        double percent = 0;
-        int credit = 0;
         String answer = "";
         Image img = null;
-        List<Tag> tags = new ArrayList();
+        List<Tag> tags = new ArrayList<>();
         for(int imgid : imgs){
             img = taskService.findImageById(imgid);
             answer = adminService.getAnswer(imgid);
@@ -155,19 +172,41 @@ public class AdminImpl implements AdminService {
                 }
             }
         }
-        for(int i = 0; i<workers.size(); i++){
-            credit = workerService.getCredit(workers.get(i));
-            percent = (double)numOfTrueTags.get(i)/total;
-            if(percent >= 0.95){
-                workerService.updateCredit(credit+total,workers.get(i));
-            }
-            else if(percent >= 0.75){
-                workerService.updateCredit(credit+numOfTrueTags.get(i),workers.get(i));
-            }
-            else if(percent < 0.5){
-                workerService.updateCredit(credit+2*numOfTrueTags.get(i)-total,workers.get(i));
+        return adminService.rewardAndPunish(workers,numOfTrueTags,total);
+    }
+
+    public ResultMessage rewardAndPunish12(int taskid){
+        TaskVO vo = taskRepository.findById(taskid).get();
+        ArrayList<Integer> imgs = vo.getImgList();
+        ArrayList<String> workers = vo.getWorkers();
+        ArrayList<Integer> numOfTrueTags = new ArrayList<>();
+        for(String name : workers){
+            numOfTrueTags.add(0);
+        }
+        int total = imgs.size();
+        List<Tag> answerTag;
+        List<Tag> tags;
+        int numOfTags;
+        int sign;
+        String name;
+        for(int imgid : imgs){
+            answerTag = taskService.getTagbyWnT(workers.get(0),imgid);
+            numOfTags = answerTag.size();
+            for(int i = 0;i<workers.size();i++) {
+                name = workers.get(i);
+                tags = taskService.getTagbyWnT(name,imgid);
+                sign = 0;
+                for(Tag t : answerTag){
+                    for(Tag t1 : tags){
+                        if((Math.abs(t.getMiddle()[0]-t1.getMiddle()[0])<=5)&&(Math.abs(t.getMiddle()[1]-t1.getMiddle()[1])<=5)&&t.getTag().equals(t1.getTag())){
+                            sign++;
+                        }
+                    }
+                }
+                if(sign == numOfTags) numOfTrueTags.set(i,numOfTrueTags.get(i)+1);
             }
         }
-        return ResultMessage.SUCCESS;
+        return adminService.rewardAndPunish(workers,numOfTrueTags,total);
     }
+
 }

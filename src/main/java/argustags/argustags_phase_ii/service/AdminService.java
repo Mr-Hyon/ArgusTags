@@ -29,5 +29,9 @@ public interface AdminService {
 
     public String getAnswer(int imgid);
 
+    public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total);
+
     public ResultMessage rewardAndPunish0(int taskid);
+
+    public ResultMessage rewardAndPunish1(int taskid);
 }
