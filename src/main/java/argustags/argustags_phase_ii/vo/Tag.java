@@ -71,4 +71,19 @@ public class Tag  {
     public void setWorkerName(String workername){
         this.workerName = workername;
     }
+
+    public double[] getMiddle(){
+        String[] start = tagStart.split(",");
+        String[] end = tagEnd.split(",");
+        double[] startNum = new double[2];
+        startNum[0] = Double.parseDouble(start[0]);
+        startNum[1] = Double.parseDouble(start[1]);
+        double[] endNum = new double[2];
+        endNum[0] = Double.parseDouble(end[0]);
+        endNum[1] = Double.parseDouble(end[1]);
+        double[] result = new double[2];
+        result[0] = (startNum[0]+endNum[0])/2;
+        result[1] = (startNum[1]+endNum[1])/2;
+        return result;
+    }
 }
