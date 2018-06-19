@@ -40,6 +40,7 @@ public class  TaskVO {
 
     }
 
+    
     public TaskVO(String name,String initName,ArrayList<Integer> imgList,String type,int process,String startTime,String endTime,String describe,String option){
 
         this.taskname = name;

@@ -35,9 +35,9 @@ public class WorkerController{
     @Autowired
     private WorkerService workerService;
     @Autowired
-    private TaskService taskservice ;
+    private TaskService taskService ;
     @Autowired
-    AdminService adminservice;
+    AdminService adminService;
 
     @RequestMapping("/workerHome")
     String workerMainPage(){
@@ -142,13 +142,13 @@ public class WorkerController{
     @ResponseBody
     public String GetImageList(@RequestParam("username") String username,
                                @RequestParam("taskId") int taskId){
-        TaskVO vo = taskservice.getByID(taskId);
+        TaskVO vo = taskService.getByID(taskId);
         ArrayList<Integer> imgidList = vo.getImgList();
         ArrayList<String> imgList = new ArrayList<>();
 
         for(int i=0;i<imgidList.size();i++){
-            String base64 = taskservice.getBase64(imgidList.get(i));
-            List<Tag> tags = taskservice.getTagbyWnT(username,imgidList.get(i));
+            String base64 = taskService.getBase64(imgidList.get(i));
+            List<Tag> tags = taskService.getTagbyWnT(username,imgidList.get(i));
             String start="";
             String end="";
             String mark_messages="";
@@ -200,11 +200,11 @@ public class WorkerController{
                             @RequestParam("imgid") int imageid,
                             @RequestParam("tagcontent") String tagcontent){
 
-        List<Tag> tags = taskservice.getTagbyWnT(workername,imageid);
+        List<Tag> tags = taskService.getTagbyWnT(workername,imageid);
         if(tags.size()>0){
             Tag sample=tags.get(0);
             sample.setTag(tagcontent);
-            ResultMessage rm1 = taskservice.modifyTag(sample);
+            ResultMessage rm1 = taskService.modifyTag(sample);
             if(rm1 == ResultMessage.SUCCESS) return "success";
             else return "fail";
         }
@@ -214,7 +214,7 @@ public class WorkerController{
             tag.setWorkerName(workername);
             tag.setTagEnd("");
             tag.setTagStart("");
-            ResultMessage rm2 = taskservice.addTag(tag);
+            ResultMessage rm2 = taskService.addTag(tag);
             if(rm2 == ResultMessage.SUCCESS) return "success";
             else return "fail";
         }
@@ -229,7 +229,7 @@ public class WorkerController{
                                    @RequestParam("tagstart") String tagstart,
                                     @RequestParam("tagend") String tagend){
 
-        List<Tag> tags = taskservice.getTagbyWnT(workername,imageid);
+        List<Tag> tags = taskService.getTagbyWnT(workername,imageid);
         String[] coordinate_one = tagstart.split(" ");
         String[] coordinate_two = tagend.split(" ");
         int flag = 0;
@@ -250,7 +250,7 @@ public class WorkerController{
                 tag.setTagStart(coord1);
                 tag.setTagEnd(coord2);
                 tag.setTag("");
-                ResultMessage rm = taskservice.addTag(tag);
+                ResultMessage rm = taskService.addTag(tag);
                 if(rm != ResultMessage.SUCCESS) error_sensor = 1;
             }
         }
@@ -271,7 +271,7 @@ public class WorkerController{
                                     @RequestParam("tagend") String tagend,
                                     @RequestParam("tagcontent") String tagcontent){
 
-        List<Tag> tags = taskservice.getTagbyWnT(workername,imageid);
+        List<Tag> tags = taskService.getTagbyWnT(workername,imageid);
         String[] coordinate_one = tagstart.split(" ");
         String[] coordinate_two = tagend.split(" ");
         String[] contents = tagcontent.split(" ");
@@ -288,7 +288,7 @@ public class WorkerController{
                     if(!tags.get(i).getTag().equals(content)){
                         Tag temp = tags.get(i);
                         temp.setTag(content);
-                        ResultMessage rm1 = taskservice.modifyTag(temp);
+                        ResultMessage rm1 = taskService.modifyTag(temp);
                         if(rm1 != ResultMessage.SUCCESS) error_sensor = 1;
                     }
                     break;
@@ -300,7 +300,7 @@ public class WorkerController{
                 tag.setWorkerName(workername);
                 tag.setTagStart(coord1);
                 tag.setTagEnd(coord2);
-                ResultMessage rm2 = taskservice.addTag(tag);
+                ResultMessage rm2 = taskService.addTag(tag);
                 if(rm2 != ResultMessage.SUCCESS) error_sensor = 1;
             }
         }
