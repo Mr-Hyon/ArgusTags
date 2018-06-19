@@ -52,7 +52,7 @@ public class InitiatorImpl implements InitiatorService {
                 ArrayList<Integer> li = new ArrayList<>();
                 initiator.setUsername(username);
                 initiator.setPassword(password);
-                initiator.setCredit(1024);
+                initiator.setCredit(10240);
                 initiator.setTaskList(li);
                 initiatorRepository.saveAndFlush(initiator);
                 return ResultMessage.SUCCESS;
