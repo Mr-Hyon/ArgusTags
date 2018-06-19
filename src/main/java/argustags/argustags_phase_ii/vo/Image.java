@@ -15,8 +15,7 @@ public class Image  {
     private  int imgid;
     @Column(nullable = false,length = 2147483647)
     private String base64 ;
-    @OneToMany
-    @JoinColumn(name = "imageid")
+    @Column(nullable = false)
     private List<Tag> Tags = new ArrayList<Tag>();
 
     public Image(){

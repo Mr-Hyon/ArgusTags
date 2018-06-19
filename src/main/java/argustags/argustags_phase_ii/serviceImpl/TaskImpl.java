@@ -110,6 +110,10 @@ public class TaskImpl implements TaskService {
         return img;
     }
 
+    public ResultMessage updateimage(Image image){
+        imageRepository.saveAndFlush(image);
+        return ResultMessage.SUCCESS;
+    }
 
 
 }
