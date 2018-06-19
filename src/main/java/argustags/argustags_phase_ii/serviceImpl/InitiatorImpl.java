@@ -25,10 +25,10 @@ public class InitiatorImpl implements InitiatorService {
 
 
 
-//    @Override
-//    public List<InitiatorVO> getAllUserlist(){
-//        return initiatorRepository.findAll();
-//    }
+    @Override
+    public List<InitiatorVO> getAllUserlist(){
+        return initiatorRepository.findAll();
+    }
 
     //	实现注册功能
     @Override

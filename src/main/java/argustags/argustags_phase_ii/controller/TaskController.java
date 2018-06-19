@@ -29,7 +29,7 @@ import static argustags.argustags_phase_ii.util.UnZip.unZipFiles;
 @Controller
 public class TaskController{
     @Autowired
-    TaskService Taskservice;
+    TaskService taskService;
     AdminService Adminservice=new AdminImpl();
     @PostMapping(value = "/release", produces = "application/text; charset=utf-8")
     public @ResponseBody
@@ -102,7 +102,7 @@ public class TaskController{
 //                object.addProperty("marked",0);
 //                imgList.add(object.toString());
                 img.setBase64(base64_image);
-                Taskservice.addimage(img);
+                taskService.addimage(img);
                 int id=new Long(img.getId()).intValue();
                 imgList.add(id);
 
@@ -113,10 +113,10 @@ public class TaskController{
         }
 
         int id=(Adminservice.getTaskNum()+1);
-        TaskVO vo=new TaskVO(id,"标注",username,imgList,method,0,df.toString(),ddl,dscb,obj);
+        TaskVO vo=new TaskVO("标注",username,imgList,method,0,df.toString(),ddl,dscb,obj);
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
-        ResultMessage rm=Taskservice.addTask(vo);
+        ResultMessage rm=taskService.addTask(vo);
         if(rm == ResultMessage.SUCCESS)
             return "success";
         else

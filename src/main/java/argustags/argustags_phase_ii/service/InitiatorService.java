@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 public interface InitiatorService {
 
-//    public List<InitiatorVO> getAllUserlist();
+   public List<InitiatorVO> getAllUserlist();
 
     public ResultMessage register(String username, String password);
 

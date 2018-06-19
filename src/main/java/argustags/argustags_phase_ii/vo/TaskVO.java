@@ -40,8 +40,8 @@ public class  TaskVO {
 
     }
 
-    public TaskVO(int ID,String name,String initName,ArrayList<Integer> imgList,String type,int process,String startTime,String endTime,String describe,String option){
-        this.id = ID;
+    public TaskVO(String name,String initName,ArrayList<Integer> imgList,String type,int process,String startTime,String endTime,String describe,String option){
+
         this.taskname = name;
         this.initName = initName;
         this.imgList = imgList;
