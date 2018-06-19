@@ -85,7 +85,7 @@ public class WorkerImpl implements WorkerService {
     @Override
     public ResultMessage login(String username, String password) {
         WorkerVO worker1 = getByName(username);
-        if((username == worker1.getUsername())&&(password == worker1.getPassword())){
+        if((username .equals( worker1.getUsername()))&&(password .equals(worker1.getPassword()) )){
             return ResultMessage.SUCCESS;
         }
         else{
@@ -165,9 +165,13 @@ public class WorkerImpl implements WorkerService {
         List<WorkerVO>li = workerRepository.findAll();
         WorkerVO res=null;
         for(WorkerVO worker:li){
-            if(worker.getUsername().equals(username)){
+            if((worker.getUsername()).equals(username)){
+                System.out.println(worker.getUsername());
                 res=worker;
                 break;
+            }
+            else{
+                ;
             }
         }
         return res;

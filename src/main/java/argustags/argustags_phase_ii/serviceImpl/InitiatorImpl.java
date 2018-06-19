@@ -72,7 +72,7 @@ public class InitiatorImpl implements InitiatorService {
     public ResultMessage login(String username, String password){
 
         InitiatorVO initiator1 = getByName(username);
-        if((username == initiator1.getUsername())&&(password == initiator1.getPassword())){
+        if((username .equals(initiator1.getUsername()))&&(password.equals(initiator1.getPassword()) )){
             return ResultMessage.SUCCESS;
         }
         else{
