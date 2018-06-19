@@ -152,8 +152,8 @@ public class WorkerController{
             String start="";
             String end="";
             String mark_messages="";
-            for(int j=0;i<tags.size();j++){
-                System.out.println(tags.get(i).getTag());
+            for(int j=0;j<tags.size();j++){
+                System.out.println(tags.get(j).getTag());
                 start = start + tags.get(j).getTagStart();
                 end = end + tags.get(j).getTagEnd();
                 mark_messages = mark_messages + tags.get(j).getTag();
@@ -210,13 +210,19 @@ public class WorkerController{
             else return "fail";
         }
         else{
-            Tag tag = new Tag();
-            tag.setTag(tagcontent);
-            tag.setWorkerName(workername);
-            tag.setTagEnd("");
-            tag.setTagStart("");
+            int count = adminService.getTagNum();
+            Tag tag = new Tag(tagcontent,"","",workername);
+//            tag.setTag(tagcontent);
+//            tag.setWorkerName(workername);
+//            tag.setTagEnd("");
+//            tag.setTagStart("");
+            Image image = taskService.findImageById(imageid);
+            ArrayList<Integer> tagids = image.getTags();
+            tagids.add(count+1);
+            image.setTags(tagids);
             ResultMessage rm2 = taskService.addTag(tag);
-            if(rm2 == ResultMessage.SUCCESS) return "success";
+            ResultMessage rm3 = taskService.updateimage(image);
+            if(rm2 == ResultMessage.SUCCESS && rm3 == ResultMessage.SUCCESS) return "success";
             else return "fail";
         }
 
@@ -246,13 +252,21 @@ public class WorkerController{
                 }
             }
             if(flag == 0){
-                Tag tag = new Tag();
-                tag.setWorkerName(workername);
-                tag.setTagStart(coord1);
-                tag.setTagEnd(coord2);
-                tag.setTag("");
+                int count = adminService.getTagNum();
+                Tag tag = new Tag("",coord1,coord2,workername);
+//                tag.setWorkerName(workername);
+//                tag.setTagStart(coord1);
+//                tag.setTagEnd(coord2);
+//                tag.setTag("");
+
+                Image image = taskService.findImageById(imageid);
+                ArrayList<Integer> tagids = image.getTags();
+                tagids.add(count+1);
+                image.setTags(tagids);
+                ResultMessage rm2 = taskService.updateimage(image);
+
                 ResultMessage rm = taskService.addTag(tag);
-                if(rm != ResultMessage.SUCCESS) error_sensor = 1;
+                if(rm != ResultMessage.SUCCESS || rm2!=ResultMessage.SUCCESS) error_sensor = 1;
             }
         }
 
@@ -296,13 +310,21 @@ public class WorkerController{
                 }
             }
             if(flag == 0){
-                Tag tag = new Tag();
-                tag.setTag(content);
-                tag.setWorkerName(workername);
-                tag.setTagStart(coord1);
-                tag.setTagEnd(coord2);
+                int count = adminService.getTagNum();
+                Tag tag = new Tag(content,coord1,coord2,workername);
+//                tag.setTag(content);
+//                tag.setWorkerName(workername);
+//                tag.setTagStart(coord1);
+//                tag.setTagEnd(coord2);
+
+                Image image = taskService.findImageById(imageid);
+                ArrayList<Integer> tagids = image.getTags();
+                tagids.add(count+1);
+                image.setTags(tagids);
+                ResultMessage rm3 = taskService.updateimage(image);
+
                 ResultMessage rm2 = taskService.addTag(tag);
-                if(rm2 != ResultMessage.SUCCESS) error_sensor = 1;
+                if(rm2 != ResultMessage.SUCCESS || rm3 !=ResultMessage.SUCCESS) error_sensor = 1;
             }
         }
 

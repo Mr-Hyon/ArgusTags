@@ -1,6 +1,7 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
 import argustags.argustags_phase_ii.repository.InitiatorRepository;
+import argustags.argustags_phase_ii.repository.TagRepository;
 import argustags.argustags_phase_ii.repository.TaskRepository;
 import argustags.argustags_phase_ii.repository.WorkerRepository;
 import argustags.argustags_phase_ii.service.AdminService;
@@ -29,6 +30,8 @@ public class AdminImpl implements AdminService {
     private TaskService taskService;
     @Autowired
     private WorkerService workerService;
+    @Autowired
+    private TagRepository tagRepository;
 
 
     //  实现登录功能，判断admin用户名密码输入是否正确
@@ -37,6 +40,12 @@ public class AdminImpl implements AdminService {
             return ResultMessage.SUCCESS;
         }
         return ResultMessage.FAILED;
+    }
+
+    // 返回tag总数
+    public int getTagNum(){
+        List<Tag> list = tagRepository.findAll();
+        return list.size();
     }
 
     //  返回initiator总数

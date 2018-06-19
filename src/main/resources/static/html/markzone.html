@@ -106,7 +106,7 @@
     }
     else if(type == 2){
         document.getElementById('Total_Mark').disabled = true
-        document.getElementById('Classic_Mark').disabled = true
+        document.getElementById('Free_Mark').disabled = true
     }
 
     /** 开始进行网页初始化布局 **/
@@ -568,9 +568,9 @@
             coordinate_one.push(ox1.toString()+","+oy1.toString());
             coordinate_two.push(ox2.toString()+","+oy2.toString());
             if(type == 2){
-                add_Mark("");
                 ctx.font="20px Georgia";
                 ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
+                add_Mark("");
             }
         }else{
             alert("取消本次标注");
@@ -605,12 +605,13 @@
         cell1.innerHTML= cell_id ;
         cell2.innerHTML="<select id='tempinput'>";
         var temp_options = option.split(" ");
-        for(var k=0;k<options.length;k++){
+        document.getElementById('tempinput').options.add(new Option("未选择",""));
+        for(var k=0;k<temp_options.length;k++){
             document.getElementById('tempinput').options.add(new Option(temp_options[k],temp_options[k]));
         }
         document.getElementById('tempinput').id = cell_id;
         if(tagContent == ''){
-            document.getElementById(cell_id).value = 'None'
+            document.getElementById(cell_id).value="";
         }
         else{
             document.getElementById(cell_id).value = tagContent;

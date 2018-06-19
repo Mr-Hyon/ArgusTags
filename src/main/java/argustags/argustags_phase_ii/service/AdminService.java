@@ -2,6 +2,7 @@ package argustags.argustags_phase_ii.service;
 
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.Image;
+import argustags.argustags_phase_ii.vo.Tag;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public interface AdminService {
 
     public ResultMessage login(String adminname, String password);
+
+    public int getTagNum();
 
     public int getInitiatorNum();
 
