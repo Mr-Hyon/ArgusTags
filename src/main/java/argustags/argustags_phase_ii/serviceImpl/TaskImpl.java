@@ -7,6 +7,7 @@ import argustags.argustags_phase_ii.service.InitiatorService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.Image;
+import argustags.argustags_phase_ii.vo.InitiatorVO;
 import argustags.argustags_phase_ii.vo.Tag;
 import argustags.argustags_phase_ii.vo.TaskVO;
 import com.google.gson.JsonObject;
@@ -32,8 +33,13 @@ public class TaskImpl implements TaskService {
     private ImageRepository imageRepository;
     @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    private InitiatorService initiatorService;
 
-    public ResultMessage addTask(TaskVO vo) {
+    public ResultMessage addTask(TaskVO vo,String ininame) {
+        InitiatorVO ini = initiatorService.getByName(ininame);
+        List<Integer> lis1 = ini.getTaskList();
+        lis1.add(vo.getID());
         taskRepository.saveAndFlush(vo);
         return ResultMessage.SUCCESS;
     }

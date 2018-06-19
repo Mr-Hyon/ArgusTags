@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 public interface TaskService {
 
-    public ResultMessage addTask(TaskVO vo);
+    ResultMessage addTask(TaskVO vo,String ininame);
 
     public ResultMessage delTask(int id);
 
