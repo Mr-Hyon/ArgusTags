@@ -13,7 +13,7 @@ public class Image  {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private  Long imgid;
-    @Column(nullable = false,length = 1024)
+    @Column(nullable = false,length = 2147483647)
     private String base64 ;
     @OneToMany
     @JoinColumn(name = "imageid")
