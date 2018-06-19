@@ -83,6 +83,36 @@
     </div>
 </div>
 <script>
+    var userData = null
+
+    $.ajax({
+        url: 'http://localhost:8080/getInitiatorInfo',
+        type: 'post',
+        async: false,
+        data: {
+            username:name
+        },
+        success: function (data) {
+            userData = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+
+    var userObj = JSON.parse(userData)
+
+    var pts0=userObj.credit;
+    var num0=userObj.tasknum;
+    var num1=userObj.taskfn;
+    var num2=userObj.taskog;
+    var pts1=userObj.creditcost;
+    document.getElementById('username').innerHTML=name;
+    document.getElementById('pts').innerHTML="剩余积分："+pts0;
+    document.getElementById('tasknum').innerHTML="发布任务总数："+num0;
+    document.getElementById('taskfn').innerHTML="已完成任务数："+num1;
+    document.getElementById('taskon').innerHTML="进行中任务数："+num2;
+    document.getElementById('ptscost').innerHTML="花费积分数："+pts1;
     document.getElementById('release').onclick = function (e) {
         var method = document.getElementById('taskmethod').value;
         var dscb = document.getElementById('taskdscb').value;

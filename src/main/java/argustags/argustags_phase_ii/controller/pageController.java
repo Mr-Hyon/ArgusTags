@@ -83,7 +83,7 @@ public class pageController {
                         @RequestParam("password") String password,
                         @RequestParam("type") String type
     ){
-        System.out.println("login"+username+" "+password);
+//        System.out.println("login"+username+" "+password);
         String result = "";
 
 

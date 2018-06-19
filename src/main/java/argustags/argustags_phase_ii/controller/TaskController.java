@@ -102,6 +102,7 @@ public class TaskController{
 //                object.addProperty("marked",0);
 //                imgList.add(object.toString());
                 img.setBase64(base64_image);
+                Taskservice.addimage(img);
                 int id=new Long(img.getId()).intValue();
                 imgList.add(id);
 
