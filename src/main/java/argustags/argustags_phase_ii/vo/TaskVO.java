@@ -116,7 +116,7 @@ public class  TaskVO {
             }
         }
 
-        this.imgList = s;
+        this.workers = s;
     }
 
     public void addWorker(String workerName){
@@ -137,7 +137,7 @@ public class  TaskVO {
             }
         }
 
-        this.imgList = s;
+        this.workers = s;
 
     }
 

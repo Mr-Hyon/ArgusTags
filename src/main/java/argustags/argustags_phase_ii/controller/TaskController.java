@@ -100,7 +100,6 @@ public class TaskController{
                 img.setTags(tags);
                 taskService.addimage(img);
                 int id=img.getId();
-                System.out.println(id+"asdfghjk");
                 imgList.add(id);
 
             }
@@ -109,11 +108,9 @@ public class TaskController{
             e.printStackTrace();
         }
 
-        System.out.println(imgList.get(0)+"qwert");
 
 
         TaskVO vo=new TaskVO("标注",username,imgList,method,0,df.toString(),ddl,dscb,obj);
-        System.out.println(vo.getImgList().get(0)+"zxcvb");
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
         ResultMessage rm=taskService.addTask(vo,username);
