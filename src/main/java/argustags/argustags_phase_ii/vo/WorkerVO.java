@@ -3,25 +3,27 @@ package argustags.argustags_phase_ii.vo;
 import org.apache.tools.ant.taskdefs.Parallel;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "worker")
-public class WorkerVO implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class WorkerVO  {
+
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private int workerid;
-
+    @Column(nullable = false)
     private String username;
-
+    @Column(nullable = false)
     private String passwd;
-
+    @Column(nullable = false)
     private ArrayList<Integer> taskList;
-
+    @Column(nullable = false)
     private int credit;
 
     public WorkerVO(){

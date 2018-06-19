@@ -7,10 +7,13 @@ import java.util.List;
 
 @Entity
 @Table(name = "image")
-public class Image implements Serializable {
+public class Image  {
+
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private  Long imgid;
+    @Column(nullable = false)
     private String base64 ;
     @OneToMany
     @JoinColumn(name = "imageid")
