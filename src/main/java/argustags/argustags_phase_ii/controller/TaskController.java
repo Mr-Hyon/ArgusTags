@@ -112,7 +112,7 @@ public class TaskController{
             e.printStackTrace();
         }
 
-        int id=(Adminservice.getTaskNum()+1);
+
         TaskVO vo=new TaskVO("标注",username,imgList,method,0,df.toString(),ddl,dscb,obj);
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
