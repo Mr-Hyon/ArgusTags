@@ -166,7 +166,7 @@ public class AdminImpl implements AdminService {
         return adminService.rewardAndPunish(workers,numOfTrueTags,total);
     }
 
-    public ResultMessage rewardAndPunish1(int taskid){
+    public ResultMessage rewardAndPunish12(int taskid){
         TaskVO vo = taskRepository.findById(taskid).get();
         ArrayList<Integer> imgs = vo.getImgList();
         ArrayList<String> workers = vo.getWorkers();
@@ -189,7 +189,7 @@ public class AdminImpl implements AdminService {
                 sign = 0;
                 for(Tag t : answerTag){
                     for(Tag t1 : tags){
-                        if((Math.abs(t.getMiddle()[0]-t1.getMiddle()[0])<=5)&&(Math.abs(t.getMiddle()[1]-t1.getMiddle()[1])<=5)){
+                        if((Math.abs(t.getMiddle()[0]-t1.getMiddle()[0])<=5)&&(Math.abs(t.getMiddle()[1]-t1.getMiddle()[1])<=5)&&t.getTag().equals(t1.getTag())){
                             sign++;
                         }
                     }
@@ -199,4 +199,5 @@ public class AdminImpl implements AdminService {
         }
         return adminService.rewardAndPunish(workers,numOfTrueTags,total);
     }
+
 }
