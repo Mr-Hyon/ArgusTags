@@ -118,7 +118,7 @@ public class TaskController{
         TaskVO vo=new TaskVO("标注",username,imgList,method,0,df.toString(),ddl,dscb,obj);
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
-        ResultMessage rm=taskService.addTask(vo);
+        ResultMessage rm=taskService.addTask(vo,username);
         if(rm == ResultMessage.SUCCESS)
             return "success";
         else
