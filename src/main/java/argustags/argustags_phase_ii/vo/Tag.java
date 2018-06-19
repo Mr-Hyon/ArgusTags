@@ -24,6 +24,13 @@ public class Tag  {
 
     }
 
+    public Tag(String tagcontent,String tagStart,String tagEnd,String workerName){
+        this.tagcontent = tagcontent;
+        this.tagStart = tagStart;
+        this.tagEnd = tagEnd;
+        this.workerName = workerName;
+    }
+
 
     public int getId() {
         return tagid;
