@@ -94,6 +94,7 @@ public class InitiatorImpl implements InitiatorService {
     public String getTaskProgress(int taskID){
         TaskVO task = taskService.getByID(taskID);
         int picnum = task.getImgList().size();
+
         int temp = task.getProcess();
         return ((100*temp)/picnum*10)+"%";
     }

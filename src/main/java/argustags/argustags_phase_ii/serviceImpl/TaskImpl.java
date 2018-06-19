@@ -1,6 +1,7 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
 import argustags.argustags_phase_ii.repository.ImageRepository;
+import argustags.argustags_phase_ii.repository.InitiatorRepository;
 import argustags.argustags_phase_ii.repository.TagRepository;
 import argustags.argustags_phase_ii.repository.TaskRepository;
 import argustags.argustags_phase_ii.service.InitiatorService;
@@ -35,12 +36,17 @@ public class TaskImpl implements TaskService {
     private TagRepository tagRepository;
     @Autowired
     private InitiatorService initiatorService;
+    @Autowired
+    private InitiatorRepository initiatorRepository;
 
     public ResultMessage addTask(TaskVO vo,String ininame) {
-        InitiatorVO ini = initiatorService.getByName(ininame);
-        List<Integer> lis1 = ini.getTaskList();
-        lis1.add(vo.getID());
         taskRepository.saveAndFlush(vo);
+        InitiatorVO ini = initiatorService.getByName(ininame);
+        ArrayList<Integer> lis1 = ini.getTaskList();
+        lis1.add(vo.getID());
+        ini.setTaskList(lis1);
+        initiatorRepository.saveAndFlush(ini);
+
         return ResultMessage.SUCCESS;
     }
 

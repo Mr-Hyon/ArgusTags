@@ -19,9 +19,9 @@ public class  TaskVO {
     @Column(nullable = false)
     private String initName;
     @Column(nullable = false)
-    private ArrayList<String> workers;
+    private String workers;
     @Column(nullable = false)
-    private ArrayList<Integer> imgList;
+    private String imgList;
     @Column(nullable = false)
     private String typ;
     @Column(nullable = false)
@@ -45,7 +45,19 @@ public class  TaskVO {
 
         this.taskname = name;
         this.initName = initName;
-        this.imgList = imgList;
+        String s = "";
+        for(int i = 0;i<imgList.size();i++){
+            int temp = imgList.get(i);
+            s=s+temp;
+            if(i==imgList.size()-1){
+               s=s+"" ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+        this.imgList = s;
+
         this.typ = type;
         this.process = process;
         this.startTime = startTime;
@@ -54,8 +66,8 @@ public class  TaskVO {
         this.opt = option;
 
         endTime = "no data";
-        ArrayList<String> list = new ArrayList<>();
-        workers = list;
+
+        workers = new String();
     }
 
     public int getID(){
@@ -83,23 +95,81 @@ public class  TaskVO {
     }
 
     public ArrayList<String> getWorkers(){
-        return workers;
+        String[] s1 = workers.split(" ");
+        ArrayList<String> res = new ArrayList<>();
+        for(int i = 0;i<s1.length;i++){
+            res.add(s1[i]);
+        }
+        return res;
     }
 
     public void setWorkers(ArrayList<String> workers){
-        this.workers = workers;
+        String s = "";
+        for(int i = 0;i<workers.size();i++){
+            String temp = workers.get(i);
+            s=s+temp;
+            if(i==workers.size()-1){
+                ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+
+        this.imgList = s;
     }
 
     public void addWorker(String workerName){
-        workers.add(workerName);
+        String[] s1 = workers.split(" ");
+        ArrayList<String> res = new ArrayList<>();
+        for(int i = 0;i<s1.length;i++){
+            res.add(s1[i]);
+        }
+        String s = "";
+        for(int i = 0;i<res.size();i++){
+            String temp = res.get(i);
+            s=s+temp;
+            if(i==res.size()-1){
+                ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+
+        this.imgList = s;
+
     }
 
     public ArrayList<Integer> getImgList(){
-        return imgList;
+        if(imgList.equals("")){
+            ArrayList<Integer> li = new ArrayList<>();
+            return li;
+        }
+        else {
+            String[] s1 = imgList.split(" ");
+            ArrayList<Integer> res = new ArrayList<>();
+            for (int i = 0; i < s1.length; i++) {
+                res.add(Integer.parseInt(s1[i]));
+            }
+            return res;
+        }
     }
 
     public void setImgList(ArrayList<Integer> imgList){
-        this.imgList = imgList;
+        String s = "";
+        for(int i = 0;i<imgList.size();i++){
+            int temp = imgList.get(i);
+            s=s+temp;
+            if(i==imgList.size()-1){
+                ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+
+        this.imgList = s;
     }
 
     public String getType(){

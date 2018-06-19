@@ -95,30 +95,29 @@ public class TaskController{
                 BASE64Encoder encoder = new BASE64Encoder();
                 String base64_image =  "data:image/png;base64,"+encoder.encode(data);
                 ArrayList<Integer> tags=new ArrayList<>();
-//                JsonObject object=new JsonObject();
-//                object.addProperty("origin_image", base64_image);
-//                object.addProperty("current_image",base64_image);
-//                object.addProperty("total_tag","default");
-//                object.addProperty("tags","default");
-//                object.addProperty("marked",0);
-//                imgList.add(object.toString());
+
                 img.setBase64(base64_image);
                 img.setTags(tags);
                 taskService.addimage(img);
-                int id=new Long(img.getId()).intValue();
+                int id=img.getId();
+                System.out.println(id+"asdfghjk");
                 imgList.add(id);
 
             }
-            System.out.println("5");
-        } catch (IOException e) {
+
+        }catch(IOException e){
             e.printStackTrace();
         }
 
+        System.out.println(imgList.get(0)+"qwert");
+
 
         TaskVO vo=new TaskVO("标注",username,imgList,method,0,df.toString(),ddl,dscb,obj);
+        System.out.println(vo.getImgList().get(0)+"zxcvb");
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
         ResultMessage rm=taskService.addTask(vo,username);
+
         if(rm == ResultMessage.SUCCESS)
             return "success";
         else

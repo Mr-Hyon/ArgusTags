@@ -22,7 +22,7 @@ public class WorkerVO  {
     @Column(nullable = false)
     private String passwd;
     @Column(nullable = false)
-    private ArrayList<Integer> taskList;
+    private String taskList;
     @Column(nullable = false)
     private int credit;
 
@@ -33,7 +33,19 @@ public class WorkerVO  {
         public WorkerVO(String username, String password, ArrayList<Integer> taskList, int credit){
         this.username = username;
         this.passwd = password;
-        this.taskList = taskList;
+        String s = "";
+            for(int i = 0;i<taskList.size();i++){
+                int temp = taskList.get(i);
+                s=s+temp;
+                if(i==taskList.size()-1){
+                    ;
+                }
+                else{
+                    s=s+" ";
+                }
+            }
+
+        this.taskList = s;
         this.credit = credit;
     }
 
@@ -61,14 +73,51 @@ public class WorkerVO  {
         this.passwd = password;
     }
 
-    public ArrayList<Integer> getTaskList(){return taskList;}
+    public ArrayList<Integer> getTaskList(){
+        String[] s1 = taskList.split(" ");
+        ArrayList<Integer> res = new ArrayList<>();
+        for(int i = 0;i<s1.length;i++){
+            res.add(Integer.parseInt(s1[i]));
+        }
+        return res;
+    }
 
     public void setTaskList(ArrayList<Integer> taskList){
-        this.taskList = taskList;
+        String s = "";
+        for(int i = 0;i<taskList.size();i++){
+            int temp = taskList.get(i);
+            s=s+temp;
+            if(i==taskList.size()-1){
+                ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+
+        this.taskList = s;
     }
 
     public void addTask(int TaskID){
-       taskList.add(TaskID);
+        String[] s1 = taskList.split(" ");
+        ArrayList<Integer> res = new ArrayList<>();
+        for(int i = 0;i<s1.length;i++){
+            res.add(Integer.parseInt(s1[i]));
+        }
+        res.add(TaskID);
+        String s = "";
+        for(int i = 0;i<res.size();i++){
+            int temp = res.get(i);
+            s=s+temp;
+            if(i==res.size()-1){
+                ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+
+        this.taskList = s;
     }
 
     public int getCredit(){

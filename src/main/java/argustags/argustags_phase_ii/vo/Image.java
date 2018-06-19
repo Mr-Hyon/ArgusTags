@@ -18,7 +18,7 @@ public class Image  {
     private String base64 ;
 
     @Column(nullable = false)
-    private ArrayList<Integer> Tags ;
+    private String Tags ;
 
     public Image(){
 
@@ -27,7 +27,20 @@ public class Image  {
     public Image(int imgid,String base64,ArrayList<Integer> Tags){
         this.imgid = imgid;
         this.base64 = base64;
-        this.Tags = Tags;
+        String s = "";
+        for(int i = 0;i<Tags.size();i++){
+            int temp = Tags.get(i);
+            s=s+temp;
+            if(i==Tags.size()-1){
+                ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+
+        this.Tags = s;
+
     }
 
     public int getId() {
@@ -46,7 +59,29 @@ public class Image  {
         this.base64 = base64;
     }
 
-    public ArrayList<Integer> getTags() { return Tags; }
+    public ArrayList<Integer> getTags() {
+        String[] s1 = Tags.split(" ");
+        ArrayList<Integer> res = new ArrayList<>();
+        for(int i = 0;i<s1.length;i++){
+            res.add(Integer.parseInt(s1[i]));
+        }
+        return res;
+    }
 
-    public void setTags(ArrayList<Integer> Tags) { this.Tags = Tags; }
+    public void setTags(ArrayList<Integer> Tags) {
+        String s = "";
+        for(int i = 0;i<Tags.size();i++){
+            int temp = Tags.get(i);
+            s=s+temp;
+            if(i==Tags.size()-1){
+                ;
+            }
+            else{
+                s=s+" ";
+            }
+        }
+
+        this.Tags = s;
+
+    }
 }
