@@ -89,9 +89,14 @@ public class AdminImpl implements AdminService {
         return count;
     }
 
-    public String getAnswer(long imgid) {
+    public String getAnswer(int imgid) {
         Image img = taskService.findImageById(imgid);
-        List<Tag> list = img.getTags();
+        List<Integer> tags = img.getTags();
+        List<Tag> list = new ArrayList<Tag>();
+        for(Integer t :tags){
+            list.add(taskService.getTagById(t));
+        }
+
         String str = "";
         int count = 0;
         int maximum = 0;
@@ -127,7 +132,10 @@ public class AdminImpl implements AdminService {
         for(int imgid : imgs){
             img = taskService.findImageById(imgid);
             answer = adminService.getAnswer(imgid);
-            tags = img.getTags();
+            List<Integer> list = img.getTags();
+            for(Integer t :list){
+                tags.add(taskService.getTagById(t));
+            }
             for(Tag t : tags){
                 if(t.getTag().equals(answer)){
                     for(int i = 0; i<workers.size(); i++){

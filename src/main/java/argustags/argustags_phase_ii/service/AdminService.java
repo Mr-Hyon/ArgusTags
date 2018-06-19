@@ -24,7 +24,7 @@ public interface AdminService {
 
     public int getTaskFinishedNum();
 
-    public String getAnswer(long imgid);
+    public String getAnswer(int imgid);
 
     public ResultMessage rewardAndPunish0(int taskid);
 }
