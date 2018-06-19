@@ -94,6 +94,7 @@ public class TaskController{
                 }
                 BASE64Encoder encoder = new BASE64Encoder();
                 String base64_image =  "data:image/png;base64,"+encoder.encode(data);
+                ArrayList<Integer> tags=new ArrayList<>();
 //                JsonObject object=new JsonObject();
 //                object.addProperty("origin_image", base64_image);
 //                object.addProperty("current_image",base64_image);
@@ -102,6 +103,7 @@ public class TaskController{
 //                object.addProperty("marked",0);
 //                imgList.add(object.toString());
                 img.setBase64(base64_image);
+                img.setTags(tags);
                 taskService.addimage(img);
                 int id=new Long(img.getId()).intValue();
                 imgList.add(id);

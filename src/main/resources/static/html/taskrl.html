@@ -35,6 +35,10 @@
             <p id="taskon" style="text-align:center;"></p>
             <p id="ptscost" style="text-align:center;"></p>
             <div>
+                <button id="backtomain" class="btn btn-default " >Back to main</button>
+            </div>
+            <br>
+            <div>
                 <button id="logout" class="btn btn-default " >Log out</button>
             </div>
         </div>
@@ -165,6 +169,9 @@
         })
         return res;
        //return jsonstr;
+    }
+    document.getElementById('backtomain').onclick=function (e) {
+        window.location="http://localhost:8080/initiatorHome"
     }
     document.getElementById('logout').onclick=function (e) {
         window.location="http://localhost:8080"

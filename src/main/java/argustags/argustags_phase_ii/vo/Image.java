@@ -16,8 +16,9 @@ public class Image  {
     private  int imgid;
     @Column(nullable = false,length = 2147483647)
     private String base64 ;
+
     @Column(nullable = false)
-    private List<Integer> Tags = new ArrayList<Integer>();
+    private ArrayList<Integer> Tags ;
 
     public Image(){
 
@@ -45,7 +46,7 @@ public class Image  {
         this.base64 = base64;
     }
 
-    public List<Integer> getTags() { return Tags; }
+    public ArrayList<Integer> getTags() { return Tags; }
 
     public void setTags(ArrayList<Integer> Tags) { this.Tags = Tags; }
 }
