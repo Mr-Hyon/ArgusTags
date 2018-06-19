@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import argustags.argustags_phase_ii.vo.Tag;
 
 @Entity
 @Table(name = "image")
@@ -16,13 +17,13 @@ public class Image  {
     @Column(nullable = false,length = 2147483647)
     private String base64 ;
     @Column(nullable = false)
-    private List<Tag> Tags = new ArrayList<Tag>();
+    private List<Integer> Tags = new ArrayList<Integer>();
 
     public Image(){
 
     }
 
-    public Image(int imgid,String base64,ArrayList<Tag> Tags){
+    public Image(int imgid,String base64,ArrayList<Integer> Tags){
         this.imgid = imgid;
         this.base64 = base64;
         this.Tags = Tags;
@@ -44,7 +45,7 @@ public class Image  {
         this.base64 = base64;
     }
 
-    public List<Tag> getTags() { return Tags; }
+    public List<Integer> getTags() { return Tags; }
 
-    public void setTags(ArrayList<Tag> Tags) { this.Tags = Tags; }
+    public void setTags(ArrayList<Integer> Tags) { this.Tags = Tags; }
 }

@@ -33,7 +33,9 @@ public interface TaskService {
 
     public ResultMessage addimage(Image image);
 
-    public Image findImageById(long id);
+    public Image findImageById(int id);
+
+    public Tag getTagById(int id);
 
     public ResultMessage updateimage(Image image);
 }

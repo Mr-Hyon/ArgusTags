@@ -65,9 +65,13 @@ public class TaskImpl implements TaskService {
     //根据工人用户名与图片编号获取tag
     public List<Tag> getTagbyWnT(String workerName,int imgid){
         Image image = imageRepository.findById(imgid).get();
-        List<Tag> tags = image.getTags();
+        List<Integer> tags = image.getTags();
+        List<Tag> temp = new ArrayList<Tag>();
         List<Tag> res = new ArrayList<Tag>();
-        for(Tag tag :tags){
+        for(Integer t :tags){
+            temp.add(getTagById(t));
+        }
+        for(Tag tag:temp){
             if(tag.getWorkerName().equals(workerName)){
                 res.add(tag);
             }
@@ -98,7 +102,7 @@ public class TaskImpl implements TaskService {
         return ResultMessage.SUCCESS;
     }
 
-    public Image findImageById(long id){
+    public Image findImageById(int id){
         List<Image> image = imageRepository.findAll();
         Image img = null;
         for(Image i:image){
@@ -108,6 +112,18 @@ public class TaskImpl implements TaskService {
             }
         }
         return img;
+    }
+
+    public Tag getTagById(int id){
+        List<Tag> tags = tagRepository.findAll();
+        Tag tag = null;
+        for(Tag t:tags){
+            if(t.getId()==id){
+                tag = t;
+                break;
+            }
+        }
+        return tag;
     }
 
     public ResultMessage updateimage(Image image){
