@@ -153,6 +153,7 @@ public class WorkerController{
             String end="";
             String mark_messages="";
             for(int j=0;i<tags.size();j++){
+                System.out.println(tags.get(i).getTag());
                 start = start + tags.get(j).getTagStart();
                 end = end + tags.get(j).getTagEnd();
                 mark_messages = mark_messages + tags.get(j).getTag();
@@ -197,7 +198,7 @@ public class WorkerController{
     @ResponseBody
     public String UpdateWorkerTask0(@RequestParam("taskId") int taskId,
                             @RequestParam("username") String workername,
-                            @RequestParam("imgid") int imageid,
+                            @RequestParam("imageid") int imageid,
                             @RequestParam("tagcontent") String tagcontent){
 
         List<Tag> tags = taskService.getTagbyWnT(workername,imageid);
@@ -225,7 +226,7 @@ public class WorkerController{
     @ResponseBody
     public String UpdateWorkerTask1(@RequestParam("taskId") int taskId,
                                    @RequestParam("username") String workername,
-                                   @RequestParam("imgid") int imageid,
+                                   @RequestParam("imageid") int imageid,
                                    @RequestParam("tagstart") String tagstart,
                                     @RequestParam("tagend") String tagend){
 
@@ -266,7 +267,7 @@ public class WorkerController{
     @ResponseBody
     public String UpdateWorkerTask2(@RequestParam("taskId") int taskId,
                                     @RequestParam("username") String workername,
-                                    @RequestParam("imgid") int imageid,
+                                    @RequestParam("imageid") int imageid,
                                     @RequestParam("tagstart") String tagstart,
                                     @RequestParam("tagend") String tagend,
                                     @RequestParam("tagcontent") String tagcontent){

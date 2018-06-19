@@ -12,7 +12,7 @@ public class Image  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
-    private  Long imgid;
+    private  int imgid;
     @Column(nullable = false,length = 2147483647)
     private String base64 ;
     @OneToMany
@@ -23,17 +23,17 @@ public class Image  {
 
     }
 
-    public Image(Long imgid,String base64,ArrayList<Tag> Tags){
+    public Image(int imgid,String base64,ArrayList<Tag> Tags){
         this.imgid = imgid;
         this.base64 = base64;
         this.Tags = Tags;
     }
 
-    public Long getId() {
+    public int getId() {
         return imgid;
     }
 
-    public void setId(Long imgid) {
+    public void setId(int imgid) {
         this.imgid = imgid;
     }
 
