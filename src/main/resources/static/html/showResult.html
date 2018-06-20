@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Welcome to DARK ZONE</title>
+    <title>Check Final Result</title>
 
     <!-- CSS -->
     <link rel="stylesheet" href="../css/markpage.css">
@@ -135,10 +135,6 @@
         document.getElementById('test-file-info').innerHTML = '任务名称：'+ taskName +'<br>'+
             '任务类型：'+ type_to_show +'<br>'+
             '任务描述：'+ disb +'<br>'+'<br>'+
-            '注意事项：'+ '1.进入标注界面后请点击下方的按钮来解锁标注功能并进行标注。' +'<br>'+
-            '          2.请在标注完一张图片后及时保存，以免在切换图片后进度丢失。' +'<br>'+
-            '          3.标注系统处于early access阶段，我们对潜在的不良体验表示抱歉。' +'<br>'+
-            '          4.祝您身体健康。' +'<br>'+'<br>'+
             '图片数量：'+ jsonData.length + '<br>'+
             '当前图片编号：'+ (pic_index+1);
 
@@ -189,17 +185,6 @@
     }
 
     load_page(current_pic_index)     //加载图片以及相关信息
-
-    alert('单张图片标注完成后请先保存再进行上一张或下一张操作')
-
-    //oneROW=table_info.insertRow();
-    //cell1=oneROW.insertCell();
-    //cell2=oneROW.insertCell();
-    //var id = "No.1";
-    //cell1.innerHTML = id;
-    //cell2.innerHTML="<input id='No.1' value='You did it'/>";
-    //document.getElementById(id).value='ttt';
-    //table_info.deleteRow(table_info.rows.length-1);
 
     function drawTagsType1(imgData,tagStart,tagEnd){
         var cvs = document.getElementById('test-canvas');
@@ -276,110 +261,6 @@
             cvs.height=img.height;
             cvs.width=img.width;
             ctx.drawImage(img,0,0,img.width,img.height);
-        }
-    }
-
-    document.getElementById('test-canvas').onmousedown = function(e){
-
-        //未选择进行标注
-        if(!line_editable && !square_editable){
-            return;
-        }
-
-//        //自由划线标注
-//        if(line_editable){
-//            var cvs = document.getElementById('test-canvas');
-//            var ctx = cvs.getContext('2d');
-//            var e = e ||event;
-//            var ox = e.clientX + window.pageXOffset - cvs.offsetLeft;
-//            var oy = e.clientY + window.pageYOffset- cvs.offsetTop;
-//            ctx.moveTo(ox,oy);
-//            var img_data=ctx.getImageData(0,0,cvs.width,cvs.height);
-//            ctx.beginPath();
-//
-//            document.onmousemove = function(e){
-//                var ox2 = e.clientX + window.pageXOffset -cvs.offsetLeft;
-//                var oy2 = e.clientY + window.pageYOffset - cvs.offsetTop;
-//                ctx.lineTo(ox2,oy2);
-//                ctx.stroke();
-//            }
-//
-//            document.onmouseup  = function(e){
-//                document.onmousemove =null;
-//                document.onmouseup = null;
-//                line_editable=false;
-//                ctx.closePath();
-//                mark_line(img_data,ox,oy);
-//            }
-//        }
-
-        //边框局部标注
-        if(square_editable){
-            var cvs = document.getElementById('test-canvas');
-            var ctx = cvs.getContext('2d');
-            var e = e ||event;
-            var ox = e.clientX + window.pageXOffset - cvs.offsetLeft;
-            var oy = e.clientY + window.pageYOffset- cvs.offsetTop;
-            var ox2;
-            var oy2;
-            ctx.moveTo(ox,oy);
-            var img_data=ctx.getImageData(0,0,cvs.width,cvs.height);
-
-            document.onmousemove = function(e){
-                ctx.putImageData(img_data,0,0);
-                ox2 = e.clientX + window.pageXOffset -cvs.offsetLeft;
-                oy2 = e.clientY + window.pageYOffset - cvs.offsetTop;
-                //ctx.clearRect(0,0,cvs.width,cvs.height);
-                ctx.beginPath();
-                ctx.strokeRect(ox,oy,ox2-ox,oy2-oy);
-                ctx.closePath();
-            }
-
-            document.onmouseup  = function(e){
-                document.onmousemove = null;
-                document.onmouseup = null;
-                square_editable=false;
-                mark_square(img_data,ox,oy,ox2,oy2);
-            }
-        }
-    }
-
-    //    document.getElementById('Free_Mark').onclick = function(e) {
-    //        if(!hasImage){
-    //            alert("请先加载图片再进行标记");
-    //            return;
-    //        }
-    //        line_editable=true;
-    //        square_editable=false;
-    //        alert("正在进行自由标注，其余标注模式已撤销");
-    //    }
-
-    document.getElementById('Classic_Mark').onclick = function(e) {
-        if(!hasImage){
-            alert("请先加载图片再进行标记");
-            return;
-        }
-        square_editable=true;
-        line_editable=false;
-        alert("正在进行边框局部标注，其余标注模式已撤销");
-    }
-
-    document.getElementById('Total_Mark').onclick = function (e) {
-        if(!hasImage){
-            alert("请先加载图片再进行标记");
-            return;
-        }
-        var cvs=document.getElementById('test-canvas');
-        var ctx=cvs.getContext('2d');
-        var total_message = confirm("是否进行该图的整体标注？");
-        if (total_message == true){
-            hasMarked = true;
-            alert("整体标注选框已解锁");
-            marked_num++;
-            totalInput.disabled = false;
-        }else{
-            alert("整体标注选框已锁定");
-            totalInput.disabled = true;
         }
     }
 
@@ -513,87 +394,7 @@
 
         }
     }
-    /*
-        //读取button
-        document.getElementById('load_button').onclick = function (e) {
-            /*if(jsonData.length == 0){
-                alert('无保存信息');
-                return;
-            }
-            var id = prompt("请输入保存的json数据编号（第一次保存的数据编号为0）:","");
-            var cvs=document.getElementById('test-canvas');
-            var ctx=cvs.getContext('2d');
-            if (id != null){
-                if(id === "" || id ==null){
-                    alert("输入无效");
-                }
-                else if(isNaN(id)){
-                    alert("输入无效");
-                }else{
-                    var num = parseInt(id);
-                    if(num >= jsonData.length) {
-                        alert("编号越界");
-                    }
-                    else{
-                        clearTable();
-                        var json_data=jsonData[num];
-                        var jsonObject = JSON.parse(json_data);
-                        var origin_image = jsonObject[0].origin_image;
-                        var after_image = jsonObject[0].current_image;
-                        var totalMark= jsonObject[0].total_mark_message;
-                        var block_messages = jsonObject[0].block_messages;
-                        preview.style.backgroundImage = 'url(' + origin_image + ')';
-                        drawToCanvas(after_image);
-                        total_mark = totalMark;
-                        for(var j = 0 ;j < block_messages.length ; j++){
-                            add_Mark(block_messages[j]);
-                        }
-                        totalInput.value = total_mark ;
-                    }
-                }
-            }else{
-                alert("取消操作");
-            }}*/
 
-    //方框画线后的具体标注
-    function mark_square(img_data,ox1,oy1,ox2,oy2){
-        var square_message = confirm("是否确认标注？");
-        var cvs=document.getElementById('test-canvas');
-        var ctx=cvs.getContext('2d');
-        if (square_message == true){
-            hasMarked = true;
-            alert("标记成功");
-            marked_num++;
-            coordinate_one.push(ox1.toString()+","+oy1.toString());
-            coordinate_two.push(ox2.toString()+","+oy2.toString());
-            if(type == 2){
-                ctx.font="20px Georgia";
-                ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
-                add_Mark("");
-            }
-        }else{
-            alert("取消本次标注");
-            ctx.putImageData(img_data,0,0);
-        }
-    }
-
-    //    //自由划线后具体标注
-    //    function mark_line(img_data,ox1,oy1){
-    //        var line_message = prompt("请输入标注信息:","");
-    //        var cvs=document.getElementById('test-canvas');
-    //        var ctx=cvs.getContext('2d');
-    //        if (line_message != null){
-    //            hasMarked = true;
-    //            alert("你输入的标注信息为："+ line_message +".若要进行标注信息的修改，可直接在对应编号的文本框中进行修改");
-    //            marked_num++;
-    //            ctx.font="20px Georgia";
-    //            ctx.fillText("No."+table_info.rows.length ,ox1+5,oy1+20);
-    //            add_Mark(line_message);
-    //        }else{
-    //            alert("取消本次标注");
-    //            ctx.putImageData(img_data,0,0);
-    //        }
-    //    }
 
     //将新增的区域编号与标注的文本信息添加至表格当中
     function add_Mark(tagContent){

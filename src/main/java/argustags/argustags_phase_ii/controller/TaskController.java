@@ -1,5 +1,6 @@
 package argustags.argustags_phase_ii.controller;
 
+import argustags.argustags_phase_ii.service.InitiatorService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.serviceImpl.TaskImpl;
 import argustags.argustags_phase_ii.service.AdminService;
@@ -28,6 +29,8 @@ import static argustags.argustags_phase_ii.util.UnZip.unZipFiles;
 
 @Controller
 public class TaskController{
+    @Autowired
+    InitiatorService initiatorService;
     @Autowired
     TaskService taskService;
     AdminService Adminservice=new AdminImpl();
@@ -114,7 +117,8 @@ public class TaskController{
         ArrayList<String> worker = new ArrayList<>();
         vo.setWorkers(worker);
         ResultMessage rm=taskService.addTask(vo,username);
-
+        int credit=initiatorService.getCredit(username)-imgList.size()*15;
+        initiatorService.updateCredit(credit,username);
         if(rm == ResultMessage.SUCCESS)
             return "success";
         else
