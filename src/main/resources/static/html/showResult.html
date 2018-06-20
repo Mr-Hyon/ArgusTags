@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Check Final Result</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/markpage.css">
+</head>
+<body background="../img/backgrounds/1@2x.jpg">
+
+<ul>
+    <li><a href="http://localhost:8080/workerHome">Home</a></li>
+    <li><a href="http://localhost:8080/worker/yourtask">Your Task</a></li>
+    <li><a href="http://localhost:8080/worker/findtask">Find Task</a></li>
+    <li><a href="http://localhost:8080">Log out</a></li>
+</ul>
+
+<br/>
+<br/>
+<br/>
+<br/>
+<h1>Argus System Marking Section</h1>
+<br/>
+<p id="test-file-info"></p>
+<p>图片编辑区域</p>
+<p>
+    <canvas id="test-canvas" width="300" height="300"></canvas>
+</p>
+<p>
+    <button id="preImage" onclick='PreviousPic()'>Previous Picture</button>
+    <button id="nextImage" onclick='NextPic()'>Next Picture</button>
+</p>
+<table width="100%" border="1px" id="mark_info">
+    <caption>标注信息</caption>
+    <tr>
+        <td>区域编号</td><td>标注信息</td>
+    </tr>
+</table>
+<p>
+    整体标注信息：<select  id="total_input">
+    <option value="">None</option>
+</select>
+</p>
+<p>
+    <button type="button "id="Classic_Mark" >框选/框注</button>
+</p>
+<p>
+    <button type="button "id="Total_Mark" >整体标注</button>
+</p>
+<p>
+    <button type="button" id="save_button" >保存</button>
+</p>
+<script src="../js/jquery-1.8.2.min.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<script>
+    document.getElementById('total_input').disabled = true
+    var marked_num = 0      //记录工人本次标记张数（用于记录可增加积分情况）
+    var workername  = $.cookie("username") //当前工人用户名
+    var taskId = $.cookie("taskId") //当前任务ID
+    var option=''   //用于存储备选项
+    var type=0
+
+    var current_pic_index = 0  //当前图片编号
+    /** 获取相关任务信息 **/
+    var TaskInfo = null
+    var TaskJsonInfo = null
+    $.ajax({
+        url: 'http://localhost:8080/getImageList',
+        type: 'post',
+        async: false,
+        data: {
+            username:workername,
+            taskId:taskId
+        },
+        success: function (data) {
+            TaskInfo = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+    TaskJsonInfo = JSON.parse(TaskInfo)
+    var taskName = TaskJsonInfo[0].taskName   //任务名称
+    var disb = TaskJsonInfo[0].discription //任务描述
+    type = TaskJsonInfo[0].type   //任务类型
+    var pic_num = TaskJsonInfo[0].pic_num  //图片数量
+    option = TaskJsonInfo[0].option
+    var jsonData = new Array();
+    for(var i = 0;i<pic_num;i++){
+        jsonData.push(TaskJsonInfo[i+1].image)
+    }
+
+    /** 根据任务类型锁死button **/
+    if(type == 0){
+        document.getElementById('Classic_Mark').disabled = true
+    }
+    else if(type == 1){
+        document.getElementById('Total_Mark').disabled = true
+    }
+    else if(type == 2){
+        document.getElementById('Total_Mark').disabled = true
+    }
+
+    /** 开始进行网页初始化布局 **/
+    var line_editable = false; //自由划线模式默认关闭
+    var square_editable = false; //边框标记模式默认关闭
+    var hasMarked = false; //判断是否进行了标记操作
+    var hasImage = false; //判断画布上是否有图片
+    var coordinate_one = new Array();
+    var coordinate_two = new Array();
+    var mark_messages = new Array();  //用于储存标记内容的数组
+
+    var totalInput = document.getElementById("total_input");
+    var table_info=document.getElementById("mark_info");
+
+    var origin_img;
+
+    var info = document.getElementById('test-file-info')
+
+    function load_page(pic_index){
+        var jsonObject = JSON.parse(jsonData[pic_index])
+
+        //var after_url = jsonObject.current_image
+        var origin_url = jsonObject.origin_image
+        origin_img = origin_url
+        //console.log(origin_url)
+        //if(jsonObject.marked == 1){
+        //    hasMarked = true
+        //}
+        var type_to_show='';
+        if(type==0) type_to_show='整体标注';
+        else if(type==0) type_to_show='方框框选';
+        else if(type==0) type_to_show='方框框注';
+        document.getElementById('test-file-info').innerHTML = '任务名称：'+ taskName +'<br>'+
+            '任务类型：'+ type_to_show +'<br>'+
+            '任务描述：'+ disb +'<br>'+'<br>'+
+            '图片数量：'+ jsonData.length + '<br>'+
+            '当前图片编号：'+ (pic_index+1);
+
+        if(type == 0){
+            drawToCanvas(origin_url);
+            hasImage = true;
+            var total_select = document.getElementById("total_input");
+            total_select.disabled = true;
+            total_select.options.length = 0;
+            total_select.options.add(new Option("未选择",""));
+            var options = option.split(" ");
+            for(var j=0;j<options.length;j++){
+                total_select.options.add(new Option(options[j],options[j]))
+            }
+            var tagToSelect = jsonObject.tagcontent;
+            total_select.value = tagToSelect;
+        }
+        else if(type == 1){
+            drawTagsType1(origin_url,jsonObject.tagstart,jsonObject.tagend);
+            hasImage = true;
+        }
+        else if(type == 2){
+            drawTagsType2(origin_url,jsonObject.tagstart,jsonObject.tagend,jsonObject.tagcontent);
+            hasImage = true;
+        }
+    }
+
+    function PreviousPic(){
+        if(current_pic_index == 0){
+            alert('已是该任务的首张图片')
+        }
+        else{
+            clearTable();
+            current_pic_index = current_pic_index - 1;
+            load_page(current_pic_index);
+        }
+    }
+
+    function NextPic(){
+        if(current_pic_index == pic_num-1){
+            alert('已是该任务的最后一张图片')
+        }
+        else{
+            clearTable();
+            current_pic_index = current_pic_index + 1;
+            load_page(current_pic_index);
+        }
+    }
+
+    load_page(current_pic_index)     //加载图片以及相关信息
+
+    function drawTagsType1(imgData,tagStart,tagEnd){
+        var cvs = document.getElementById('test-canvas');
+        var ctx = cvs.getContext('2d');
+        var img = new Image;
+        img.src = imgData;
+        cvs.width=1920;
+        cvs.height=1080;
+        var tagstart = tagStart.split(" ")
+        var tagend = tagEnd.split(" ")
+
+        img.onload = function(){//必须onload之后再画
+            cvs.height=img.height;
+            cvs.width=img.width;
+            ctx.drawImage(img,0,0,img.width,img.height);
+            for(var k = 0 ;k<tagstart.length;k++){
+                if(tagstart[k].length > 0 ){
+                    var coordinate1 = tagstart[k].split(",");
+                    var coordinate2 = tagend[k].split(",");
+                    var x1=parseInt(parseFloat(coordinate1[0]));
+                    var y1=parseInt(parseFloat(coordinate1[1]));
+                    var x2=parseInt(parseFloat(coordinate2[0]));
+                    var y2=parseInt(parseFloat(coordinate2[1]));
+                    coordinate_one.push(tagstart[k]);
+                    coordinate_two.push(tagend[k]);
+                    ctx.strokeRect(x1,y1,x2-x1,y2-y1);
+                }
+            }
+        }
+    }
+
+    function drawTagsType2(imgData,tagStart,tagEnd,tagContent){
+        var cvs = document.getElementById('test-canvas');
+        var ctx = cvs.getContext('2d');
+        var img = new Image;
+        img.src = imgData;
+        cvs.width=1920;
+        cvs.height=1080;
+        var tagstart = tagStart.split(" ")
+        var tagend = tagEnd.split(" ")
+        var tagcontent = tagContent.split(" ")
+
+        img.onload = function(){//必须onload之后再画
+            cvs.height=img.height;
+            cvs.width=img.width;
+            ctx.drawImage(img,0,0,img.width,img.height);
+            for(var k = 0 ;k<tagstart.length;k++){
+                if(tagstart[k].length > 0 ){
+                    var coordinate1 = tagstart[k].split(",");
+                    var coordinate2 = tagend[k].split(",");
+                    var x1=parseInt(parseFloat(coordinate1[0]));
+                    var y1=parseInt(parseFloat(coordinate1[1]));
+                    var x2=parseInt(parseFloat(coordinate2[0]));
+                    var y2=parseInt(parseFloat(coordinate2[1]));
+                    coordinate_one.push(tagstart[k]);
+                    coordinate_two.push(tagend[k]);
+                    ctx.strokeRect(x1,y1,x2-x1,y2-y1);
+                    ctx.font="20px Georgia";
+                    ctx.fillText("No."+table_info.rows.length ,x1+5,y1+20);
+                    add_Mark(tagcontent[k]);
+                }
+            }
+        }
+    }
+
+    function drawToCanvas(imgData){
+        var cvs = document.getElementById('test-canvas');
+        var ctx = cvs.getContext('2d');
+        var img = new Image;
+        img.src = imgData;
+        cvs.width=1920;
+        cvs.height=1080;
+        img.onload = function(){//必须onload之后再画
+            cvs.height=img.height;
+            cvs.width=img.width;
+            ctx.drawImage(img,0,0,img.width,img.height);
+        }
+    }
+
+    //保存json文件
+    document.getElementById('save_button').onclick = function (e) {
+        if(!hasMarked){
+            alert('未检测到标注行为，保存无效');
+            return;
+        }
+        var cvs = document.getElementById('test-canvas');
+        //var img = cvs.toDataURL();
+        if(type == 0){
+            var total_mark = totalInput.value;
+            var JSONObject= {
+                "imgid":JSON.parse(jsonData[current_pic_index]).imgid,
+                "origin_image":JSON.parse(jsonData[current_pic_index]).origin_image,
+                "tagstart":JSON.parse(jsonData[current_pic_index]).tagstart,
+                "tagend":JSON.parse(jsonData[current_pic_index]).tagend,
+                "tagcontent":total_mark};
+
+            jsonData[current_pic_index] = JSON.stringify(JSONObject);
+
+            $.ajax({
+                url: 'http://localhost:8080/updateWorkerTaskType0',
+                type: 'post',
+                async: false,
+                data: {
+                    taskId:taskId,
+                    username:workername,
+                    imageid:JSON.parse(jsonData[current_pic_index]).imgid,
+                    tagcontent:total_mark
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function() {
+                    alert('error')
+                }
+            })
+        }
+
+        else if( type == 1 ){
+            var coord1toSend = '';
+            var coord2toSend = '';
+            for(var i=0;i<coordinate_one.length;i++){
+                coord1toSend = coord1toSend + coordinate_one[i];
+                coord2toSend = coord2toSend + coordinate_two[i];
+                if(i<coordinate_one.length-1){
+                    coord1toSend = coord1toSend + ' ';
+                    coord2toSend = coord2toSend + ' ';
+                }
+            }
+
+            var JSONObject= {
+                "imgid":JSON.parse(jsonData[current_pic_index]).imgid,
+                "origin_image":JSON.parse(jsonData[current_pic_index]).origin_image,
+                "tagstart":coord1toSend,
+                "tagend":coord2toSend,
+                "tagcontent":JSON.parse(jsonData[current_pic_index]).tagcontent};
+
+            jsonData[current_pic_index] = JSON.stringify(JSONObject);
+
+            $.ajax({
+                url: 'http://localhost:8080/updateWorkerTaskType1',
+                type: 'post',
+                async: false,
+                data: {
+                    taskId:taskId,
+                    username:workername,
+                    imageid:JSON.parse(jsonData[current_pic_index]).imgid,
+                    tagstart:coord1toSend,
+                    tagend:coord2toSend
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function() {
+                    alert('fail')
+                }
+            })
+        }
+        else if(type == 2){
+
+            for(var i = 0 ; i < mark_messages.length ; i++){
+                var temp_id = "No."+(i+1);
+                mark_messages[i]=document.getElementById(temp_id).value;
+            }
+            var coord1toSend = '';
+            var coord2toSend = '';
+            var tagtoSend = '';
+
+            for(var i=0;i<coordinate_one.length;i++){
+                coord1toSend = coord1toSend + coordinate_one[i];
+                coord2toSend = coord2toSend + coordinate_two[i];
+                tagtoSend = tagtoSend + mark_messages[i];
+                if(i<coordinate_one.length-1){
+                    coord1toSend = coord1toSend + ' ';
+                    coord2toSend = coord2toSend + ' ';
+                    tagtoSend = tagtoSend + ' ';
+                }
+            }
+
+            var JSONObject= {
+                "imgid":JSON.parse(jsonData[current_pic_index]).imgid,
+                "origin_image":JSON.parse(jsonData[current_pic_index]).origin_image,
+                "tagstart":coord1toSend,
+                "tagend":coord2toSend,
+                "tagcontent":tagtoSend};
+
+            jsonData[current_pic_index] = JSON.stringify(JSONObject);
+
+            $.ajax({
+                url: 'http://localhost:8080/updateWorkerTaskType2',
+                type: 'post',
+                async: false,
+                data: {
+                    taskId:taskId,
+                    username:workername,
+                    imageid:JSON.parse(jsonData[current_pic_index]).imgid,
+                    tagstart:coord1toSend,
+                    tagend:coord2toSend,
+                    tagcontent:tagtoSend
+                },
+                success: function (data) {
+                    alert(data)
+                },
+                error: function() {
+                    alert('fail')
+                }
+            })
+
+        }
+    }
+
+
+    //将新增的区域编号与标注的文本信息添加至表格当中
+    function add_Mark(tagContent){
+        var oneRow = table_info.insertRow();
+        var cell1 = oneRow.insertCell();
+        var cell2 = oneRow.insertCell();
+        var cell_id = "No." + (table_info.rows.length-1);
+        cell1.innerHTML= cell_id ;
+        cell2.innerHTML="<select id='tempinput'>";
+        var temp_options = option.split(" ");
+        document.getElementById('tempinput').options.add(new Option("未选择",""));
+        for(var k=0;k<temp_options.length;k++){
+            document.getElementById('tempinput').options.add(new Option(temp_options[k],temp_options[k]));
+        }
+        document.getElementById('tempinput').id = cell_id;
+        if(tagContent == ''){
+            document.getElementById(cell_id).value="";
+        }
+        else{
+            document.getElementById(cell_id).value = tagContent;
+        }
+        mark_messages.push(tagContent)
+    }
+
+    //用于清空表格内容与信息储存数组
+    function clearTable(){
+        origin_img = '';
+        hasMarked = false;
+        totalInput.disabled = true;
+        totalInput.value="";
+        while( table_info.rows.length > 1){
+            table_info.deleteRow(table_info.rows.length-1);
+        }
+        while( mark_messages.length > 0){
+            mark_messages.pop();
+        }
+        while( coordinate_one.length > 0){
+            coordinate_one.pop();
+            coordinate_two.pop();
+        }
+    }
+
+
+</script>
+
+
+
+</body>
+</html>
