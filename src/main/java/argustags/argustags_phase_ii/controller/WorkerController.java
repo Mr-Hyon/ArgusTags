@@ -222,6 +222,7 @@ public class WorkerController{
             image.setTags(tagids);
             ResultMessage rm2 = taskService.addTag(tag);
             ResultMessage rm3 = taskService.updateimage(image);
+            workerService.submitTask(taskId);
             if(rm2 == ResultMessage.SUCCESS && rm3 == ResultMessage.SUCCESS) return "success";
             else return "fail";
         }
@@ -264,7 +265,9 @@ public class WorkerController{
                 tagids.add(count+1);
                 image.setTags(tagids);
                 ResultMessage rm2 = taskService.updateimage(image);
-
+                if(taskService.getTagbyWnT(workername,imageid).size()==0){
+                    workerService.submitTask(taskId);
+                }
                 ResultMessage rm = taskService.addTag(tag);
                 if(rm != ResultMessage.SUCCESS || rm2!=ResultMessage.SUCCESS) error_sensor = 1;
             }
@@ -322,7 +325,9 @@ public class WorkerController{
                 tagids.add(count+1);
                 image.setTags(tagids);
                 ResultMessage rm3 = taskService.updateimage(image);
-
+                if(taskService.getTagbyWnT(workername,imageid).size()==0){
+                    workerService.submitTask(taskId);
+                }
                 ResultMessage rm2 = taskService.addTag(tag);
                 if(rm2 != ResultMessage.SUCCESS || rm3 !=ResultMessage.SUCCESS) error_sensor = 1;
             }
