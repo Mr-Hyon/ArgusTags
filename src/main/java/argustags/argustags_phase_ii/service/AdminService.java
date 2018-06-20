@@ -15,6 +15,8 @@ public interface AdminService {
 
     public int getTagNum();
 
+    public int getImageNum();
+
     public int getInitiatorNum();
 
     public int getWorkerNum();

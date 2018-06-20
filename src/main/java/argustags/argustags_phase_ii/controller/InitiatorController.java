@@ -1,6 +1,8 @@
 package argustags.argustags_phase_ii.controller;
 
+import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.InitiatorService;
+import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.serviceImpl.InitiatorImpl;
 import argustags.argustags_phase_ii.util.ResultMessage;
 import argustags.argustags_phase_ii.vo.InitiatorVO;
@@ -21,6 +23,10 @@ public class InitiatorController{
 
     @Autowired
     private InitiatorService initiatorService;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private AdminService adminService;
     @RequestMapping("/initiatorHome")
     String initiatorMainPage(){
         return "inimain";
@@ -74,4 +80,17 @@ public class InitiatorController{
         return array.toString();
     }
 
+
+
+    @PostMapping(value = "/endTask", produces="application/text; charset=utf-8")
+    @ResponseBody
+    public String endTask(@RequestParam("taskId") int TaskId) {
+        System.out.println("yes");
+    String type=taskService.getByID(TaskId).getType();
+    if(type.equals("0"))
+        adminService.rewardAndPunish0(TaskId);
+    else
+        adminService.rewardAndPunish12(TaskId);
+    return "success";
+    }
 }
