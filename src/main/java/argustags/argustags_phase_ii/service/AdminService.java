@@ -33,5 +33,5 @@ public interface AdminService {
 
     public ResultMessage rewardAndPunish0(int taskid);
 
-    public ResultMessage rewardAndPunish1(int taskid);
+    public ResultMessage rewardAndPunish12(int taskid);
 }
