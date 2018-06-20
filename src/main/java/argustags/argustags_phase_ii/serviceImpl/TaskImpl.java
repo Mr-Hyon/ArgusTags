@@ -69,6 +69,17 @@ public class TaskImpl implements TaskService {
         TaskVO task = taskRepository.findById(taskId).get();
         return task.getImgList();
     }
+    //根据type获取task
+    public List<TaskVO> getByType(String type) {
+        List<TaskVO> lis1 = taskRepository.findAll();
+        List<TaskVO> lis2 = new ArrayList<TaskVO>();
+        for(TaskVO task:lis1){
+            if(task.getType().equals(type)){
+                lis2.add(task);
+            }
+        }
+        return lis2;
+    }
     //根据图片id获取base64
     public String getBase64(int imgid){
         Image image = imageRepository.findById(imgid).get();
