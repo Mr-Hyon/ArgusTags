@@ -31,6 +31,7 @@ import static argustags.argustags_phase_ii.util.UnZip.unZipFiles;
 public class TaskController{
     @Autowired
     InitiatorService initiatorService;
+    @Autowired
     TaskService taskService;
     AdminService Adminservice=new AdminImpl();
     @PostMapping(value = "/release", produces = "application/text; charset=utf-8")
