@@ -1,9 +1,6 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
-import argustags.argustags_phase_ii.repository.InitiatorRepository;
-import argustags.argustags_phase_ii.repository.TagRepository;
-import argustags.argustags_phase_ii.repository.TaskRepository;
-import argustags.argustags_phase_ii.repository.WorkerRepository;
+import argustags.argustags_phase_ii.repository.*;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
@@ -32,6 +29,8 @@ public class AdminImpl implements AdminService {
     private WorkerService workerService;
     @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    private ImageRepository imageRepository;
 
 
     //  实现登录功能，判断admin用户名密码输入是否正确
@@ -45,6 +44,12 @@ public class AdminImpl implements AdminService {
     // 返回tag总数
     public int getTagNum(){
         List<Tag> list = tagRepository.findAll();
+        return list.size();
+    }
+
+    // 返回image总数
+    public int getImageNum(){
+        List<Image> list = imageRepository.findAll();
         return list.size();
     }
 
@@ -127,6 +132,7 @@ public class AdminImpl implements AdminService {
     public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total){
         double percent = 0;
         int credit = 0;
+        System.out.println(workers.get(0)+"ygu");
         for(int i = 0; i<workers.size(); i++){
             credit = workerService.getCredit(workers.get(i));
             percent = (double)numOfTrueTags.get(i)/total;

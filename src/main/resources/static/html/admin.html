@@ -33,6 +33,7 @@
         <p id="tasknum" style="text-align:center;"></p>
         <p id="taskon" style="text-align:center;"></p>
         <p id="taskfn" style="text-align:center;"></p>
+    <p id="imagenum" style="text-align:center;"></p>
     <div>
         <button id="logout" class="btn btn-default " >Log out</button>
     </div>
@@ -74,20 +75,30 @@
     <div class="col-md-6 col-sm-12 col-xs-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Donut Chart
+                Users
             </div>
             <div class="panel-body">
-                <div id="morris-donut-chart"></div>
+                <div id="Users"></div>
             </div>
         </div>
     </div>
     <div class="col-md-6 col-sm-12 col-xs-12">
         <div class="panel panel-default">
             <div class="panel-heading">
-                Donut Chart
+               Task Status
             </div>
             <div class="panel-body">
-                <div id="morris-donut-chart2"></div>
+                <div id="TaskStatus"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Task Type
+            </div>
+            <div class="panel-body">
+                <div id="TaskType"></div>
             </div>
         </div>
     </div>
@@ -116,6 +127,10 @@ var num2=Obj.workernum;
 var num3=Obj.tasknum;
 var num4=Obj.taskog;
 var num5=Obj.taskfn;
+var num6=Obj.imagenum;
+var num7=Obj.type0num;
+    var num8=Obj.type1num;
+    var num9=Obj.type2num;
 
 document.getElementById('usernum').innerHTML="系统用户数："+num0;
 document.getElementById('ininum').innerHTML="众包发起者数："+num1;
@@ -123,6 +138,7 @@ document.getElementById('workernum').innerHTML="众包工人数："+num2;
 document.getElementById('tasknum').innerHTML="系统任务数："+num3;
 document.getElementById('taskon').innerHTML="进行中任务数："+num4;
 document.getElementById('taskfn').innerHTML="已完成任务数："+num5;
+    document.getElementById('imagenum').innerHTML="总图片张数："+num6;
 
     document.getElementById('logout').onclick=function (e) {
         window.location="http://localhost:8080"
@@ -162,21 +178,30 @@ document.getElementById('taskfn').innerHTML="已完成任务数："+num5;
             b: 90
         }];
 
-    var donutdata=[{
+    var usersdata=[{
             label: "Initiators",
             value: num1
         }, {
             label: "Workers",
             value: num2
         }];
-    var donutdata2=[{
+    var taskstatusdata=[{
         label: "OngoingTask",
         value: num4
     }, {
-        label: "Workers",
+        label: "FinishedTask",
         value: num5
     }];
-
+    var tasktypedata=[{
+        label: "整体标注",
+        value: num7
+    }, {
+        label: "方框框选",
+        value: num8
+    }, {
+        label: "方框标注",
+        value: num9
+    }];
     var areadata=[{
         period: '2010 Q1',
         iphone: 2666,

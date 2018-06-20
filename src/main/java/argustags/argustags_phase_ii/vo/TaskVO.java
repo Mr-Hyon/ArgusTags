@@ -120,24 +120,10 @@ public class  TaskVO {
     }
 
     public void addWorker(String workerName){
-        String[] s1 = workers.split(" ");
-        ArrayList<String> res = new ArrayList<>();
-        for(int i = 0;i<s1.length;i++){
-            res.add(s1[i]);
-        }
-        String s = "";
-        for(int i = 0;i<res.size();i++){
-            String temp = res.get(i);
-            s=s+temp;
-            if(i==res.size()-1){
-                ;
-            }
-            else{
-                s=s+" ";
-            }
-        }
-
-        this.workers = s;
+        if(workers.equals(""))
+            this.workers=workerName;
+        else
+            this.workers=workers+" "+workerName;
 
     }
 

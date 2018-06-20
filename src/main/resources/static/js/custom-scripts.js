@@ -42,8 +42,8 @@
             /* MORRIS DONUT CHART
 			----------------------------------------*/
             Morris.Donut({
-                element: 'morris-donut-chart',
-                data: donutdata,
+                element: 'Users',
+                data: usersdata,
 				   colors: [
     '#A6A6A6','#1cc09f',
     '#A8E9DC'
@@ -53,8 +53,20 @@
             /* MORRIS DONUT CHART
 			----------------------------------------*/
             Morris.Donut({
-                element: 'morris-donut-chart2',
-                data: donutdata2,
+                element: 'TaskStatus',
+                data: taskstatusdata,
+                colors: [
+                    '#A6A6A6','#1cc09f',
+                    '#A8E9DC'
+                ],
+                resize: true
+            });
+
+            /* MORRIS DONUT CHART
+			----------------------------------------*/
+            Morris.Donut({
+                element: 'TaskType',
+                data: tasktypedata,
                 colors: [
                     '#A6A6A6','#1cc09f',
                     '#A8E9DC'
