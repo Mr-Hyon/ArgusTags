@@ -175,6 +175,7 @@ public class WorkerController{
         String taskName = vo.getName();
         String type = vo.getType();
         String option = vo.getOption();
+        String disb = vo.getDescribe();
 
         JsonArray arr = new JsonArray();
 
@@ -183,6 +184,7 @@ public class WorkerController{
         basic_info.addProperty("type",type);
         basic_info.addProperty("pic_num",imgList.size());
         basic_info.addProperty("option",option);
+        basic_info.addProperty("discription",disb);
 
         arr.add(basic_info);
         for(int i=0;i<imgList.size();i++){
@@ -264,10 +266,10 @@ public class WorkerController{
                 ArrayList<Integer> tagids = image.getTags();
                 tagids.add(count+1);
                 image.setTags(tagids);
-                ResultMessage rm2 = taskService.updateimage(image);
                 if(taskService.getTagbyWnT(workername,imageid).size()==0){
                     workerService.submitTask(taskId);
                 }
+                ResultMessage rm2 = taskService.updateimage(image);
                 ResultMessage rm = taskService.addTag(tag);
                 if(rm != ResultMessage.SUCCESS || rm2!=ResultMessage.SUCCESS) error_sensor = 1;
             }
@@ -324,10 +326,10 @@ public class WorkerController{
                 ArrayList<Integer> tagids = image.getTags();
                 tagids.add(count+1);
                 image.setTags(tagids);
-                ResultMessage rm3 = taskService.updateimage(image);
                 if(taskService.getTagbyWnT(workername,imageid).size()==0){
                     workerService.submitTask(taskId);
                 }
+                ResultMessage rm3 = taskService.updateimage(image);
                 ResultMessage rm2 = taskService.addTag(tag);
                 if(rm2 != ResultMessage.SUCCESS || rm3 !=ResultMessage.SUCCESS) error_sensor = 1;
             }

@@ -84,6 +84,7 @@ public class TaskImpl implements TaskService {
             temp.add(getTagById(t));
         }
         for(Tag tag:temp){
+            if(tag == null) continue;
             if(tag.getWorkerName().equals(workerName)){
                 res.add(tag);
             }
