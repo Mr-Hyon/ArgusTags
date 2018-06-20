@@ -26,10 +26,6 @@
 <body>
 
 <div class="page-container">
-    <ul>
-        <li style="float:right"><a href="http://localhost:8080">Log out</a></li>
-        <li style="float:right" id="user"><a>Welcome!</a></li>
-    </ul>
     <br><br>
         <p id="usernum" style="text-align:center;"></p>
         <p id="ininum" style="text-align:center;"></p>
@@ -37,6 +33,54 @@
         <p id="tasknum" style="text-align:center;"></p>
         <p id="taskon" style="text-align:center;"></p>
         <p id="taskfn" style="text-align:center;"></p>
+    <div style="text-align:center;">
+        <button id="rltask" class="btn btn-default btn-lg" style="width:50%"  >发布新任务</button>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Bar Chart
+            </div>
+            <div class="panel-body">
+                <div id="morris-bar-chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Area Chart
+            </div>
+            <div class="panel-body">
+                <div id="morris-area-chart"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- /. ROW  -->
+<div class="row">
+
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Line Chart
+            </div>
+            <div class="panel-body">
+                <div id="morris-line-chart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Donut Chart
+            </div>
+            <div class="panel-body">
+                <div id="morris-donut-chart"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var Data = null
@@ -69,6 +113,35 @@ document.getElementById('workernum').innerHTML="众包工人数："+num2;
 document.getElementById('tasknum').innerHTML="系统任务数："+num3;
 document.getElementById('taskon').innerHTML="进行中任务数："+num4;
 document.getElementById('taskfn').innerHTML="已完成任务数："+num5;
+
+    document.getElementById('logout').onclick=function (e) {
+        window.location="http://localhost:8080"
+    }
+    var datatest1=[{
+            label: "Initiators",
+            value: 58
+        }, {
+            label: "Workers",
+            value: 32
+        }, {
+            label: "Mail-Order Sales",
+            value: 54
+        }]
+
+    ;
+
 </script>
+<!-- jQuery Js -->
+<script src="../js/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="../js/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="../js/jquery.metisMenu.js"></script>
+<!-- Morris Chart Js -->
+<script src="../js/morris/raphael-2.1.0.min.js"></script>
+<script src="../js/morris/morris.js"></script>
+<!-- Custom Js -->
+<script src="../js/custom-scripts.js"></script>
+
 </body>
 </html>
