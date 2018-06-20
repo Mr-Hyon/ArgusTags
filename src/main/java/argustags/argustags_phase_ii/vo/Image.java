@@ -62,8 +62,10 @@ public class Image  {
     public ArrayList<Integer> getTags() {
         String[] s1 = Tags.split(" ");
         ArrayList<Integer> res = new ArrayList<>();
-        for(int i = 0;i<s1.length;i++){
-            res.add(Integer.parseInt(s1[i]));
+        if(!s1[0].equals("")){
+            for(int i = 0;i<s1.length;i++){
+                res.add(Integer.parseInt(s1[i]));
+            }
         }
         return res;
     }

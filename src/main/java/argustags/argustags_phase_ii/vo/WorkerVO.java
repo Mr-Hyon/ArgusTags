@@ -76,10 +76,14 @@ public class WorkerVO  {
     public ArrayList<Integer> getTaskList(){
         String[] s1 = taskList.split(" ");
         ArrayList<Integer> res = new ArrayList<>();
-        for(int i = 0;i<s1.length;i++){
-            res.add(Integer.parseInt(s1[i]));
+        if(s1[0].equals(""))
+            return res;
+        else{
+            for(int i = 0;i<s1.length;i++){
+                res.add(Integer.parseInt(s1[i]));
+            }
+            return res;
         }
-        return res;
     }
 
     public void setTaskList(ArrayList<Integer> taskList){
@@ -101,8 +105,10 @@ public class WorkerVO  {
     public void addTask(int TaskID){
         String[] s1 = taskList.split(" ");
         ArrayList<Integer> res = new ArrayList<>();
-        for(int i = 0;i<s1.length;i++){
-            res.add(Integer.parseInt(s1[i]));
+        if(!s1[0].equals("")){
+            for(int i = 0;i<s1.length;i++){
+                res.add(Integer.parseInt(s1[i]));
+            }
         }
         res.add(TaskID);
         String s = "";
