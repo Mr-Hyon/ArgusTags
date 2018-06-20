@@ -81,6 +81,16 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Donut Chart
+            </div>
+            <div class="panel-body">
+                <div id="morris-donut-chart2"></div>
+            </div>
+        </div>
+    </div>
 </div>
 <script>
     var Data = null
@@ -154,14 +164,18 @@ document.getElementById('taskfn').innerHTML="已完成任务数："+num5;
 
     var donutdata=[{
             label: "Initiators",
-            value: 58
+            value: num1
         }, {
             label: "Workers",
-            value: 32
-        }, {
-            label: "Mail-Order Sales",
-            value: 54
+            value: num2
         }];
+    var donutdata2=[{
+        label: "OngoingTask",
+        value: num4
+    }, {
+        label: "Workers",
+        value: num5
+    }];
 
     var areadata=[{
         period: '2010 Q1',

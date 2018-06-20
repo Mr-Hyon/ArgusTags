@@ -90,7 +90,7 @@ public class WorkerController{
             JsonObject temp = new JsonObject();
             temp.addProperty("id",sample.getID());
             temp.addProperty("name",sample.getName());
-            temp.addProperty("num",1);
+            temp.addProperty("num",sample.getImgList().size());
             temp.addProperty("end_date",sample.getEndTime());
             array.add(temp);
         }

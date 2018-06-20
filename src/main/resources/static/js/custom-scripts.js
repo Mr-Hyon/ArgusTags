@@ -50,6 +50,17 @@
   ],
                 resize: true
             });
+            /* MORRIS DONUT CHART
+			----------------------------------------*/
+            Morris.Donut({
+                element: 'morris-donut-chart2',
+                data: donutdata2,
+                colors: [
+                    '#A6A6A6','#1cc09f',
+                    '#A8E9DC'
+                ],
+                resize: true
+            });
 
             /* MORRIS AREA CHART
 			----------------------------------------*/

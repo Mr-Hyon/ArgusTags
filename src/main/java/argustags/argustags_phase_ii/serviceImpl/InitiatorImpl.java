@@ -165,6 +165,7 @@ public class InitiatorImpl implements InitiatorService {
     public ResultMessage updateCredit(int credit,String initName){
         InitiatorVO initiator1=getByName(initName);
         initiator1.setCredit(credit);
+        initiatorRepository.saveAndFlush(initiator1);
         return ResultMessage.SUCCESS;
     }
 
