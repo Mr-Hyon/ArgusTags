@@ -144,7 +144,7 @@
 
     function AcceptTask(o){
         var TaskId = o.id
-        var WorkerName = username
+        var WorkerName = name
 
         $.ajax({
             url: 'http://localhost:8080/workerAcceptTask',
@@ -161,7 +161,7 @@
                 alert('fail')
             }
         })
-
+        window.location="http://localhost:8080/workerHome"
     }
     document.getElementById('backtomain').onclick=function (e) {
         window.location="http://localhost:8080/workerHome"
