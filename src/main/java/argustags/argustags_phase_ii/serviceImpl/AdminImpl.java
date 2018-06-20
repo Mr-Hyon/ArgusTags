@@ -124,6 +124,71 @@ public class AdminImpl implements AdminService {
         return result;
     }
 
+    public List<Tag> getFrames(int taskid, int imgid){
+        TaskVO vo = taskService.getByID(taskid);
+        List<String> workers = vo.getWorkers();
+        List<Tag> options = taskService.getTagbyWnT(workers.get(0),imgid);
+        int count;
+        List<Tag> tags;
+        for(Tag t : options) {
+            count = 0;
+            for (int i = 1; i < workers.size(); i++) {
+                tags = taskService.getTagbyWnT(workers.get(i), imgid);
+                for (Tag t1 : tags) {
+                    if ((Math.abs(t.getMiddle()[0] - t1.getMiddle()[0]) <= 5) && (Math.abs(t.getMiddle()[1] - t1.getMiddle()[1]) <= 5)) {
+                        count++;
+                    }
+                }
+                if(count>=5) break;
+            }
+            if(count<5){
+                options.remove(t);
+            }
+        }
+        return options;
+    }
+
+    public List<Tag> getFrameAndAnswer(int taskid, int imgid){
+        TaskVO vo = taskService.getByID(taskid);
+        List<String> workers = vo.getWorkers();
+        List<Tag> position = adminService.getFrames(taskid, imgid);
+
+        String str;
+        String temp;
+        List<Tag> tags;
+        List<String> contents;
+        int count;
+        int maximum;
+        String answerTag;
+
+        for(Tag t : position){
+            str = "";
+            maximum = 0;
+            answerTag = "";
+            contents = new ArrayList<>();
+            for (int i = 0; i < workers.size(); i++) {
+                tags = taskService.getTagbyWnT(workers.get(i), imgid);
+                for (Tag t1 : tags) {
+                    if ((Math.abs(t.getMiddle()[0] - t1.getMiddle()[0]) <= 5) && (Math.abs(t.getMiddle()[1] - t1.getMiddle()[1]) <= 5)){
+                        str += t1.getTag();
+                        contents.add(t1.getTag());
+                    }
+                }
+            }
+            for (int i = 0; i < contents.size(); i++) {
+                temp = str.replaceAll(contents.get(i), "");
+                count = (str.length() - temp.length()) / contents.get(i).length();
+                if (count > maximum) {
+                    maximum = count;
+                    answerTag = contents.get(i);
+                }
+            }
+            t.setTag(answerTag);
+        }
+
+        return position;
+    }
+
     public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total){
         double percent = 0;
         int credit = 0;

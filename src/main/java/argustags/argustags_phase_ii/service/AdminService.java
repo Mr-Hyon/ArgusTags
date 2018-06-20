@@ -29,6 +29,10 @@ public interface AdminService {
 
     public String getAnswer(int imgid);
 
+    public List<Tag> getFrames(int taskid, int imgid);
+
+    public List<Tag> getFrameAndAnswer(int taskid, int imgid);
+
     public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total);
 
     public ResultMessage rewardAndPunish0(int taskid);
