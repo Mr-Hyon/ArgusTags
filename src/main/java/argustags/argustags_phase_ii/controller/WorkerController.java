@@ -89,7 +89,7 @@ public class WorkerController{
             TaskVO sample = WorkerTask.get(i);
             JsonObject temp = new JsonObject();
             temp.addProperty("id",sample.getID());
-            temp.addProperty("name",sample.getName());
+            temp.addProperty("dscp",sample.getDescribe());
             temp.addProperty("num",sample.getImgList().size());
             temp.addProperty("end_date",sample.getEndTime());
             array.add(temp);
@@ -116,7 +116,7 @@ public class WorkerController{
                 TaskVO sample = WorkerTask.get(i);
                 JsonObject temp = new JsonObject();
                 temp.addProperty("id", sample.getID());
-                temp.addProperty("name", sample.getName());
+                temp.addProperty("dscp", sample.getDescribe());
                 temp.addProperty("num", sample.getImgList().size());
                 temp.addProperty("end_date", sample.getEndTime());
                 array.add(temp);

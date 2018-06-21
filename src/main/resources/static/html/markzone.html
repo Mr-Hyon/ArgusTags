@@ -6,51 +6,47 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../css/markpage.css">
-    <link rel="stylesheet" href="../css/style1.css">
+    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="../css/Style.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
 </head>
 <body background="../img/backgrounds/1@2x.jpg">
 
-<ul>
-    <li><a href="http://localhost:8080/workerHome">Home</a></li>
-    <li><a href="http://localhost:8080/worker/yourtask">Your Task</a></li>
-    <li><a href="http://localhost:8080/worker/findtask">Find Task</a></li>
-    <li><a href="http://localhost:8080">Log out</a></li>
-</ul>
 
-<br/>
-<br/>
-<br/>
-<br/>
 <h1>Argus System Marking Section</h1>
 <br/>
 <p id="test-file-info"></p>
 <p>
-    <button type="button "id="Classic_Mark" >框选/框注</button>
+    <button type="button "id="Classic_Mark" class="btn btn-default" style="width: 10%;height:40px">框选/框注</button>
 </p>
 <p>
-    <button type="button "id="Total_Mark" >整体标注</button>
+    <button type="button "id="Total_Mark" class="btn btn-default" style="width: 10%;height:40px">整体标注</button>
 </p>
 <p>
-    <button id="preImage" onclick='PreviousPic()'>Previous Picture</button>
-    <button id="nextImage" onclick='NextPic()'>Next Picture</button>
+    <button id="preImage" onclick='PreviousPic()' class="btn btn-default" style="width: 10%">Previous Picture</button>
+    <button id="nextImage" onclick='NextPic()' class="btn btn-default" style="width: 10%">Next Picture</button>
 </p>
 <p>图片编辑区域</p>
 <p>
     <canvas id="test-canvas" width="300" height="300"></canvas>
 </p>
-<table width="100%" border="1px" id="mark_info">
+<table class="table table-striped table-bordered table-hover" width="100%" border="1px" id="mark_info">
     <caption>标注信息</caption>
     <tr>
         <td>区域编号</td><td>标注信息</td>
     </tr>
 </table>
 <p>
-    整体标注信息：<select  id="total_input">
+    整体标注信息：<select  id="total_input" class="btn btn-default" style="width: 10%">
     <option value="">None</option>
 </select>
 </p>
+<div>
+    <button id="backtomain" class="btn btn-default " style="width: 10%">返回主页面</button>
+</div>
+<br>
 <p>
-    <button type="button" id="save_button" >保存</button>
+    <button type="button" id="save_button"  class="btn btn-default" style="width: 10%">保存</button>
 </p>
 <script src="../js/jquery-1.8.2.min.js"></script>
 <script src="../js/jquery.cookie.js"></script>
@@ -636,7 +632,9 @@
             coordinate_two.pop();
         }
     }
-
+    document.getElementById('backtomain').onclick=function (e) {
+        window.location="http://localhost:8080/workerHome"
+    }
 
 </script>
 
