@@ -34,6 +34,8 @@ public class  TaskVO {
     private String description;
     @Column(nullable = false)
     private String opt;
+    @Column(nullable = false)
+    private String bal;
 
 
     public TaskVO(){
@@ -68,6 +70,9 @@ public class  TaskVO {
         endTime = "no data";
 
         workers = new String();
+
+        this.bal = "0";
+
     }
 
     public int getID(){
@@ -206,5 +211,12 @@ public class  TaskVO {
         this.opt = option;
     }
 
+    public String getBal(){
+        return bal;
+    }
+
+    public void setBal(String bal){
+        this.bal = bal;
+    }
 
 }
