@@ -142,6 +142,7 @@ public class AdminImpl implements AdminService {
                 for (Tag t1 : tags) {
                     if ((Math.abs(t.getMiddle()[0] - t1.getMiddle()[0]) <= 5) && (Math.abs(t.getMiddle()[1] - t1.getMiddle()[1]) <= 5)) {
                         count++;
+                        break;
                     }
                 }
                 if(count>=5) break;
@@ -177,6 +178,7 @@ public class AdminImpl implements AdminService {
                     if ((Math.abs(t.getMiddle()[0] - t1.getMiddle()[0]) <= 5) && (Math.abs(t.getMiddle()[1] - t1.getMiddle()[1]) <= 5)){
                         str += t1.getTag();
                         contents.add(t1.getTag());
+                        break;
                     }
                 }
             }
@@ -238,6 +240,7 @@ public class AdminImpl implements AdminService {
                     for(int i = 0; i<workers.size(); i++){
                         if(workers.get(i).equals(t.getWorkerName())){
                             numOfTrueTags.set(i,numOfTrueTags.get(i)+1);
+                            break;
                         }
                     }
                 }
@@ -261,7 +264,7 @@ public class AdminImpl implements AdminService {
         int sign;
         String name;
         for(int imgid : imgs){
-            answerTag = taskService.getTagbyWnT(workers.get(0),imgid);
+            answerTag = adminService.getFrames(taskid, imgid);
             numOfTags = answerTag.size();
             for(int i = 0;i<workers.size();i++) {
                 name = workers.get(i);
@@ -271,6 +274,7 @@ public class AdminImpl implements AdminService {
                     for(Tag t1 : tags){
                         if((Math.abs(t.getMiddle()[0]-t1.getMiddle()[0])<=5)&&(Math.abs(t.getMiddle()[1]-t1.getMiddle()[1])<=5)&&t.getTag().equals(t1.getTag())){
                             sign++;
+                            break;
                         }
                     }
                 }
