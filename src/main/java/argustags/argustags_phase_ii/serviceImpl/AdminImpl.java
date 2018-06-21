@@ -172,6 +172,8 @@ public class AdminImpl implements AdminService {
         List<String> workers = vo.getWorkers();
         List<Tag> position = adminService.getFrames(taskid, imgid);
 
+        if(position.get(0).getTag().equals("")) return position;
+
         String str;
         String temp;
         List<Tag> tags;
