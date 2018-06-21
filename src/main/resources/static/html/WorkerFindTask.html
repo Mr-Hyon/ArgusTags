@@ -134,11 +134,11 @@
 
     for(var i=1 ; i<=TaskJsonObjArray[0].num ; i++){
         var TaskId = TaskJsonObjArray[i].id
-        var TaskName = TaskJsonObjArray[i].name
+        var TaskDscp = TaskJsonObjArray[i].dscp
         var TaskNumPics = TaskJsonObjArray[i].num
         var EndTime = TaskJsonObjArray[i].end_date
 
-        load_task(TaskId,TaskName,TaskNumPics,EndTime)
+        load_task(TaskId,TaskDscp,TaskNumPics,EndTime)
     }
 
 

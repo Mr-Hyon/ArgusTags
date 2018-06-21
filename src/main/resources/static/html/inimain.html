@@ -99,11 +99,13 @@
         cell4.innerHTML = numb
         cell5.innerHTML = status+x;
         cell6.innerHTML=deadline
-        cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn btn-default\" disabled>不可查看</button>"
-        document.getElementById('SelectTask').id = id
+
         $(cell5).append($(y).append($(z).css("width",x)))
         if(x=="100%")
             cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn btn-default\" >进入任务</button>"
+        else
+            cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn btn-default\" disabled>不可查看</button>"
+        document.getElementById('SelectTask').id = id
     }
     var userData = null
 
@@ -175,14 +177,14 @@
 
     function SelectTask(o){
         var TaskId = o.id
-        alert(TaskId-1)
-        $.cookie('taskId',TaskId-1)
+        alert(TaskId)
+        $.cookie('taskId',TaskId)
         $.ajax({
             url: 'http://localhost:8080/endTask',
             type: 'post',
             async: false,
             data: {
-                taskId:TaskId-1
+                taskId:TaskId
             },
             success: function (data) {
                 alert(data)
