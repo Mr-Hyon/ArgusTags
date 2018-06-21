@@ -129,6 +129,25 @@ public class AdminImpl implements AdminService {
         return result;
     }
 
+    public List<Tag> getAnswerList(int taskid){
+        TaskVO vo = taskService.getByID(taskid);
+        List<Integer> imgs = vo.getImgList();
+        List<Tag> result = new ArrayList<>();
+        Image img ;
+        List<Integer> tags ;
+        for(int imgid : imgs){
+            img = taskService.findImageById(imgid);
+            tags = img.getTags();
+            for(int t : tags){
+                if(taskService.getTagById(t).getTag().equals(adminService.getAnswer(imgid))){
+                    result.add(taskService.getTagById(t));
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
     public List<Tag> getFrames(int taskid, int imgid){
         TaskVO vo = taskService.getByID(taskid);
         List<String> workers = vo.getWorkers();
