@@ -129,6 +129,19 @@ public class AdminImpl implements AdminService {
         return result;
     }
 
+    public List<Tag> getAnswerTag(int imgid){
+        Image img = taskService.findImageById(imgid);
+        List<Tag> result = new ArrayList<>();
+        List<Integer> tags = img.getTags();
+        for(int t : tags){
+            if(taskService.getTagById(t).getTag().equals(adminService.getAnswer(imgid))){
+                result.add(taskService.getTagById(t));
+                break;
+            }
+        }
+        return result;
+    }
+
     public List<Tag> getFrames(int taskid, int imgid){
         TaskVO vo = taskService.getByID(taskid);
         List<String> workers = vo.getWorkers();
@@ -158,6 +171,8 @@ public class AdminImpl implements AdminService {
         TaskVO vo = taskService.getByID(taskid);
         List<String> workers = vo.getWorkers();
         List<Tag> position = adminService.getFrames(taskid, imgid);
+
+        if(position.get(0).getTag().equals("")) return position;
 
         String str;
         String temp;
@@ -211,6 +226,9 @@ public class AdminImpl implements AdminService {
             }
             else if(percent < 0.5){
                 workerService.updateCredit(credit+2*numOfTrueTags.get(i)-total,workers.get(i));
+            }
+            else if(percent == 1){
+                workerService.updateCredit(credit+total+10,workers.get(i));
             }
         }
         return ResultMessage.SUCCESS;

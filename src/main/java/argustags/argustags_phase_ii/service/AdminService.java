@@ -31,6 +31,8 @@ public interface AdminService {
 
     public String getAnswer(int imgid);
 
+    public List<Tag> getAnswerTag(int imgid);
+
     public List<Tag> getFrames(int taskid, int imgid);
 
     public List<Tag> getFrameAndAnswer(int taskid, int imgid);
