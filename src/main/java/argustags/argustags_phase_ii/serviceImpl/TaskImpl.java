@@ -155,5 +155,17 @@ public class TaskImpl implements TaskService {
         return ResultMessage.SUCCESS;
     }
 
+    public String getTaskBal(int Taskid){
+        TaskVO task = taskRepository.findById(Taskid).get();
+        return task.getBal();
+    }
+
+    public ResultMessage Bal(int Taskid){
+        TaskVO task = taskRepository.findById(Taskid).get();
+        task.setBal("1");
+        taskRepository.saveAndFlush(task);
+        return ResultMessage.SUCCESS;
+    }
+
 
 }
