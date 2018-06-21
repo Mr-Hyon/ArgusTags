@@ -172,6 +172,27 @@
     document.getElementById('rltask').onclick=function (e) {
         window.location="http://localhost:8080/releaseTask"
     }
+
+    function SelectTask(o){
+        var TaskId = o.id
+        alert(TaskId-1)
+        $.cookie('taskId',TaskId-1)
+        $.ajax({
+            url: 'http://localhost:8080/endTask',
+            type: 'post',
+            async: false,
+            data: {
+                taskId:TaskId-1
+            },
+            success: function (data) {
+                alert(data)
+            },
+            error: function() {
+                alert('fail')
+            }
+        })
+        window.location = "http://localhost:8080/showResult"
+    }
 </script>
 </body>
 </html>

@@ -38,4 +38,6 @@ public interface TaskService {
     public Tag getTagById(int id);
 
     public ResultMessage updateimage(Image image);
+
+    public List<TaskVO> getByType(String type);
 }

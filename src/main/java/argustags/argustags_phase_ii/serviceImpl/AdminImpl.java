@@ -1,9 +1,6 @@
 package argustags.argustags_phase_ii.serviceImpl;
 
-import argustags.argustags_phase_ii.repository.InitiatorRepository;
-import argustags.argustags_phase_ii.repository.TagRepository;
-import argustags.argustags_phase_ii.repository.TaskRepository;
-import argustags.argustags_phase_ii.repository.WorkerRepository;
+import argustags.argustags_phase_ii.repository.*;
 import argustags.argustags_phase_ii.service.AdminService;
 import argustags.argustags_phase_ii.service.TaskService;
 import argustags.argustags_phase_ii.service.WorkerService;
@@ -32,6 +29,8 @@ public class AdminImpl implements AdminService {
     private WorkerService workerService;
     @Autowired
     private TagRepository tagRepository;
+    @Autowired
+    private ImageRepository imageRepository;
 
 
     //  实现登录功能，判断admin用户名密码输入是否正确
@@ -45,6 +44,12 @@ public class AdminImpl implements AdminService {
     // 返回tag总数
     public int getTagNum(){
         List<Tag> list = tagRepository.findAll();
+        return list.size();
+    }
+
+    // 返回image总数
+    public int getImageNum(){
+        List<Image> list = imageRepository.findAll();
         return list.size();
     }
 
@@ -124,9 +129,77 @@ public class AdminImpl implements AdminService {
         return result;
     }
 
+    public List<Tag> getFrames(int taskid, int imgid){
+        TaskVO vo = taskService.getByID(taskid);
+        List<String> workers = vo.getWorkers();
+        List<Tag> options = taskService.getTagbyWnT(workers.get(0),imgid);
+        int count;
+        List<Tag> tags;
+        for(Tag t : options) {
+            count = 0;
+            for (int i = 1; i < workers.size(); i++) {
+                tags = taskService.getTagbyWnT(workers.get(i), imgid);
+                for (Tag t1 : tags) {
+                    if ((Math.abs(t.getMiddle()[0] - t1.getMiddle()[0]) <= 5) && (Math.abs(t.getMiddle()[1] - t1.getMiddle()[1]) <= 5)) {
+                        count++;
+                        break;
+                    }
+                }
+                if(count>=5) break;
+            }
+            if(count<5){
+                options.remove(t);
+            }
+        }
+        return options;
+    }
+
+    public List<Tag> getFrameAndAnswer(int taskid, int imgid){
+        TaskVO vo = taskService.getByID(taskid);
+        List<String> workers = vo.getWorkers();
+        List<Tag> position = adminService.getFrames(taskid, imgid);
+
+        String str;
+        String temp;
+        List<Tag> tags;
+        List<String> contents;
+        int count;
+        int maximum;
+        String answerTag;
+
+        for(Tag t : position){
+            str = "";
+            maximum = 0;
+            answerTag = "";
+            contents = new ArrayList<>();
+            for (int i = 0; i < workers.size(); i++) {
+                tags = taskService.getTagbyWnT(workers.get(i), imgid);
+                for (Tag t1 : tags) {
+                    if ((Math.abs(t.getMiddle()[0] - t1.getMiddle()[0]) <= 5) && (Math.abs(t.getMiddle()[1] - t1.getMiddle()[1]) <= 5)){
+                        str += t1.getTag();
+                        contents.add(t1.getTag());
+                        break;
+                    }
+                }
+            }
+            for (int i = 0; i < contents.size(); i++) {
+                temp = str.replaceAll(contents.get(i), "");
+                count = (str.length() - temp.length()) / contents.get(i).length();
+                if (count > maximum) {
+                    maximum = count;
+                    answerTag = contents.get(i);
+                }
+            }
+            t.setTag(answerTag);
+        }
+
+        return position;
+    }
+
     public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total){
         double percent = 0;
         int credit = 0;
+        System.out.println(workers.get(0)+"ygu");
         for(int i = 0; i<workers.size(); i++){
             credit = workerService.getCredit(workers.get(i));
             percent = (double)numOfTrueTags.get(i)/total;
@@ -167,6 +240,7 @@ public class AdminImpl implements AdminService {
                     for(int i = 0; i<workers.size(); i++){
                         if(workers.get(i).equals(t.getWorkerName())){
                             numOfTrueTags.set(i,numOfTrueTags.get(i)+1);
+                            break;
                         }
                     }
                 }
@@ -190,7 +264,7 @@ public class AdminImpl implements AdminService {
         int sign;
         String name;
         for(int imgid : imgs){
-            answerTag = taskService.getTagbyWnT(workers.get(0),imgid);
+            answerTag = adminService.getFrames(taskid, imgid);
             numOfTags = answerTag.size();
             for(int i = 0;i<workers.size();i++) {
                 name = workers.get(i);
@@ -200,6 +274,7 @@ public class AdminImpl implements AdminService {
                     for(Tag t1 : tags){
                         if((Math.abs(t.getMiddle()[0]-t1.getMiddle()[0])<=5)&&(Math.abs(t.getMiddle()[1]-t1.getMiddle()[1])<=5)&&t.getTag().equals(t1.getTag())){
                             sign++;
+                            break;
                         }
                     }
                 }

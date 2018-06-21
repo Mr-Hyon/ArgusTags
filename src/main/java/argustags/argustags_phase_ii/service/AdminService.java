@@ -15,6 +15,8 @@ public interface AdminService {
 
     public int getTagNum();
 
+    public int getImageNum();
+
     public int getInitiatorNum();
 
     public int getWorkerNum();
@@ -28,6 +30,10 @@ public interface AdminService {
     public int getTaskFinishedNum();
 
     public String getAnswer(int imgid);
+
+    public List<Tag> getFrames(int taskid, int imgid);
+
+    public List<Tag> getFrameAndAnswer(int taskid, int imgid);
 
     public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total);
 
