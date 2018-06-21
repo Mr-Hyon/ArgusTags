@@ -217,7 +217,7 @@ public class AdminImpl implements AdminService {
     public ResultMessage rewardAndPunish(List<String> workers,List<Integer> numOfTrueTags,int total){
         double percent = 0;
         int credit = 0;
-        //System.out.println(workers.get(0)+"ygu");
+//        System.out.println(workers.get(0)+"ygu");
         for(int i = 0; i<workers.size(); i++){
             credit = workerService.getCredit(workers.get(i));
             percent = (double)numOfTrueTags.get(i)/total;
