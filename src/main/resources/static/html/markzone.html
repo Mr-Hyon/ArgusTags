@@ -6,6 +6,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../css/markpage.css">
+    <link rel="stylesheet" href="../css/style1.css">
 </head>
 <body background="../img/backgrounds/1@2x.jpg">
 
@@ -23,13 +24,19 @@
 <h1>Argus System Marking Section</h1>
 <br/>
 <p id="test-file-info"></p>
-<p>图片编辑区域</p>
 <p>
-    <canvas id="test-canvas" width="300" height="300"></canvas>
+    <button type="button "id="Classic_Mark" >框选/框注</button>
+</p>
+<p>
+    <button type="button "id="Total_Mark" >整体标注</button>
 </p>
 <p>
     <button id="preImage" onclick='PreviousPic()'>Previous Picture</button>
     <button id="nextImage" onclick='NextPic()'>Next Picture</button>
+</p>
+<p>图片编辑区域</p>
+<p>
+    <canvas id="test-canvas" width="300" height="300"></canvas>
 </p>
 <table width="100%" border="1px" id="mark_info">
     <caption>标注信息</caption>
@@ -41,12 +48,6 @@
     整体标注信息：<select  id="total_input">
     <option value="">None</option>
 </select>
-</p>
-<p>
-    <button type="button "id="Classic_Mark" >框选/框注</button>
-</p>
-<p>
-    <button type="button "id="Total_Mark" >整体标注</button>
 </p>
 <p>
     <button type="button" id="save_button" >保存</button>
