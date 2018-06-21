@@ -28,7 +28,7 @@
                 data:bardata,
                 xkey: 'y',
                 ykeys: ['a', 'b'],
-                labels: ['Series A', 'Series B'],
+                labels: ['每日注册人数', '每日登录人数'],
 				 barColors: [
     '#A6A6A6','#1cc09f',
     '#A8E9DC' 
