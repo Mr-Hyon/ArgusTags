@@ -227,6 +227,9 @@ public class AdminImpl implements AdminService {
             else if(percent < 0.5){
                 workerService.updateCredit(credit+2*numOfTrueTags.get(i)-total,workers.get(i));
             }
+            else if(percent == 1){
+                workerService.updateCredit(credit+total+10,workers.get(i));
+            }
         }
         return ResultMessage.SUCCESS;
     }
