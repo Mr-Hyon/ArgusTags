@@ -95,7 +95,7 @@ public class InitiatorImpl implements InitiatorService {
         TaskVO task = taskService.getByID(taskID);
         int picnum = task.getImgList().size();
         int temp = task.getProcess();
-        return ((100*temp)/(picnum*10))+"%";
+        return ((100*temp)/(picnum))+"%";
     }
 
     //得到该initiator的task总数

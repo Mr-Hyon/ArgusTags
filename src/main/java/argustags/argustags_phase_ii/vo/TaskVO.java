@@ -97,6 +97,7 @@ public class  TaskVO {
     public ArrayList<String> getWorkers(){
         String[] s1 = workers.split(" ");
         ArrayList<String> res = new ArrayList<>();
+        if(s1[0].equals("")) return res;
         for(int i = 0;i<s1.length;i++){
             res.add(s1[i]);
         }

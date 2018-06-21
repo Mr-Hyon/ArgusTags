@@ -146,6 +146,7 @@ public class AdminImpl implements AdminService {
         TaskVO vo = taskService.getByID(taskid);
         List<String> workers = vo.getWorkers();
         List<Tag> options = taskService.getTagbyWnT(workers.get(0),imgid);
+        System.out.println("length of options:"+options.size());
         int count;
         List<Tag> tags;
         for(Tag t : options) {
@@ -163,6 +164,7 @@ public class AdminImpl implements AdminService {
             if(count<5){
                 options.remove(t);
             }
+            if(options.size()==0) break;
         }
         return options;
     }
@@ -172,6 +174,7 @@ public class AdminImpl implements AdminService {
         List<String> workers = vo.getWorkers();
         List<Tag> position = adminService.getFrames(taskid, imgid);
 
+        if(position.size()==0) return position;
         if(position.get(0).getTag().equals("")) return position;
 
         String str;
