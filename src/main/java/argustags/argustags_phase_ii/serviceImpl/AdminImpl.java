@@ -264,7 +264,7 @@ public class AdminImpl implements AdminService {
         int sign;
         String name;
         for(int imgid : imgs){
-            answerTag = adminService.getFrames(taskid, imgid);
+            answerTag = adminService.getFrameAndAnswer(taskid, imgid);
             numOfTags = answerTag.size();
             for(int i = 0;i<workers.size();i++) {
                 name = workers.get(i);
