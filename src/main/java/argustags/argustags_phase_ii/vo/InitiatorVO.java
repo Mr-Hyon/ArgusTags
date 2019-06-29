@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 @Entity
 @Table(name = "initiator")
+@SecondaryTable(name="initiator_info")
 public class InitiatorVO  {
 
     @Id
@@ -22,6 +23,18 @@ public class InitiatorVO  {
     private String taskList;
     @Column(nullable = false)
     private int credit;
+    @Column(table="initiator_info")
+    private int task1rl;
+    @Column(table="initiator_info")
+    private int task2rl;
+    @Column(table="initiator_info")
+    private int pic1num;
+    @Column(table="initiator_info")
+    private int pic2num;
+    /*@Column(table="initiator_info")
+    private int task1rl;
+    @Column(table="initiator_info")
+    private int task1rl;*/
 
     public InitiatorVO(){
 
@@ -128,5 +141,37 @@ public class InitiatorVO  {
 
     public void setCredit(int credit){
         this.credit = credit;
+    }
+
+    public int getTask1rl() {
+        return task1rl;
+    }
+
+    public void setTask1rl(int task1rl) {
+        this.task1rl = task1rl;
+    }
+
+    public int getTask2rl() {
+        return task2rl;
+    }
+
+    public void setTask2rl(int task2rl) {
+        this.task2rl = task2rl;
+    }
+
+    public int getPic1num() {
+        return pic1num;
+    }
+
+    public void setPic1num(int pic1num) {
+        this.pic1num = pic1num;
+    }
+
+    public int getPic2num() {
+        return pic2num;
+    }
+
+    public void setPic2num(int pic2num) {
+        this.pic2num = pic2num;
     }
 }

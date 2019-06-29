@@ -1,0 +1,44 @@
+$("#btn1").click(function(){
+    $("#test1").slideToggle();
+    if(document.getElementById("btn1").innerHTML=="收起") {
+        document.getElementById("btn1").innerHTML = "展开"
+    }
+    else{
+        document.getElementById("btn1").innerHTML="收起"
+    }
+});
+$("#btn2").click(function(){
+    $("#test2").slideToggle();
+    if(document.getElementById("btn2").innerHTML=="展开")
+        document.getElementById("btn2").innerHTML="收起";
+    else
+        document.getElementById("btn2").innerHTML="展开";
+});
+$("#btn3").click(function(){
+    $("#test3").slideToggle();
+    if(document.getElementById("btn3").innerHTML=="展开")
+        document.getElementById("btn3").innerHTML="收起";
+    else
+        document.getElementById("btn3").innerHTML="展开";
+});
+$("#btn4").click(function(){
+    $("#test4").slideToggle();
+    if(document.getElementById("btn4").innerHTML=="展开")
+        document.getElementById("btn4").innerHTML="收起";
+    else
+        document.getElementById("btn4").innerHTML="展开";
+});
+$("#btn5").click(function(){
+    $("#test5").slideToggle();
+    if(document.getElementById("btn5").innerHTML=="展开")
+        document.getElementById("btn5").innerHTML="收起";
+    else
+        document.getElementById("btn5").innerHTML="展开";
+});
+$("#btn6").click(function(){
+    $("#test6").slideToggle();
+    if(document.getElementById("btn6").innerHTML=="展开")
+        document.getElementById("btn6").innerHTML="收起";
+    else
+        document.getElementById("btn6").innerHTML="展开";
+});

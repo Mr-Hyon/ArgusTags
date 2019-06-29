@@ -52,6 +52,16 @@ public class pageController {
         return "taskrl";
     }
 
+    @RequestMapping("/detailMesIni")
+    String page5(){
+        return "detailMesIni";
+    }
+
+    @RequestMapping("/detailMesWor")
+    String page6(){
+        return "detailMesWor";
+    }
+
     @PostMapping(value = "/login", produces="application/text; charset=utf-8")
     @ResponseBody
     public String login(@RequestParam("username") String username,

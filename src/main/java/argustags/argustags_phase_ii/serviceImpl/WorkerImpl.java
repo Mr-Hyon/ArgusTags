@@ -64,6 +64,16 @@ public class WorkerImpl implements WorkerService {
                 worker.setPassword(password);
                 worker.setCredit(100);
                 worker.setTaskList(li);
+                worker.setTask1acc(0);
+                worker.setTask2acc(0);
+                worker.setTask1fin(0);
+                worker.setTask2fin(0);
+                worker.setReward1get(0);
+                worker.setReward2get(0);
+                worker.setPic1done(0);
+                worker.setPic2done(0);
+                worker.setPic1corr(0);
+                worker.setPic2corr(0);
                 workerRepository.saveAndFlush(worker);
                 return ResultMessage.SUCCESS;
 //            }

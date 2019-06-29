@@ -54,6 +54,10 @@ public class InitiatorImpl implements InitiatorService {
                 initiator.setPassword(password);
                 initiator.setCredit(10240);
                 initiator.setTaskList(li);
+                initiator.setPic1num(0);
+                initiator.setPic2num(0);
+                initiator.setTask1rl(0);
+                initiator.setTask2rl(0);
                 initiatorRepository.saveAndFlush(initiator);
                 return ResultMessage.SUCCESS;
 //            }

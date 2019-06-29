@@ -9,6 +9,12 @@ body {
 
 strong { font-weight: 500; }
 
+div.pos_fixed{
+    position:sticky;
+    top:30px;
+    left:50px;
+}
+
 a, a:hover, a:focus {
     color: #66d6c5;
     text-decoration: none;
@@ -19,7 +25,7 @@ h1, h2 {
     margin-top: 10px;
     font-size: 38px;
     font-weight: 100;
-    color: #0fcdf6;
+    color: white;
     line-height: 50px;
 }
 
@@ -28,6 +34,11 @@ h3 {
     font-weight: 300;
     color: #555;
     line-height: 30px;
+}
+
+p {
+    font-family:"Times New Roman",Times,serif;
+    font-size:20px;
 }
 
 img { max-width: 100%; }

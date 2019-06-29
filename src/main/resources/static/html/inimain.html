@@ -35,6 +35,10 @@
         <p id="taskon" style="text-align:center;"></p>
         <p id="ptscost" style="text-align:center;"></p>
         <div>
+            <button id="detailmes" class="btn btn-default " >Detail Message</button>
+        </div>
+        <br>
+        <div>
             <button id="logout" class="btn btn-default " >Log out</button>
         </div>
     </div>
@@ -171,6 +175,9 @@
         window.location="http://localhost:8080"
     }
 
+    document.getElementById('detailmes').onclick=function (e) {
+        window.location="http://localhost:8080/detailMesIni"
+    }
 
     document.getElementById('rltask').onclick=function (e) {
         window.location="http://localhost:8080/releaseTask"

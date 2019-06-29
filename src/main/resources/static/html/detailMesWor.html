@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:style="http://www.w3.org/1999/xhtml" xmlns:float="http://www.w3.org/1999/xhtml"
+      style="height:100%;width:100%" xmlns:position="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>Argus Worker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/form.css">
+    <link rel="stylesheet" href="../css/Style.css">
+    <link rel="stylesheet" href="../css/bootstrap.css">
+    <script src="../js/jquery-1.8.2.min.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/jquery-1.8.2.min.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+</head>
+
+<body style="height: 100%;width:100%">
+
+<div class="page-container" style="height:100%;width:100%">
+
+    <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
+        <div class="pos_fixed">
+        <h1 style="color: white"><strong>Argus</strong> System</h1>
+        <p ><img src="../img/tx.jpg" style="height:10%;width:50%"> </p>
+            <div class="form-top-divider" ></div>
+            <br>
+        <p id="UserName" style="text-align:left;width:100%"><strong>&emsp;&emsp;用&emsp;&emsp;&emsp;户&emsp;：</strong></p>
+        <p id="Credit" style="text-align:left;width:100%"><strong>&emsp;&emsp;积&emsp;&emsp;&emsp;分&emsp;：</strong></p>
+        <p id="OngoingNum" style="text-align:left;width:100%"><strong>&emsp;&emsp;进行中任务数：</strong></p>
+        <p id="taskfn" style="text-align:left;width:100%"><strong>&emsp;&emsp;已完成任务数：</strong></p>
+            <br><br><br><br><br><br><br><br>
+        <div >
+            <button id="backtomain" class="btn1 btn-default " >Back to main</button>
+        </div>
+        <br>
+        <div>
+            <button id="logout" class="btn1 btn-default " >Log out</button>
+        </div>
+        </div>
+    </div>
+    <div style="height:100%;width: 75%;float:right;overflow: auto">
+    <div class="col-md-4 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                任务接取数
+                <button id="btn1" class="btn btn-info btn-xs" style="float: right">收起</button>
+            </div>
+            <div class="panel-body" id="test1">
+                <div id="Taskac"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                任务完成数
+                <button id="btn2" class="btn btn-info btn-xs" style="float: right">收起</button>
+            </div>
+            <div class="panel-body" id="test2">
+                <div id="Taskfin"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                获取的报酬
+                <button id="btn3" class="btn btn-info btn-xs" style="float: right">收起</button>
+            </div>
+            <div class="panel-body" id="test3">
+                <div id="Payment"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                正确率变化（%）
+                <button id="btn4" class="btn btn-info btn-xs" style="float: right">收起</button>
+            </div>
+            <div class="panel-body" id="test4">
+                <div id="CorRate-line"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                标注速度（张/天）
+                <button id="btn5" class="btn btn-info btn-xs" style="float: right">收起</button>
+            </div>
+            <div class="panel-body" id="test5">
+                <div id="Speed-line"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                获取报酬（分）
+                <button id="btn6" class="btn btn-info btn-xs" style="float: right">收起</button>
+            </div>
+            <div class="panel-body" id="test6">
+                <div id="Payment-line"></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<script>
+
+    var name=$.cookie("username");
+
+    var userData = null
+
+    $.ajax({
+        url: 'http://localhost:8080/getWorkerInfo',
+        type: 'post',
+        async: false,
+        data: {
+            username:name
+        },
+        success: function (data) {
+            userData = data
+        },
+        error: function() {
+            alert('fail')
+        }
+    })
+
+    var userObj = JSON.parse(userData)
+
+    var credit = userObj.credit
+    var ongoing = userObj.numOfTasks
+
+    document.getElementById("UserName").innerHTML+=name;
+    document.getElementById("Credit").innerHTML+=credit;
+    document.getElementById("OngoingNum").innerHTML+=ongoing;
+    document.getElementById("taskfn").innerHTML+=ongoing;
+
+
+    document.getElementById('backtomain').onclick=function (e) {
+        window.location="http://localhost:8080/workerHome"
+    }
+    document.getElementById('logout').onclick=function (e) {
+        window.location="http://localhost:8080"
+    }
+    var Taskac=[{
+        label: "整体标注",
+        value: 32
+    }, {
+        label: "方框框选",
+        value: 21
+    }, {
+        label: "方框标注",
+        value: 17
+    }];
+
+    var Taskfin=[{
+        label: "整体标注",
+        value: 30
+    }, {
+        label: "方框框选",
+        value: 19
+    }, {
+        label: "方框标注",
+        value: 16
+    }];
+
+    var Payment=[{
+        label: "整体标注",
+        value: 35558
+    }, {
+        label: "方框框选",
+        value: 20222
+    }, {
+        label: "方框标注",
+        value: 20265
+    }];
+
+    var CorRate_line=[
+        { y: '2019-03', a: 95, b: 88,c:76},
+        { y: '2019-04', a: 92, b: 85,c:72},
+        { y: '2019-05', a: 94, b: 79,c:65},
+        { y: '2019-06', a: 89, b: 82,c:68},
+        { y: '2019-07', a: 93, b: 85,c:71},
+        { y: '2019-08', a: 97, b: 80,c:80}
+    ];
+
+    var Speed_line=[
+        { y: '2019-03', a: 25, b: 26,c:11},
+        { y: '2019-04', a: 32, b: 21,c:15},
+        { y: '2019-05', a: 47, b: 19,c:19},
+        { y: '2019-06', a: 34, b: 26,c:16},
+        { y: '2019-07', a: 25, b: 23,c:12},
+        { y: '2019-08', a: 22, b: 17,c:9}
+    ];
+
+    var Payment_line=[
+        { y: '2019-03', a: 5025, b: 4012,c:3109},
+        { y: '2019-04', a: 6575, b: 3364,c:3420},
+        { y: '2019-05', a: 7285, b: 2854,c:4023},
+        { y: '2019-06', a: 6715, b: 3820,c:3518},
+        { y: '2019-07', a: 5066, b: 3562,c:3352},
+        { y: '2019-08', a: 4792, b: 2610,c:2843}
+    ];
+
+
+
+</script>
+<!-- jQuery Js -->
+<script src="../js/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="../js/bootstrap.min.js"></script>
+<!-- Metis Menu Js -->
+<script src="../js/jquery.metisMenu.js"></script>
+<!-- Morris Chart Js -->
+<script src="../js/morris/raphael-2.1.0.min.js"></script>
+<script src="../js/morris/morris.js"></script>
+<!-- Custom Js -->
+<script src="../js/custom-scripts-wor.js"></script>
+<script src="../js/test.js"></script>
+</body>
+</html>

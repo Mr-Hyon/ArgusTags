@@ -14,15 +14,99 @@
                     $('div.sidebar-collapse').removeClass('collapse')
                 }
             });
+            /* MORRIS DONUT CHART
+			----------------------------------------*/
+            Morris.Donut({
+                element: 'Taskrl',
+                data: Taskrl,
+                colors: [
+                    '#A6A6A6','#1cc09f',
+                    '#A8E9DC'
+                ],
+                resize: true
+            });
 
+            Morris.Donut({
+                element: 'Picnum',
+                data: Picnum,
+                colors: [
+                    '#A6A6A6','#1cc09f',
+                    '#A8E9DC'
+                ],
+                resize: true
+            });
+
+            Morris.Donut({
+                element: 'Payment',
+                data: Payment,
+                colors: [
+                    '#A6A6A6','#1cc09f',
+                    '#A8E9DC'
+                ],
+                resize: true
+            });
+
+            /* MORRIS LINE CHART
+			----------------------------------------*/
+            Morris.Line({
+                element: 'Payment-line',
+                data: Payment_line,
+
+
+                xkey: 'y',
+                ykeys: ['a', 'b','c'],
+                labels: ['整体标注', '方框框选','方框标注'],
+                fillOpacity: 0.6,
+                hideHover: 'auto',
+                behaveLikeLine: true,
+                resize: true,
+                pointFillColors:['#ffffff'],
+                pointStrokeColors: ['black'],
+                lineColors:['gray','#1cc09f','#1dd08c']
+
+            });
+
+            Morris.Line({
+                element: 'Speed-line',
+                data: Speed_line,
+
+
+                xkey: 'y',
+                ykeys: ['a', 'b','c'],
+                labels: ['整体标注', '方框框选','方框标注'],
+                fillOpacity: 0.6,
+                hideHover: 'auto',
+                behaveLikeLine: true,
+                resize: true,
+                pointFillColors:['#ffffff'],
+                pointStrokeColors: ['black'],
+                lineColors:['gray','#1cc09f','#1dd08c']
+
+            });
             /* MORRIS BAR CHART
 			-----------------------------------------*/
+
+
             Morris.Bar({
-                element: 'morris-bar-chart',
+                element: 'morris-bar-chart2',
+                data:bardata2,
+                xkey: 'y',
+                ykeys: ['a', 'b','c'],
+                labels: ['整体标注', '方框框选','方框标注'],
+                barColors: [
+                    '#A6A6A6','#1cc09f',
+                    '#A8E9DC'
+                ],
+                hideHover: 'auto',
+                resize: true
+            });
+
+            Morris.Bar({
+                element: 'morris-bar-chart3',
                 data:bardata,
                 xkey: 'y',
                 ykeys: ['a', 'b'],
-                labels: ['每日注册人数', '每日登陆人数'],
+                labels: ['每日注册人数', '每日登录人数'],
                 barColors: [
                     '#A6A6A6','#1cc09f',
                     '#A8E9DC'
@@ -33,17 +117,8 @@
 
 
 
-            /* MORRIS DONUT CHART
-			----------------------------------------*/
-            Morris.Donut({
-                element: 'Users',
-                data: usersdata,
-                colors: [
-                    '#A6A6A6','#1cc09f',
-                    '#A8E9DC'
-                ],
-                resize: true
-            });
+
+
             /* MORRIS DONUT CHART
 			----------------------------------------*/
             Morris.Donut({
@@ -68,101 +143,19 @@
                 resize: true
             });
 
-            /* MORRIS BAR CHART
-           -----------------------------------------*/
-            Morris.Bar({
-                element: 'Picnum',
-                data:Picnum,
-                xkey: 'y',
-                ykeys: ['a', 'b','c'],
-                labels: ['整体标注', '方框框选','方框标注'],
-                barColors: [
+            /* MORRIS DONUT CHART
+           ----------------------------------------*/
+            Morris.Donut({
+                element: 'YYQ',
+                data: tasktypedata,
+                colors: [
                     '#A6A6A6','#1cc09f',
                     '#A8E9DC'
                 ],
-                hideHover: 'auto',
                 resize: true
             });
 
-            Morris.Bar({
-                element: 'Payment',
-                data:Payment,
-                xkey: 'y',
-                ykeys: ['a', 'b','c'],
-                labels: ['整体标注', '方框框选','方框标注'],
-                barColors: [
-                    '#A6A6A6','#1cc09f',
-                    '#A8E9DC'
-                ],
-                hideHover: 'auto',
-                resize: true
-            });
 
-            Morris.Bar({
-                element: 'Fndays',
-                data:Fndays,
-                xkey: 'y',
-                ykeys: ['a', 'b','c'],
-                labels: ['整体标注', '方框框选','方框标注'],
-                barColors: [
-                    '#A6A6A6','#1cc09f',
-                    '#A8E9DC'
-                ],
-                hideHover: 'auto',
-                resize: true
-            });
-
-            Morris.Bar({
-                element: 'Fnspeed',
-                data:Fnspeed,
-                xkey: 'y',
-                ykeys: ['a', 'b','c'],
-                labels: ['整体标注', '方框框选','方框标注'],
-                barColors: [
-                    '#A6A6A6','#1cc09f',
-                    '#A8E9DC'
-                ],
-                hideHover: 'auto',
-                resize: true
-            });
-
-            /* MORRIS LINE CHART
-			----------------------------------------*/
-            Morris.Line({
-                element: 'Analy1',
-                data: Analy1,
-
-
-                xkey: 'y',
-                ykeys: ['a', 'b','c'],
-                labels: ['整体标注', '方框框选','方框标注'],
-                fillOpacity: 0.6,
-                hideHover: 'auto',
-                behaveLikeLine: true,
-                resize: true,
-                pointFillColors:['#ffffff'],
-                pointStrokeColors: ['black'],
-                lineColors:['gray','#1cc09f']
-
-            });
-
-            Morris.Line({
-                element: 'Analy2',
-                data: Analy2,
-
-
-                xkey: 'y',
-                ykeys: ['a', 'b','c'],
-                labels: ['整体标注', '方框框选','方框标注'],
-                fillOpacity: 0.6,
-                hideHover: 'auto',
-                behaveLikeLine: true,
-                resize: true,
-                pointFillColors:['#ffffff'],
-                pointStrokeColors: ['black'],
-                lineColors:['gray','#1cc09f']
-
-            });
 
             /* MORRIS AREA CHART
 			----------------------------------------*/

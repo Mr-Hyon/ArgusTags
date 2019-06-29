@@ -13,7 +13,7 @@
 <body background="../img/backgrounds/1@2x.jpg">
 
 
-<h1>Argus System Marking Section</h1>
+<h1>Argus System viewing Section</h1>
 <br/>
 <p id="test-file-info"></p>
 <p>图片编辑区域</p>
@@ -34,6 +34,9 @@
     整体标注信息：<select  id="total_input">
     <option value="">None</option>
 </select>
+<div>
+    <button id="backtomain" class="btn btn-default " style="width: 10%">返回主页面</button>
+</div>
 </p>
 
 <script src="../js/jquery-1.8.2.min.js"></script>
@@ -291,7 +294,9 @@
             coordinate_two.pop();
         }
     }
-
+    document.getElementById('backtomain').onclick=function (e) {
+        window.location="http://localhost:8080/initiatorHome"
+    }
 
 </script>
 
