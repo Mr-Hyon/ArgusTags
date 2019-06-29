@@ -27,7 +27,7 @@
 
     <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
         <h1> <strong>Argus System</strong></h1>
-        <p><img src="../img/tx0.jpg" style="height:10%;width:50%"> </p>
+        <p><img src="../img/tx.jpg" style="height:10%;width:50%"> </p>
         <p id="test-file-info"></p>
         <div>
             <button id="backtomain" class="btn btn-default " >返回主页面</button>
@@ -109,13 +109,16 @@
 
     /** 根据任务类型锁死button **/
     if(type == 0){
-        document.getElementById('Classic_Mark').disabled = true
+        document.getElementById('Classic_Mark').disabled = true;
+        document.getElementById('Classic_Mark').style.display = "none";
     }
     else if(type == 1){
-        document.getElementById('Total_Mark').disabled = true
+        document.getElementById('Total_Mark').disabled = true;
+        document.getElementById('Total_Mark').style.display = "none";
     }
     else if(type == 2){
-        document.getElementById('Total_Mark').disabled = true
+        document.getElementById('Total_Mark').disabled = true;
+        document.getElementById('Total_Mark').style.display = "none";
     }
 
     /** 开始进行网页初始化布局 **/
@@ -163,6 +166,7 @@
             total_select.disabled = true;
             total_select.options.length = 0;
             total_select.options.add(new Option("未选择",""));
+            total_select.style.display = "none";
             var options = option.split(" ");
             for(var j=0;j<options.length;j++){
                 total_select.options.add(new Option(options[j],options[j]))
@@ -409,9 +413,11 @@
             alert("整体标注选框已解锁");
             marked_num++;
             totalInput.disabled = false;
+            totalInput.style.display = "";
         }else{
             alert("整体标注选框已锁定");
             totalInput.disabled = true;
+            totalInput.style.display = "none";
         }
     }
 
