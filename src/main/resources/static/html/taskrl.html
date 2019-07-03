@@ -30,22 +30,25 @@
         <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
             <h1> <strong>Argus System</strong></h1>
             <p><img src="../img/tx0.jpg" style="height:10%;width:50%"> </p>
-            <p id="username" style="text-align:center;"></p>
-            <p id="pts" style="text-align:center;"></p>
-            <p id="tasknum" style="text-align:center;"></p>
-            <p id="taskfn" style="text-align:center;"></p>
-            <p id="taskon" style="text-align:center;"></p>
-            <p id="ptscost" style="text-align:center;"></p>
+            <div class="form-top-divider" ></div>
+            <br>
+            <p id="username" style="text-align:left;width:100%"><strong>&emsp;&emsp;用&emsp;&emsp;&emsp;户&emsp;：</strong></p>
+            <p id="pts" style="text-align:left;width:100%"><strong>&emsp;&emsp;积&emsp;&emsp;&emsp;分&emsp;：</strong></p>
+            <p id="tasknum" style="text-align:left;width:100%"><strong>&emsp;&emsp;已发布任务数：</strong></p>
+            <p id="taskfn" style="text-align:left;width:100%"><strong>&emsp;&emsp;已完成任务数：</strong></p>
+            <p id="taskon" style="text-align:left;width:100%"><strong>&emsp;&emsp;进行中任务数：</strong></p>
+            <p id="ptscost" style="text-align:left;width:100%"><strong>&emsp;&emsp;已花费积分数：</strong></p>
+            <br><br>
             <div>
-                <button id="backtomain" class="btn btn-default " >Back to main</button>
+                <button id="backtomain" class="btn1 btn-default " >Back to main</button>
             </div>
             <br>
             <div>
-                <button id="logout" class="btn btn-default " >Log out</button>
+                <button id="logout" class="btn1 btn-default " >Log out</button>
             </div>
         </div>
 
-        <div class="col-sm-9 text" style="height:100%;width:75%">
+        <div class="col-sm-9 text" style="height:100%;width:75%;float:right;overflow: auto">
     <div class="form_content">
     <fieldset style="width:500px;">
 
@@ -83,9 +86,29 @@
     </fieldset>
     </div>
     <div style="text-align:center;">
-        <button id="release" class="btn btn-default btn-lg" style="width:10%" >发布任务</button>
+        <button id="release" class="btn1 btn-default btn-lg" style="width:10%" >发布任务</button>
     </div>
 </div>
+        <div class="modal fade bd-example-modal-sm"  id="suc" role="dialog" data-backdrop="false"  aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <p class="text-center mb-0">
+                        <i class="fa fa-check-circle text-success mr-1" aria-hidden="true"></i>
+                        发布成功
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade bd-example-modal-sm"  id="fail1" role="dialog" data-backdrop="false"  aria-hidden="true">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <p class="text-center mb-0">
+                        <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                        发布失败！请检查内容是否填写准确！
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
 <script>
@@ -132,11 +155,11 @@
         var result = release(name,method,dscb,obj,ddl, file);
 
         if (result == "success") {
-            alert('发布成功！')
+            suc();
             window.location = "http://localhost:8080/initiatorHome"
         }
         else {
-            alert('发布失败！请检查内容是否填写准确！')
+            fail1();
         }
     }
         //var jsonstr=JSON.stringify(JSONObject);
@@ -179,5 +202,9 @@
         window.location="http://localhost:8080"
     }
 </script>
+    <script src="../js/jquery-1.10.2.js"></script>
+    <!-- Bootstrap Js -->
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/test.js"></script>
 </body>
 </html>

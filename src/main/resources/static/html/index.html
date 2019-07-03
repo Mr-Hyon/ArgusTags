@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="../css/Style.css">
-
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -66,19 +66,53 @@
                             <label class="sr-only" for="password">Password</label>
                             <input type="password"  placeholder="Password" class="form-last-name form-control" id="password" style="    width:300px;">
                         </div>
-                        <button id="signin" class="btn" style="    width:300px;">Sign me in!</button>
+                        <button id="signin" class="btn1" style="    width:300px;">Sign me in!</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade bd-example-modal-sm"  id="suc" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-check-circle text-success mr-1" aria-hidden="true"></i>
+                    提交成功
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail1" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    请输入用户名！
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail2" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    请输入密码！
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail3" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    用户不存在或密码错误
+                </p>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
-
-
-<script src="../js/jquery-1.8.2.min.js"></script>
-<script src="../js/scripts.js"></script>
-<script src="../js/jquery.cookie.js"></script>
 
 <script>
 
@@ -93,9 +127,9 @@
         var type=document.getElementById('identity').value;
 
         if(name==""||name==null)
-            alert('请输入用户名！');
+            fail1();
         else if(pw==""||pw==null)
-            alert('请输入密码！');
+            fail2();
 
         else{
             //alert("trying to send request")
@@ -114,7 +148,7 @@
                 }
             }
             else{
-                alert("用户不存在或密码错误")
+                fail3();
             }
         }
     }
@@ -142,5 +176,11 @@
     }
 
 </script>
+<script src="../js/jquery-1.10.2.js"></script>
+<script src="../js/scripts.js"></script>
+<script src="../js/jquery.cookie.js"></script>
+<!-- Bootstrap Js -->
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/test.js"></script>
 </body>
 </html>

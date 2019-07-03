@@ -28,22 +28,25 @@
     <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
         <h1> <strong>Argus System</strong></h1>
         <p><img src="../img/tx0.jpg" style="height:10%;width:50%"> </p>
-        <p id="username" style="text-align:center;"></p>
-        <p id="pts" style="text-align:center;"></p>
-        <p id="tasknum" style="text-align:center;"></p>
-        <p id="taskfn" style="text-align:center;"></p>
-        <p id="taskon" style="text-align:center;"></p>
-        <p id="ptscost" style="text-align:center;"></p>
+        <div class="form-top-divider" ></div>
+        <br>
+        <p id="username" style="text-align:left;width:100%"><strong>&emsp;&emsp;用&emsp;&emsp;&emsp;户&emsp;：</strong></p>
+        <p id="pts" style="text-align:left;width:100%"><strong>&emsp;&emsp;积&emsp;&emsp;&emsp;分&emsp;：</strong></p>
+        <p id="tasknum" style="text-align:left;width:100%"><strong>&emsp;&emsp;已发布任务数：</strong></p>
+        <p id="taskfn" style="text-align:left;width:100%"><strong>&emsp;&emsp;已完成任务数：</strong></p>
+        <p id="taskon" style="text-align:left;width:100%"><strong>&emsp;&emsp;进行中任务数：</strong></p>
+        <p id="ptscost" style="text-align:left;width:100%"><strong>&emsp;&emsp;已花费积分数：</strong></p>
+        <br><br>
         <div>
-            <button id="detailmes" class="btn btn-default " >Detail Message</button>
+            <button id="detailmes" class="btn1 btn-default " >Detail Message</button>
         </div>
         <br>
         <div>
-            <button id="logout" class="btn btn-default " >Log out</button>
+            <button id="logout" class="btn1 btn-default " >Log out</button>
         </div>
     </div>
 
-    <div class="col-sm-9 text" style="height:100%;width:75%">
+    <div class="col-sm-9 text" style="height:100%;width:75%;float:right;overflow: auto">
         <br>
         <p id="task"  style="text-align:center;"></p>
         <HR   width="80%" color=#000000 SIZE=3>
@@ -57,7 +60,7 @@
         </div>
         </br>
         <div style="text-align:center;">
-            <button id="rltask" class="btn btn-default btn-lg" style="width:50%"  >发布新任务</button>
+            <button id="rltask" class="btn1 btn-default btn-lg" style="width:50%"  >发布新任务</button>
         </div>
     </div>
 </div>
@@ -107,9 +110,9 @@
 
         $(cell5).append($(y).append($(z).css("width",x)))
         if(x=="100%")
-            cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn btn-default\" >进入任务</button>"
+            cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn1 btn-default\" >进入任务</button>"
         else
-            cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn btn-default\" disabled>不可查看</button>"
+            cell7.innerHTML = "<button id='SelectTask'  onclick='SelectTask(this)' class=\"btn1 btn-default\" disabled>不可查看</button>"
         document.getElementById('SelectTask').id = id
     }
     var userData = null

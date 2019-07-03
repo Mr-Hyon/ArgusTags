@@ -9,9 +9,19 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+
     <link rel="stylesheet" href="../css/bootstrap.css">
     <link rel="stylesheet" href="../css/form.css">
     <link rel="stylesheet" href="../css/Style.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+    <style>
+        .modal-content {
+        // 宽度自适应内容
+        width: fit-content;
+        // 流出间隙
+        padding: 0.2rem 0.4rem;
+        }
+    </style>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -72,36 +82,96 @@
                             </div>
 
                         </form>
-                        <button id="register" class="btn" style="    width:300px;">Register</button>
+                        <button id="register" class="btn1" style="    width:300px;">Register</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <div class="modal fade bd-example-modal-sm"  id="suc" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-check-circle text-success mr-1" aria-hidden="true"></i>
+                    提交成功
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail1" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    请输入用户名！
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail2" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    请输入密码！
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail3" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    请重新输入密码！
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail4" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    两次输入密码不一致！请重新输入！
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="fail5" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    用户名已被使用，请重新输入！
+                </p>
+            </div>
+        </div>
+    </div>
+
 
 </div>
-
-<script src="../js/jquery-1.8.2.min.js"></script>
-<script src="../js/scripts.js"></script>
 
 <script>
     document.getElementById('signin').onclick = function (e) {
         //alert("Hello");
         window.location = 'http://localhost:8080/';
     }
+
+
     document.getElementById('register').onclick=function (e) {
         var type =document.getElementById('identity').value;
         var name=document.getElementById('username').value;
         var pw=document.getElementById('password').value;
         var repw=document.getElementById('repassword').value;
         if(name==""||name==null)
-            alert('请输入用户名！');
+            fail1();
         else if(pw==""||pw==null)
-            alert('请输入密码！');
+            fail2() ;
         else if(repw==''||repw==null)
-            alert('请重新输入密码！');
+            fail3() ;
         else if(pw!=repw){
-            alert('两次输入密码不一致！请重新输入！');
+           fail4();
             document.getElementById('password').value="";
             document.getElementById('repassword').value="";
         }
@@ -109,11 +179,12 @@
             //alert("trying to send request")
             var result = register(name,pw,type)
             if(result == "success"){
-                alert("注册成功！")
-                window.location = "http://localhost:8080/"
+                suc();
+                setTimeout(window.location = "http://localhost:8080/",5000)
+
             }
             else{
-                alert("用户名已被使用，请重新输入！")
+                fail5();
                 document.getElementById('username').value="";
             }
         }
@@ -134,11 +205,14 @@
                 res = data
             },
             error: function() {
-                alert('fail')
             }
         })
         return res
     }
 </script>
+<script src="../js/jquery-1.10.2.js"></script>
+<!-- Bootstrap Js -->
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/test.js"></script>
 </body>
 </html>

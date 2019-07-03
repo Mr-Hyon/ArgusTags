@@ -26,21 +26,25 @@
 
 <div class="page-container" style="height:100%;width:100%">
 
-    <div class="col-sm-3 text" style="background-color: #996699;height:200%;width:25%">
+    <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
         <h1> <strong>Argus System</strong></h1>
-        <p id="usernum" style="text-align:center;"></p>
-        <p id="ininum" style="text-align:center;"></p>
-        <p id="workernum" style="text-align:center;"></p>
-        <p id="tasknum" style="text-align:center;"></p>
-        <p id="taskon" style="text-align:center;"></p>
-        <p id="taskfn" style="text-align:center;"></p>
-        <p id="imagenum" style="text-align:center;"></p>
+        <br>
+        <div class="form-top-divider" ></div>
+        <br>
+        <p id="usernum" style="text-align:left;width:100%"><strong>&emsp;&emsp;用户数量&emsp;：</strong></p>
+        <p id="ininum" style="text-align:left;width:100%"><strong>&emsp;&emsp;发起者数量：</strong></p>
+        <p id="workernum" style="text-align:left;width:100%"><strong>&emsp;&emsp;工人数量&emsp;：</strong></p>
+        <p id="tasknum" style="text-align:left;width:100%"><strong>&emsp;&emsp;任务数量&emsp;：</strong></p>
+        <p id="taskon" style="text-align:left;width:100%"><strong>&emsp;&emsp;进行中任务：</strong></p>
+        <p id="taskfn" style="text-align:left;width:100%"><strong>&emsp;&emsp;已完成任务：</strong></p>
+        <p id="imagenum" style="text-align:left;width:100%"><strong>&emsp;&emsp;图片数量&emsp;：</strong></p>
+        <br><br><br><br><br><br><br><br><br>
         <div>
-            <button id="logout" class="btn btn-default " >Log out</button>
+            <button id="logout" class="btn1 btn-default " >Log out</button>
         </div>
         <br>
     </div>
-    <div class="col-md-9 text">
+    <div style="height:100%;width: 75%;float:right;overflow: auto">
         <div class="col-md-12 text">
             <p>会员管理</p>
         </div>
@@ -49,8 +53,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     注册与登陆
+                    <button id="btn1" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test1">
                     <div id="morris-bar-chart"></div>
                 </div>
             </div>
@@ -62,8 +67,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Users
+                    <button id="btn2" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test2">
                     <div id="Users"></div>
                 </div>
             </div>
@@ -72,8 +78,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Task Status
+                    <button id="btn3" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test3">
                     <div id="TaskStatus"></div>
                 </div>
             </div>
@@ -82,8 +89,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     Task Type
+                    <button id="btn4" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test4">
                     <div id="TaskType"></div>
                 </div>
             </div>
@@ -92,8 +100,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     平均图片数量（张）
+                    <button id="btn5" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test5">
                     <div id="Picnum"></div>
                 </div>
             </div>
@@ -102,8 +111,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     平均报酬数量（分/（张*人））
+                    <button id="btn6" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test6">
                     <div id="Payment"></div>
                 </div>
             </div>
@@ -112,8 +122,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     平均完成时间
+                    <button id="btn7" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test7">
                     <div id="Fndays"></div>
                 </div>
             </div>
@@ -122,8 +133,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     平均标注速度
+                    <button id="btn8" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test8">
                     <div id="Fnspeed"></div>
                 </div>
             </div>
@@ -135,8 +147,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     报酬数量与标注速度关系
+                    <button id="btn9" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test9">
                     <div id="Analy1"></div>
                 </div>
             </div>
@@ -145,8 +158,9 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     图片数量与完成时间关系
+                    <button id="btn10" class="btn btn-info btn-xs" style="float: right">收起</button>
                 </div>
-                <div class="panel-body">
+                <div class="panel-body" id="test10">
                     <div id="Analy2"></div>
                 </div>
             </div>
@@ -184,13 +198,13 @@
     var num8=Obj.type1num;
     var num9=Obj.type2num;
 
-    document.getElementById('usernum').innerHTML="系统用户数："+num0;
-    document.getElementById('ininum').innerHTML="众包发起者数："+num1;
-    document.getElementById('workernum').innerHTML="众包工人数："+num2;
-    document.getElementById('tasknum').innerHTML="系统任务数："+num3;
-    document.getElementById('taskon').innerHTML="进行中任务数："+num4;
-    document.getElementById('taskfn').innerHTML="已完成任务数："+num5;
-    document.getElementById('imagenum').innerHTML="总图片张数："+num6;
+    document.getElementById('usernum').innerHTML+=num0;
+    document.getElementById('ininum').innerHTML+=num1;
+    document.getElementById('workernum').innerHTML+=num2;
+    document.getElementById('tasknum').innerHTML+=num3;
+    document.getElementById('taskon').innerHTML+=num4;
+    document.getElementById('taskfn').innerHTML+=num5;
+    document.getElementById('imagenum').innerHTML+=num6;
 
     document.getElementById('logout').onclick=function (e) {
         window.location="http://localhost:8080"
@@ -364,6 +378,7 @@
 <script src="../js/morris/morris.js"></script>
 <!-- Custom Js -->
 <script src="../js/custom-scripts.js"></script>
+<script src="../js/test.js"></script>
 
 </body>
 </html>
