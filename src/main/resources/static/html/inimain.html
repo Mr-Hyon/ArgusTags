@@ -139,12 +139,12 @@
     var num1=userObj.taskfn;
     var num2=userObj.taskog;
     var pts1=userObj.creditcost;
-    document.getElementById('username').innerHTML=name;
-    document.getElementById('pts').innerHTML="剩余积分："+pts0;
-    document.getElementById('tasknum').innerHTML="发布任务总数："+num0;
-    document.getElementById('taskfn').innerHTML="已完成任务数："+num1;
-    document.getElementById('taskon').innerHTML="进行中任务数："+num2;
-    document.getElementById('ptscost').innerHTML="花费积分数："+pts1;
+    document.getElementById('username').innerHTML+=name;
+    document.getElementById('pts').innerHTML+=pts0;
+    document.getElementById('tasknum').innerHTML+=num0;
+    document.getElementById('taskfn').innerHTML+=num1;
+    document.getElementById('taskon').innerHTML+=num2;
+    document.getElementById('ptscost').innerHTML+=pts1;
 
     for(var i=1 ; i<=TaskJsonObjArray[0].num ; i++){
        var TaskId = TaskJsonObjArray[i].id

@@ -12,8 +12,10 @@
     <link href="../css/form.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/Style.css">
     <link href="../css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
     <script src="../js/jquery-1.8.2.min.js"></script>
-    <script src="../js/jquery.cookie.js"></script>
+
+
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -125,7 +127,7 @@
             userData = data
         },
         error: function() {
-            alert('fail')
+            //alert('fail')
         }
     })
 
@@ -136,12 +138,12 @@
     var num1=userObj.taskfn;
     var num2=userObj.taskog;
     var pts1=userObj.creditcost;
-    document.getElementById('username').innerHTML=name;
-    document.getElementById('pts').innerHTML="剩余积分："+pts0;
-    document.getElementById('tasknum').innerHTML="发布任务总数："+num0;
-    document.getElementById('taskfn').innerHTML="已完成任务数："+num1;
-    document.getElementById('taskon').innerHTML="进行中任务数："+num2;
-    document.getElementById('ptscost').innerHTML="花费积分数："+pts1;
+    document.getElementById('username').innerHTML+=name;
+    document.getElementById('pts').innerHTML+=pts0;
+    document.getElementById('tasknum').innerHTML+=num0;
+    document.getElementById('taskfn').innerHTML+=num1;
+    document.getElementById('taskon').innerHTML+=num2;
+    document.getElementById('ptscost').innerHTML+=pts1;
     document.getElementById('release').onclick = function (e) {
         var method = document.getElementById('taskmethod').value;
         var dscb = document.getElementById('taskdscb').value;
@@ -186,10 +188,10 @@
            enctype:'multipart/form-data',
             success: function (data) {
                 res = data
-                alert(data)
+                //alert(data)
             },
             error: function() {
-                alert('request fail!')
+                //alert('request fail!')
             }
         })
         return res;
@@ -203,6 +205,7 @@
     }
 </script>
     <script src="../js/jquery-1.10.2.js"></script>
+    <script src="../js/jquery.cookie.js"></script>
     <!-- Bootstrap Js -->
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/test.js"></script>

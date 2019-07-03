@@ -89,9 +89,10 @@
     var credit = userObj.credit
     var ongoing = userObj.numOfTasks
 
-    document.getElementById("UserName").innerHTML="用户:"+name;
-    document.getElementById("Credit").innerHTML="积分："+credit;
-    document.getElementById("OngoingNum").innerHTML="进行中任务数："+ongoing;
+    document.getElementById("UserName").innerHTML+=name;
+    document.getElementById("Credit").innerHTML+=credit;
+    document.getElementById("OngoingNum").innerHTML+=ongoing;
+    //document.getElementById('task').innerHTML+=ongoing;
 
     var table_info = document.getElementById('ongoing_task')
 
