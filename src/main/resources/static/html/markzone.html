@@ -25,32 +25,33 @@
 
 <div class="page-container" style="height:100%;width:100%">
 
-    <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
+    <div id="left-area" class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
         <h1> <strong>Argus System</strong></h1>
         <p><img src="../img/tx.jpg" style="height:10%;width:50%"> </p>
-        <p id="test-file-info"></p>
+        <div class="form-top-divider" ></div>
+        <br>
+        <p id="test-file-info" style="text-align:left;width:100%"></p>
         <p id="location_bar"></p>
+        <br><br><br><br><br>
         <div>
-            <button id="backtomain" class="btn btn-default " >返回主页面</button>
+            <button id="backtomain" class="btn1 btn-default " >返回主页面</button>
         </div>
     </div>
 
-    <div class="col-sm-9 text" style="height:100%;width:75%">
+    <div id="right-area" class="col-sm-9 text" style="height:100%;width:75%;overflow: auto">
         <h1>Argus System Marking Section</h1>
         <br/>
     <p>
-        <button type="button " id="Classic_Mark" class="btn btn-default" style="width: 10%;height:40px">框选/框注</button>
+        <button type="button " id="Classic_Mark" class="btn1 btn-default" style="width: 10%;height:40px">框选/框注</button>
     </p>
     <p>
-        <button type="button " id="Total_Mark" class="btn btn-default" style="width: 10%;height:40px">整体标注</button>
+        <button type="button " id="Total_Mark" class="btn1 btn-default" style="width: 10%;height:40px">整体标注</button>
     </p>
-    <p>
-        <button id="preImage" onclick='PreviousPic()' class="btn btn-default" style="width: 10%">上一张</button>
-        <button id="nextImage" onclick='NextPic()' class="btn btn-default" style="width: 10%">下一张</button>
-    </p>
-    <p>
-        跳转至第<select  id="pic_index" class="btn btn-default" style="width: 10%">
-                </select>张
+    <p style="font-size:20px">
+        <button id="preImage" onclick='PreviousPic()' class="btn1 btn-default" style="width: 10%;height:40px">上一张</button>
+            跳转至第<select  id="pic_index" class="btn1 btn-default" style="width: 10%">
+        </select>张
+        <button id="nextImage" onclick='NextPic()' class="btn1 btn-default" style="width: 10%;height:40px">下一张</button>
     </p>
     <p>图片编辑区域</p>
     <p>
@@ -62,14 +63,14 @@
             <td>区域编号</td><td>标注信息</td>
         </tr>
     </table>
-    <p>
-        整体标注信息：<select  id="total_input" class="btn btn-default" style="width: 10%">
+    <p id="total_input_section">
+        整体标注信息：<select  id="total_input" class="btn1 btn-default" style="width: 10%">
                             <option value="">None</option>
                         </select>
     </p>
     <br>
     <p>
-        <button type="button" id="save_button"  class="btn btn-default" style="width: 10%">保存</button>
+        <button type="button" id="save_button"  class="btn1 btn-default" style="width: 10%">保存</button>
     </p>
     </div>
 </div>
@@ -116,6 +117,7 @@
     if(type == 0){
         document.getElementById('Classic_Mark').disabled = true;
         document.getElementById('Classic_Mark').style.display = "none";
+        document.getElementById('mark_info').style.display="none";
     }
     else if(type == 1){
         document.getElementById('Total_Mark').disabled = true;
@@ -156,8 +158,8 @@
         //}
         var type_to_show='';
         if(type==0) type_to_show='整体标注';
-        else if(type==0) type_to_show='方框框选';
-        else if(type==0) type_to_show='方框框注';
+        else if(type==1) type_to_show='方框框选';
+        else if(type==2) type_to_show='方框框注';
         var y="<div class=\"progress progress-striped active\"></div>"
         var z="<div class=\"progress-bar progress-bar-primary\" role=\"progressbar\" aria-valuenow=\"40\" aria-valuemin=\"0\" aria-valuemax=\"100\"></div>"
         var progress_bar = document.getElementById('location_bar');
@@ -167,16 +169,16 @@
             $(index_select).append("<option value='"+(i+1).toString()+"'>"+(i+1).toString()+"</option>");
         }
         $(index_select).val(current_pic_index+1);
-        document.getElementById('test-file-info').innerHTML = '任 务 名 称：'+ taskName +'<br>'+
-            '任 务 类 型 ：'+ type_to_show +'<br>'+
-            '任 务 描 述 ：'+ disb +'<br>'+'<br>'+
-            '注 意 事 项 ：'+ '1.进入标注界面后请点击下方的按钮来解锁标注功能并进行标注。' +'<br>'+
+        document.getElementById('test-file-info').innerHTML = '<strong>'+'任 务 名 称 ：'+'</strong>'+ taskName +'<br>'+
+            '<strong>'+'任 务 类 型 ：'+'</strong>'+ type_to_show +'<br>'+
+            '<strong>'+'任 务 描 述 ：'+'</strong>'+ disb +'<br>'+'<br>'+
+            '<strong>'+'注 意 事 项 ：'+'</strong>'+'<br>'+ '1.进入标注界面后请点击下方的按钮来解锁标注功能并进行标注。' +'<br>'+
             '               2.请在标注完一张图片后及时保存，以免在切换图片后进度丢失。' +'<br>'+'<br>'+
-            '图 片 数 量 ：'+ jsonData.length + '<br>'+
-            '当前图片编号：'+ (pic_index+1);
+            '<strong>'+'图 片 数 量 ：'+'</strong>'+ jsonData.length + '<br>'+
+            '<strong>'+'当前图片编号：'+'</strong>'+ (pic_index+1);
         var num = (current_pic_index+1) * 1.0 /jsonData.length;
         var percent = (num*100).toString() + '%';
-        progress_bar.innerHTML = '当前位置：'+(current_pic_index+1).toString() +'/'+jsonData.length;
+        progress_bar.innerHTML = '<strong>'+'当前位置：'+'</strong>'+(current_pic_index+1).toString() +'/'+jsonData.length;
         $(progress_bar).append($(y).append($(z).css("width",percent)));
 
         if(type == 0){
@@ -187,6 +189,7 @@
             total_select.options.length = 0;
             total_select.options.add(new Option("未选择",""));
             total_select.style.display = "none";
+            document.getElementById("total_input_section").style.display="none";
             var options = option.split(" ");
             for(var j=0;j<options.length;j++){
                 total_select.options.add(new Option(options[j],options[j]))
@@ -197,10 +200,16 @@
         else if(type == 1){
             drawTagsType1(origin_url,jsonObject.tagstart,jsonObject.tagend);
             hasImage = true;
+            var total_select = document.getElementById("total_input");
+            total_select.style.display = "none";
+            document.getElementById("total_input_section").style.display="none";
         }
         else if(type == 2){
             drawTagsType2(origin_url,jsonObject.tagstart,jsonObject.tagend,jsonObject.tagcontent);
             hasImage = true;
+            var total_select = document.getElementById("total_input");
+            total_select.style.display = "none";
+            document.getElementById("total_input_section").style.display="none";
         }
     }
 
@@ -228,7 +237,7 @@
 
     load_page(current_pic_index)     //加载图片以及相关信息
 
-    alert('单张图片标注完成后请先保存再进行上一张或下一张操作');
+    //alert('单张图片标注完成后请先保存再进行上一张或下一张操作');
 
     //oneROW=table_info.insertRow();
     //cell1=oneROW.insertCell();
@@ -244,15 +253,33 @@
         var ctx = cvs.getContext('2d');
         var img = new Image;
         img.src = imgData;
-        cvs.width=1920;
-        cvs.height=1080;
+        cvs.width=1280;
+        cvs.height=960;
         var tagstart = tagStart.split(" ")
         var tagend = tagEnd.split(" ")
 
         img.onload = function(){//必须onload之后再画
-            cvs.height=img.height;
-            cvs.width=img.width;
-            ctx.drawImage(img,0,0,img.width,img.height);
+            width_ratio = img.width/cvs.width;
+            height_ratio = img.height/cvs.width;
+            if(width_ratio <=1 && height_ratio <=1){
+                cvs.height=img.height;
+                cvs.width=img.width;
+                ctx.drawImage(img,0,0,img.width,img.height);
+            }
+            else if( width_ratio >= height_ratio){
+                img.height = img.height/width_ratio;
+                img.width = img.width/width_ratio;
+                cvs.height=img.height;
+                cvs.width=img.width;
+                ctx.drawImage(img,0,0,img.width,img.height);
+            }
+            else{
+                img.height = img.height/height_ratio;
+                img.width = img.width/height_ratio;
+                cvs.height=img.height;
+                cvs.width=img.width;
+                ctx.drawImage(img,0,0,img.width,img.height);
+            }
             for(var k = 0 ;k<tagstart.length;k++){
                 if(tagstart[k].length > 0 ){
                     var coordinate1 = tagstart[k].split(",");
@@ -274,16 +301,34 @@
         var ctx = cvs.getContext('2d');
         var img = new Image;
         img.src = imgData;
-        cvs.width=1920;
-        cvs.height=1080;
+        cvs.width=1280;
+        cvs.height=960;
         var tagstart = tagStart.split(" ")
         var tagend = tagEnd.split(" ")
         var tagcontent = tagContent.split(" ")
 
         img.onload = function(){//必须onload之后再画
-            cvs.height=img.height;
-            cvs.width=img.width;
-            ctx.drawImage(img,0,0,img.width,img.height);
+            width_ratio = img.width/cvs.width;
+            height_ratio = img.height/cvs.width;
+            if(width_ratio <=1 && height_ratio <=1){
+                cvs.height=img.height;
+                cvs.width=img.width;
+                ctx.drawImage(img,0,0,img.width,img.height);
+            }
+            else if( width_ratio >= height_ratio){
+                img.height = img.height/width_ratio;
+                img.width = img.width/width_ratio;
+                cvs.height=img.height;
+                cvs.width=img.width;
+                ctx.drawImage(img,0,0,img.width,img.height);
+            }
+            else{
+                img.height = img.height/height_ratio;
+                img.width = img.width/height_ratio;
+                cvs.height=img.height;
+                cvs.width=img.width;
+                ctx.drawImage(img,0,0,img.width,img.height);
+            }
             for(var k = 0 ;k<tagstart.length;k++){
                 if(tagstart[k].length > 0 ){
                     var coordinate1 = tagstart[k].split(",");
@@ -374,8 +419,8 @@
             var cvs = document.getElementById('test-canvas');
             var ctx = cvs.getContext('2d');
             var e = e ||event;
-            var ox = e.clientX + window.pageXOffset - cvs.offsetLeft;
-            var oy = e.clientY + window.pageYOffset- cvs.offsetTop;
+            var ox = e.clientX  - cvs.offsetLeft + window.pageXOffset - document.getElementById("left-area").offsetWidth;
+            var oy = e.clientY  - cvs.offsetTop + window.pageYOffset + document.getElementById("right-area").scrollTop;
             var ox2;
             var oy2;
             ctx.moveTo(ox,oy);
@@ -383,8 +428,8 @@
 
             document.onmousemove = function(e){
                 ctx.putImageData(img_data,0,0);
-                ox2 = e.clientX + window.pageXOffset -cvs.offsetLeft;
-                oy2 = e.clientY + window.pageYOffset - cvs.offsetTop;
+                ox2 = e.clientX  - cvs.offsetLeft + window.pageXOffset - document.getElementById("left-area").offsetWidth;
+                oy2 = e.clientY  - cvs.offsetTop + window.pageYOffset + document.getElementById("right-area").scrollTop;
                 //ctx.clearRect(0,0,cvs.width,cvs.height);
                 ctx.beginPath();
                 ctx.strokeRect(ox,oy,ox2-ox,oy2-oy);
@@ -440,10 +485,12 @@
             marked_num++;
             totalInput.disabled = false;
             totalInput.style.display = "";
+            document.getElementById("total_input_section").style.display="";
         }else{
             alert("整体标注选框已锁定");
             totalInput.disabled = true;
             totalInput.style.display = "none";
+            document.getElementById("total_input_section").style.display="none";
         }
     }
 
