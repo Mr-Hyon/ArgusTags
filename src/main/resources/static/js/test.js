@@ -105,3 +105,21 @@ function fail5(){
         $("#fail5").modal("hide")
     },1200);
 }
+function save1(){
+    $('#save1').modal('show');
+    setTimeout(function(){
+        $("#save1").modal("hide")
+    },1200);
+}
+function unlock1(){
+    $('#unlock1').modal('show');
+    setTimeout(function(){
+        $("#unlock1").modal("hide")
+    },1200);
+}
+function unlock2(){
+    $('#unlock2').modal('show');
+    setTimeout(function(){
+        $("#unlock2").modal("hide")
+    },1200);
+}

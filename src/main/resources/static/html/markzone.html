@@ -13,8 +13,10 @@
     <link rel="stylesheet" href="../css/Style.css">
     <link rel="stylesheet" href="../css/bootstrap.css">
 
-    <script src="../js/jquery-1.8.2.min.js"></script>
+    <script src="../js/jquery-1.10.2.js"></script>
     <script src="../js/jquery.cookie.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/test.js"></script>
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -42,7 +44,7 @@
         <h1><font color = #d3d3d3>ARGUS标注区域</font></h1>
         <br/>
     <p>
-        <button type="button " id="Classic_Mark" class="btn1 btn-default" style="width: 10%;height:40px">解锁框选/框注</button>
+        <button type="button " id="Classic_Mark" class="btn1 btn-default" style="width: 10%;height:40px">解锁框选框注</button>
     </p>
     <p>
         <button type="button " id="Total_Mark" class="btn1 btn-default" style="width: 10%;height:40px">解锁整体标注</button>
@@ -72,6 +74,36 @@
     <p>
         <button type="button" id="save_button"  class="btn1 btn-default" style="width: 10%">保存</button>
     </p>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="save1" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    保存成功
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="unlock1" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    整体标注已解锁
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-sm"  id="unlock2" role="dialog" data-backdrop="false"  aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <p class="text-center mb-0">
+                    <i class="fa fa-times-circle text-danger mr-1" aria-hidden="true"></i>
+                    框选/框注已解锁
+                </p>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -469,6 +501,7 @@
         square_editable=true;
         line_editable=false;
         //alert("正在进行边框局部标注");
+        unlock2();
     }
 
     document.getElementById('Total_Mark').onclick = function (e) {
@@ -483,6 +516,7 @@
         if (total_message == true){
             hasMarked = true;
             //alert("整体标注选框已解锁");
+            unlock1();
             marked_num++;
             totalInput.disabled = false;
             totalInput.style.display = "";
@@ -525,7 +559,8 @@
                     tagcontent:total_mark
                 },
                 success: function (data) {
-                    alert("保存成功");
+                    //alert("保存成功");
+                    save1();
                 },
                 error: function() {
                     alert('error')
@@ -566,7 +601,8 @@
                     tagend:coord2toSend
                 },
                 success: function (data) {
-                    alert(data)
+                    //alert(data)
+                    save1();
                 },
                 error: function() {
                     alert('fail')
@@ -616,7 +652,8 @@
                     tagcontent:tagtoSend
                 },
                 success: function (data) {
-                    alert(data)
+                    //alert(data)
+                    save1();
                 },
                 error: function() {
                     alert('fail')
