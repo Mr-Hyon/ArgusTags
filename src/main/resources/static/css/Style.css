@@ -7,6 +7,11 @@ body {
     text-align: center;
 }
 
+
+@font-face {
+    font-family: Anurati;
+    src:url('Anurati-Regular.otf');
+}
 strong { font-weight: 500; }
 
 div.pos_fixed{
@@ -23,7 +28,8 @@ a, a:hover, a:focus {
 
 h1, h2 {
     margin-top: 10px;
-    font-size: 38px;
+    font-family: Anurati;
+    font-size: 50px;
     font-weight: 100;
     color: white;
     line-height: 50px;
@@ -37,7 +43,7 @@ h3 {
 }
 
 p {
-    font-family:"Times New Roman",Times,serif;
+    font-family: 'Roboto', sans-serif;
     font-size:20px;
 }
 

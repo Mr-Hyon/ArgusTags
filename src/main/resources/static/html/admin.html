@@ -9,8 +9,8 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../css/form.css">
-    <link rel="stylesheet" href="../css/Style.css">
     <link rel="stylesheet" href="../css/bootstrap.css">
+    <link rel="stylesheet" href="../css/Style.css">
     <script src="../js/jquery-1.8.2.min.js"></script>
     <script src="../js/jquery.cookie.js"></script>
     <script src="../js/jquery-1.8.2.min.js"></script>
@@ -22,12 +22,12 @@
 
 </head>
 
-<body style="height: 100%;width:100%">
+<body style="height: 100%;width:100%" background="../img/backgrounds/1@2x.jpg">
 
 <div class="page-container" style="height:100%;width:100%">
 
     <div class="col-sm-3 text" style="background-color: #996699;height:100%;width:25%">
-        <h1> <strong>Argus System</strong></h1>
+        <h1> <strong>A R G U S</strong></h1>
         <br>
         <div class="form-top-divider" ></div>
         <br>
@@ -38,7 +38,7 @@
         <p id="taskon" style="text-align:left;width:100%"><strong>&emsp;&emsp;进行中任务：</strong></p>
         <p id="taskfn" style="text-align:left;width:100%"><strong>&emsp;&emsp;已完成任务：</strong></p>
         <p id="imagenum" style="text-align:left;width:100%"><strong>&emsp;&emsp;图片数量&emsp;：</strong></p>
-        <br><br><br><br><br><br><br><br><br>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br>
         <div>
             <button id="logout" class="btn1 btn-default " >Log out</button>
         </div>
@@ -46,7 +46,7 @@
     </div>
     <div style="height:100%;width: 75%;float:right;overflow: auto">
         <div class="col-md-12 text">
-            <p>会员管理</p>
+            <p style="color:lightgrey;text-align:center;font-size: 25px">会员管理</p>
         </div>
 
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -61,7 +61,7 @@
             </div>
         </div>
         <div class="col-md-12 text">
-            <p>基础统计</p>
+            <p style="color:lightgrey;text-align:center;font-size: 25px">基础统计</p>
         </div>
         <div class="col-md-4 col-sm-12 col-xs-12">
             <div class="panel panel-default">
@@ -141,7 +141,7 @@
             </div>
         </div>
         <div class="col-md-12 text">
-            <p>进阶分析</p>
+            <p style="color:lightgrey;text-align:center;font-size: 25px">进阶分析</p>
         </div>
         <div class="col-md-6 col-sm-12 col-xs-12">
             <div class="panel panel-default">
@@ -273,17 +273,17 @@
     }]
 
     var usersdata=[{
-        label: "Initiators",
+        label: "发起者",
         value: num1
     }, {
-        label: "Workers",
+        label: "工人",
         value: num2
     }];
     var taskstatusdata=[{
-        label: "OngoingTask",
+        label: "进行中任务数",
         value: num4
     }, {
-        label: "FinishedTask",
+        label: "已完成任务数",
         value: num5
     }];
     var tasktypedata=[{

@@ -42,3 +42,66 @@ $("#btn6").click(function(){
     else
         document.getElementById("btn6").innerHTML="展开";
 });
+$("#btn7").click(function(){
+    $("#test7").slideToggle();
+    if(document.getElementById("btn7").innerHTML=="展开")
+        document.getElementById("btn7").innerHTML="收起";
+    else
+        document.getElementById("btn7").innerHTML="展开";
+});
+$("#btn8").click(function(){
+    $("#test8").slideToggle();
+    if(document.getElementById("btn8").innerHTML=="展开")
+        document.getElementById("btn8").innerHTML="收起";
+    else
+        document.getElementById("btn8").innerHTML="展开";
+});
+$("#btn9").click(function(){
+    $("#test9").slideToggle();
+    if(document.getElementById("btn9").innerHTML=="展开")
+        document.getElementById("btn9").innerHTML="收起";
+    else
+        document.getElementById("btn9").innerHTML="展开";
+});
+$("#btn10").click(function(){
+    $("#test10").slideToggle();
+    if(document.getElementById("btn10").innerHTML=="展开")
+        document.getElementById("btn10").innerHTML="收起";
+    else
+        document.getElementById("btn6").innerHTML="展开";
+});function suc(){
+    $('#suc').modal('show');
+    setTimeout(function(){
+        $("#suc").modal("hide")
+    },4800);
+}
+function fail1(){
+    $('#fail1').modal('show');
+    setTimeout(function(){
+        $("#fail1").modal("hide")
+    },1200);
+}
+function fail2(){
+    $('#fail2').modal('show');
+    setTimeout(function(){
+        $("#fail2").modal("hide")
+    },1200);
+}
+function fail3(){
+    $('#fail3').modal('show');
+    setTimeout(function(){
+        $("#fail3").modal("hide")
+    },1200);
+}
+function fail4(){
+    $('#fail4').modal('show');
+    setTimeout(function(){
+        $("#fail4").modal("hide")
+    },1200);
+}
+function fail5(){
+    $('#fail5').modal('show');
+    setTimeout(function(){
+        $("#fail5").modal("hide")
+    },1200);
+}
