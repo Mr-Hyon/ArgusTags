@@ -228,6 +228,7 @@
             }
             var tagToSelect = jsonObject.tagcontent;
             total_select.value = tagToSelect;
+            total_mark_func();
         }
         else if(type == 1){
             drawTagsType1(origin_url,jsonObject.tagstart,jsonObject.tagend);
@@ -504,7 +505,7 @@
         unlock2();
     }
 
-    document.getElementById('Total_Mark').onclick = function (e) {
+    function total_mark_func(){
         if(!hasImage){
             alert("请先加载图片再进行标记");
             return;
@@ -521,6 +522,7 @@
             totalInput.disabled = false;
             totalInput.style.display = "";
             document.getElementById("total_input_section").style.display="";
+            document.getElementById("Total_Mark").style.display="none";
         }else{
             //alert("整体标注选框已锁定");
             totalInput.disabled = true;
@@ -528,6 +530,31 @@
             document.getElementById("total_input_section").style.display="none";
         }
     }
+
+//    document.getElementById('Total_Mark').onclick = function (e) {
+//        if(!hasImage){
+//            alert("请先加载图片再进行标记");
+//            return;
+//        }
+//        var cvs=document.getElementById('test-canvas');
+//        var ctx=cvs.getContext('2d');
+//        //var total_message = confirm("是否进行该图的整体标注？");
+//        var total_message = true;
+//        if (total_message == true){
+//            hasMarked = true;
+//            //alert("整体标注选框已解锁");
+//            unlock1();
+//            marked_num++;
+//            totalInput.disabled = false;
+//            totalInput.style.display = "";
+//            document.getElementById("total_input_section").style.display="";
+//        }else{
+//            //alert("整体标注选框已锁定");
+//            totalInput.disabled = true;
+//            totalInput.style.display = "none";
+//            document.getElementById("total_input_section").style.display="none";
+//        }
+//    }
 
     //保存json文件
     document.getElementById('save_button').onclick = function (e) {
